@@ -12,8 +12,12 @@ router.post('/UpdateCurrent_user', adminController.adminUpdateUser);
 router.get('/message',authenticate, adminController.adminMessage);
 router.get('/allInvestment', adminController.allInvestorDetails);
 router.get('/allLoanRequest', adminController.allLoanRequest);
+router.get('/allNegotiateUser', adminController.negotiationData);
+router.get('/allRepaymentUser', adminController.allRepaymentData);
 router.post('/updateLoan_details', adminController.updateLoanUser);
 router.post('/updateInvestor_details', adminController.updateInvestorUser);
+router.post('/updateNegotiation_details', adminController.updateNegotiationUser);
+router.post('/updateRepayment_details', adminController.updateRepaymentUser);
 //router.get('/messageDelete',authenticate, adminController.adminMessageDelete);
 
 module.exports = router;
