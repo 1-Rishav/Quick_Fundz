@@ -3,6 +3,7 @@ const loanController = require('../controller/loanController')
 const authenticate = require('../middleware/authenticate.middleware')
 const router = express.Router();
 
+router.post('/loanAccepted', loanController.acceptedLoan);
 router.post('/loan', loanController.requestLoan);
 router.post("/requestInvestor", loanController.requestInvestor);
 router.post("/rejectLoan", loanController.rejectedLoan);
