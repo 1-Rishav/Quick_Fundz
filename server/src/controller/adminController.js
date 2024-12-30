@@ -44,6 +44,7 @@ exports.getAllKycDetails = async (req, res) => {
 
   exports.adminUpdateKycUser=asyncHandler(async(req,res)=>{
     const {userId,userID} = req.body;
+    console.log(userId , userID)
 try {
       const updateKycUser= await pool.query('Update user_kyc_details set user_id = NULL where id=$1',[userId])
       const updateUserKyc= await pool.query('Update users set kyc_usersuser_id=NULL where id=$1',[userID])
@@ -72,9 +73,10 @@ try {
   console.log(error)
 }})
 exports.deleteUser = async (req, res) => {
-  const userId = req.params.id;
+  const {userId} = req.body
+  
   try {
-    const result = await pool.query('DELETE FROM user_kyc_details WHERE user_id = $1', [userId]);
+    const result = await pool.query('DELETE FROM users WHERE id = $1', [userId]);
     if (result.rowCount === 0) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -143,5 +145,46 @@ exports.adminMessage=asyncHandler(async(req, res)=>{
       const updateLoanRequestUser= await pool.query('Update users set loan_usersuser_id=NULL where id=$1',[userID])
         } catch (error) {
       console.log(error)
+    }
+  })
+
+  exports.negotiationData = asyncHandler(async(req,res)=>{
+    try {
+      const negotiationData = await pool.query('Select * from investor_negotiation')
+      res.status(200).json(negotiationData.rows)
+      
+    } catch (error) {
+      console.error('Error fetching User details:', error);
+        res.status(500).json({ message: 'Error fetching User details' });
+    }
+  })
+
+  exports.updateNegotiationUser = asyncHandler(async(req,res)=>{
+    const {userId,userID} = req.body;
+    try {
+      const updateNegotiationUser = await pool.query('Update investor_negotiation set user_id=NULL where id=$1',[userId])
+      const updateLoanRequestUser= await pool.query('Update users set negotiate_usersuser_id=NULL where id=$1',[userID])
+    } catch (error) {
+      
+    }
+  })
+
+  exports.allRepaymentData = asyncHandler(async(req,res)=>{
+    try {
+      const repaymentData = await pool.query('Select * from loan_repayment')
+      res.status(200).json(repaymentData.rows)
+    } catch (error) {
+      console.error('Error fetching User details:', error);
+        res.status(500).json({ message: 'Error fetching User details' });
+    }
+  })
+
+  exports.updateRepaymentUser = asyncHandler(async(req,res)=>{
+    const {userId,userID} = req.body;
+    try {
+      const updateRepaymentUser = await pool.query('Update loan_repayment set repayment_user_id=NULL where id=$1',[userId])
+      const updateLoanRequestUser= await pool.query('Update users set repayment_usersuser_id=NULL where id=$1',[userID])
+    } catch (error) {
+      
     }
   })
