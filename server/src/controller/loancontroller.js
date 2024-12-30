@@ -8,6 +8,21 @@ let pool;
     pool = await connectPostgresDB();
 })();
 
+exports.acceptedLoan = asyncHandler(async (req, res) => {
+    const { investorId,investorUserId,investorAmount,investorDuration,investorRate,investorEmail,user_id,status } = req.body;
+    const filteredBody = filterObj(req.body, 'investorId', 'investorUserId', 'investorAmount', 'investorDuration', 'investorRate', 'user_id', 'status','investorEmail');
+    const user = await pool.query("Select * from users where id=$1", [user_id])
+    const name = user.rows[0].name;
+    const email = user.rows[0].email;
+    const investorStatus = await pool.query("UPDATE investor_details SET invest_status = $1 WHERE id = $2", [status, investorId]);
+    const loanRequest = await pool.query(
+        "INSERT INTO loan_request_details (name, loan_amount, duration, user_id, rate_of_interest, email, investor_email, investoruser_id, original_amount, original_duration, original_rate_of_interest,investor_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11,$12)",
+        [name, filteredBody.investorAmount, filteredBody.investorDuration, filteredBody.user_id, filteredBody.investorRate, email, filteredBody.investorEmail, filteredBody.investorUserId, filteredBody.investorAmount, filteredBody.investorDuration, filteredBody.investorRate, investorId]
+
+    );
+    const updateLoanUser_id = await pool.query("Update users set loan_usersuser_id=$1 where id=$2", [user_id, user_id])
+
+})
 exports.requestLoan = asyncHandler(async (req, res) => {
     const { userId, loanAmount, loanDuration, loanUserId, loanInterestRate, investorEmail, investorUserId, status, investorAmount, investorDuration, investorRate } = req.body;
     const filteredBody = filterObj(req.body, 'loanAmount', 'loanDuration', 'loanUserId', 'loanInterestRate', 'investorEmail', 'investorUserId', 'status', 'investorAmount', 'investorDuration', 'investorRate');
@@ -39,14 +54,14 @@ exports.requestInvestor = asyncHandler(async (req, res) => {
 
 exports.rejectedLoan = asyncHandler(async (req, res) => {
     const { status, userId, loanId } = req.body;
-    const updateLoanRequest = await pool.query("UPDATE loan_request_details SET state=$1,pay_status=$2 where id=$3 ", [status,status, loanId])
+    const updateLoanRequest = await pool.query("UPDATE loan_request_details SET state=$1,pay_status=$2 where id=$3 ", [status, status, loanId])
     const updateInvestor = await pool.query("Update investor_details Set invest_status=$1 where id=$2", ['provider', userId])
 
 })
 
 exports.acceptLoan = asyncHandler(async (req, res) => {
-    const { status, userId, loanId,pay_status } = req.body;
-    const updateLoanRequest = await pool.query("UPDATE loan_request_details SET state=$1,pay_status=$2 where id=$3 ", [status,pay_status, loanId])
+    const { status, userId, loanId, pay_status } = req.body;
+    const updateLoanRequest = await pool.query("UPDATE loan_request_details SET state=$1,pay_status=$2 where id=$3 ", [status, pay_status, loanId])
     //const updateInvestor = await pool.query("Update investor_details Set invest_status=$1 where id=$2", ['paid', userId])
 });
 
@@ -60,43 +75,45 @@ exports.lastNegotiate = asyncHandler(async (req, res) => {
 })
 
 exports.paidStatus = asyncHandler(async (req, res) => {
-    const { investorId, invest_status,loan_status,duration } = req.body;
+    const { investorId, invest_status, loan_status, duration } = req.body;
     try {
         const updateInvestorStatus = await pool.query('Update investor_details set invest_status=$1 where id=$2', [invest_status, investorId])
-        const updateLoanRequestDetails = await pool.query('Update loan_request_details set pay_status=$1,payment_time=$2,repayment_time=$3 where investor_id=$4 RETURNING *',[loan_status, new Date(Date.now()),new Date(new Date(Date.now()).setMonth(new Date(Date.now()).getMonth() + duration)) ,investorId])
+        const updateLoanRequestDetails = await pool.query('Update loan_request_details set pay_status=$1,payment_time=$2,repayment_time=$3 where investor_id=$4 RETURNING *', [loan_status, new Date(Date.now()), new Date(new Date(Date.now()).setMonth(new Date(Date.now()).getMonth() + duration)), investorId])
 
         const updatedLoanRequest = updateLoanRequestDetails.rows[0];
-        const investorNameDetail = await pool.query('Select name from investor_details where id=$1',[updatedLoanRequest.investor_id])
+        const investorNameDetail = await pool.query('Select name from investor_details where id=$1', [updatedLoanRequest.investor_id])
         const investorName = investorNameDetail.rows[0].name;
         const loan_amount = updatedLoanRequest.original_amount;
         const loan_duration = updatedLoanRequest.original_duration;
         const loan_ROI = updatedLoanRequest.original_rate_of_interest;
-        const repay_user=updatedLoanRequest.user_id;
-        const provider_user=updatedLoanRequest.investoruser_id;
+        const repay_user = updatedLoanRequest.user_id;
+        const provider_user = updatedLoanRequest.investoruser_id;
         const startDate = updatedLoanRequest.payment_time;
         const endDate = updatedLoanRequest.repayment_time;
         let Amount = parseInt(loan_amount.replace('₹', '').replace(/\s+/g, ''));
         let Duration = parseInt(loan_duration.replace('month', '').replace(/\s+/g, ''));
-        let Anual_duration = Duration/12
+        let Anual_duration = Duration / 12
         let ROI = parseInt(loan_ROI.replace('%', '').replace(/\s+/g, ''));
         let interest = (Amount * Anual_duration * ROI) / 100;
         let total_amount = Math.ceil(Amount + interest);
-        let remainDays = endDate-startDate;
+        let remainDays = endDate - startDate;
         const days = remainDays / (1000 * 60 * 60 * 24);
-        const insertLoanRepaymentData = await pool.query('Insert into loan_repayment (name,loan_amount,loan_duration,loan_roi,interest_amount,remain_days,repayment_user_id,provider_user_id) values ($1,$2, $3,$4,$5,$6,$7,$8)',[investorName,loan_amount,loan_duration,loan_ROI,total_amount,days,repay_user,provider_user])
+        const insertLoanRepaymentData = await pool.query('Insert into loan_repayment (name,loan_amount,loan_duration,loan_roi,interest_amount,remain_days,repayment_user_id,provider_user_id) values ($1,$2, $3,$4,$5,$6,$7,$8)', [investorName, loan_amount, loan_duration, loan_ROI, total_amount, days, repay_user, provider_user])
+        const updateUserId = await pool.query('Update users set repayment_usersuser_id = $1 where id=$2', [repay_user, repay_user])
 
-       return res.status(200).json({status:200,
-            message:'Payment Successful'
+        return res.status(200).json({
+            status: 200,
+            message: 'Payment Successful'
         })
     } catch (error) {
         console.log(error);
     }
 })
 
-exports.repayStatus = asyncHandler(async(req,res)=>{
-    const {userId} = req
+exports.repayStatus = asyncHandler(async (req, res) => {
+    const { userId } = req
     try {
-        const RepayData = await pool.query('Select * from loan_repayment where repayment_user_id = $1',[userId])
+        const RepayData = await pool.query('Select * from loan_repayment where repayment_user_id = $1', [userId])
         const repayData = RepayData.rows
         res.status(200).json(repayData)
     } catch (error) {
@@ -104,10 +121,10 @@ exports.repayStatus = asyncHandler(async(req,res)=>{
     }
 })
 
-exports.moneyRepaid = asyncHandler(async(req,res)=>{
-    const {pay_id,paid_status} = req.body;
+exports.moneyRepaid = asyncHandler(async (req, res) => {
+    const { pay_id, paid_status } = req.body;
     try {
-        const updateRepayment = await pool.query('Update loan_repayment set payment_status = $1 paid_time = $2 where id=$3',[paid_status , new Date(Date.now()),pay_id])
+        const updateRepayment = await pool.query('Update loan_repayment set payment_status = $1 paid_time = $2 where id=$3', [paid_status, new Date(Date.now()), pay_id])
     } catch (error) {
         console.log(error);
     }
@@ -115,11 +132,11 @@ exports.moneyRepaid = asyncHandler(async(req,res)=>{
 
 corn.schedule('0 0 * * *', async () => {
     try {
-      console.log('Running daily task: Decreasing remaining days...');
-       await pool.query('UPDATE loan_repayment SET remain_days = remain_days - 1 WHERE remain_days > 0;');
-       await pool.query('UPDATE loan_repayment SET enable_pay=$1 WHERE remain_days =$2',[true,25])
-       console.log('Task completed successfully.');
+        console.log('Running daily task: Decreasing remaining days...');
+        await pool.query('UPDATE loan_repayment SET remain_days = remain_days - 1 WHERE remain_days > 0;');
+        await pool.query('UPDATE loan_repayment SET enable_pay=$1 WHERE remain_days =$2', [true, 25])
+        console.log('Task completed successfully.');
     } catch (error) {
-      console.error('Error executing cron job:', error);
+        console.error('Error executing cron job:', error);
     }
-  });
+});
