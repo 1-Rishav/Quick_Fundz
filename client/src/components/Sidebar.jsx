@@ -33,13 +33,13 @@ const Sidebar = () => {
   return (
     <div className="flex md:block hidden">
       <div
-        className={` ${open ? "w-60" : "w-15"} bg-gray-600 h-screen p-5 pt-8 relative transition-all duration-200 ease-in-out`}
+        className={` ${open ? "w-60" : "w-15"} z-50 blue-glassmorphism h-screen p-5 pt-8 relative transition-all duration-200 ease-in-out`}
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
       >
         <img
           src={arrow}
-          className={`absolute cursor-pointer -right-3 top-9 w-7 border-dark-purple bg-white p-1 shadow-lg border-2 rounded-lg ${!open && "rotate-180"}`}
+          className={`absolute z-10 cursor-pointer -right-3 top-9 w-7 border-dark-purple bg-white p-1 shadow-lg border-2 rounded-lg ${!open && "rotate-180"}`}
           onClick={() => setOpen(!open)}
         />
         <div className="flex gap-x-4 items-center w-10">
