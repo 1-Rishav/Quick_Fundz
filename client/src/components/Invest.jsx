@@ -92,14 +92,14 @@ const Invest = () => {
       <div className="z-index-50">
         <Sidebar />
       </div>
-      <div className="flex-1 flex items-center justify-center min-h-screen p-4">
-        <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-lg">
-          <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+      <div className="flex-1 flex items-center justify-center min-h-screen p-4 gradient-bg-transactions text-neutral-50">
+        <div className="gradient-bg-services text-neutral-50 p-8 rounded-2xl shadow-lg w-full max-w-lg">
+          <h1 className="text-3xl font-bold  mb-6 text-center">
             Investment Form
           </h1>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-gray-700 font-semibold mb-2">
+              <label className="block  font-semibold mb-2">
                 Amount (max= 5,00,000)
               </label>
               <input
@@ -109,12 +109,12 @@ const Invest = () => {
                 onChange={handleChangeAmount}
                 onBlur={handleBlurAmount}
                 onFocus={handleFocusAmount}
-                className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="p-3 border text-black border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
                 required
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 font-semibold mb-2">
+              <label className="block  font-semibold mb-2">
                 Duration (in months)
               </label>
               <input
@@ -124,12 +124,12 @@ const Invest = () => {
                 onChange={handleChangeDuration}
                 onBlur={handleBlurDuration}
                 onFocus={handleFocusDuration}
-                className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="p-3 border text-black border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
                 required
               />
             </div>
             <div className="mb-6">
-              <label className="block text-gray-700 font-semibold mb-2">
+              <label className="block  font-semibold mb-2">
                 Interest Rate (%)
               </label>
               <input
@@ -139,7 +139,7 @@ const Invest = () => {
                 onChange={handleChangeInterest}
                 onBlur={handleBlur}
                 onFocus={handleFocus}
-                className="p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="p-3 border text-black border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-400"
                 required
               />
             </div>
