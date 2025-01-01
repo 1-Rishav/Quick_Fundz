@@ -18,6 +18,7 @@ const LoanRequest = () => {
   const [loanInterestRate, setLoanInterestRate] = useState(null);
   const [loanUserId, setLoanUserId] = useState(null);
   const [loanId, setLoanId] = useState(null);
+  const [countRequest , setCountRequest] = useState(null);
   const dispatch = useDispatch();
   const { user_id } = useSelector((state) => state.auth);
 
@@ -38,6 +39,7 @@ const LoanRequest = () => {
       try {
         const loanRequestUser = await dispatch(requestInvestor(data));
         setShowLoanRequest(loanRequestUser.loanTaker);
+        setCountRequest(loanRequestUser.loanTaker.length)
       } catch (error) {
         console.error("Error fetching KYC requests: ", error);
       }
@@ -241,8 +243,8 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
       <div className="z-index-50 ">
         <Sidebar />
       </div>
-      <div className="flex flex-col flex-1 max-w-8xl mx-auto p-4 overflow-scroll overflow-x-hidden">
-        <h1 className="text-2xl font-bold mb-6 text-center">Loan Requests</h1>
+      <div className="flex flex-col flex-1 max-w-8xl mx-auto p-4 overflow-scroll overflow-x-hidden gradient-bg-transactions text-neutral-50">
+       {countRequest>0 ? <h1 className="text-2xl font-bold mb-6 text-center">Loan Requests</h1>:<h1 className="text-2xl font-bold mb-6 flex items-center justify-center h-full ">No Loan Request Yet</h1>} 
         <div className="grid grid-cols-1 gap-4">
           {currentUsers?.map((user, index) => (
             <div key={index} className="border p-4 rounded-lg flex justify-between items-center">
@@ -294,7 +296,7 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
         </div>
 
         {/* Pagination */}
-        <div className="flex justify-end mt-6 space-x-2 ">
+       {countRequest>7 &&  <div className="flex justify-end mt-6 space-x-2 ">
           <button
             className={`px-4 py-2 rounded-full cursor-pointer ${currentPage === 1 ? 'bg-gray-300' : 'bg-slate-800 text-white'}`}
             disabled={currentPage === 1}
@@ -320,7 +322,7 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
           >
             Next
           </button>
-        </div>
+        </div>}
       </div>
       <NegotiateForm
         isOpen={isOverlayOpen}
