@@ -6,6 +6,7 @@ import {  negotiateValue ,negotiationApprove,rejectNegotiation} from '../redux/s
 const NegotiateLoan = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [lastAmount,setLastAmount]=useState(null); 
+  const [countNegotiation , setCountNegotiation] = useState(null);
   const dispatch = useDispatch();
   const { user_id } = useSelector((state) => state.auth);
 
@@ -34,6 +35,7 @@ const NegotiateLoan = () => {
       try {
        const finalAmount=await dispatch(negotiateValue());
         setLastAmount(finalAmount.finalAmount);
+        setCountNegotiation(finalAmount.finalAmount.length);
       } catch (error) {
         console.error("Error fetching KYC requests: ", error);
       }
@@ -72,8 +74,8 @@ const NegotiateLoan = () => {
       <div className="z-index-50 ">
         <Sidebar />
       </div>
-      <div className="flex flex-col flex-1 max-w-8xl mx-auto p-4 overflow-scroll overflow-x-hidden">
-        <h1 className="text-2xl font-bold mb-6 text-center">Loan Negotiation</h1>
+      <div className="flex flex-col flex-1 max-w-8xl mx-auto p-4 overflow-scroll overflow-x-hidden gradient-bg-transactions text-neutral-50">
+        {countNegotiation>0 ? <h1 className="text-2xl font-bold mb-6 text-center">Loan Negotiation</h1>:<h1 className="text-2xl font-bold mb-6 flex items-center justify-center h-full">No Negotiation Request Yet</h1>}
         <div className="grid grid-cols-1 gap-4">
           {currentUsers?.map((user, index) => (
             <div key={index} className="border p-4 rounded-lg flex justify-between items-center">
@@ -112,7 +114,7 @@ const NegotiateLoan = () => {
         </div>
 
         {/* Pagination */}
-        <div className="flex justify-end mt-6 space-x-2 ">
+       {countNegotiation>7 && <div className="flex justify-end mt-6 space-x-2 ">
           <button
             className={`px-4 py-2 rounded-full cursor-pointer ${currentPage === 1 ? 'bg-gray-300' : 'bg-slate-800 text-white'}`}
             disabled={currentPage === 1}
@@ -138,7 +140,7 @@ const NegotiateLoan = () => {
           >
             Next
           </button>
-        </div>
+        </div>}
       </div>
      
     </div>
