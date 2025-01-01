@@ -22,6 +22,7 @@ const Loan = () => {
   const [investorUserId, setInvestorUserId] = useState(null);
   const [investorEmail, setInvestorEmail] = useState(null);
   const [loanStatus, setLoanStatus] = useState(null);
+  const [countLoan , setCountLoan] = useState(null);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [error, setError] = useState("");
   const { user_id } = useSelector((state) => state.auth)
@@ -34,6 +35,7 @@ const Loan = () => {
         const InvestorDetail = await dispatch(allInvestments());
         const result = await InvestorDetail;
         setShowInvestor(InvestorDetail)
+        setCountLoan(InvestorDetail.data.length);
         if (result?.status === "success" && Array.isArray(result?.data)) {
           setLoans(result?.data);
           setFilteredLoans(result?.data);
@@ -48,6 +50,7 @@ const Loan = () => {
     fetchLoans();
   }, [dispatch]);
 
+  
   const applyFilter = () => {
     const filtered = loans.filter((loan) => {
       // Parse and format amount input and loan amount for comparison
@@ -231,15 +234,15 @@ const Loan = () => {
       <div className="z-index-50">
         <Sidebar />
       </div>
-      <div className="flex flex-col flex-1 max-w-8xl mx-auto p-4 overflow-y-auto relative">
-        <h1 className="text-2xl font-bold mb-6 text-center">Live Loans</h1>
-        <button
+      <div className="flex flex-col flex-1 max-w-8xl mx-auto p-4 overflow-y-auto relative gradient-bg-transactions text-neutral-50">
+        {countLoan>0 ? <h1 className="text-2xl font-bold mb-6 text-center">Live Loans</h1> :<h1 className="text-2xl font-bold mb-6 text-center">Submit Your Request</h1>}  
+          {countLoan>2 &&  <button
           className="p-3 border border-black text-black rounded-full shadow-md hover:bg-gray-100 flex items-center space-x-2 w-44 absolute top-4 right-4"
           onClick={() => setShowFilter(!showFilter)}
         >
           <FaSearch size={16} />
           <span className="hidden sm:inline">Search</span>
-        </button>
+        </button>} 
         {showFilter && (
           <div className="absolute top-20 right-4 bg-white p-4 border shadow-lg rounded-lg w-96 z-50 overflow-y-auto">
             <div className="flex flex-col gap-4 mb-6">
@@ -323,7 +326,7 @@ const Loan = () => {
             </div>
           ))}
         </div>
-        <div className="flex justify-end mt-6 space-x-2">
+         {countLoan>7 &&  <div className="flex justify-end mt-6 space-x-2">
           <button
             className={`px-4 py-2 rounded-full cursor-pointer ${currentPage === 1 ? "bg-gray-300" : "bg-slate-800 text-white"
               }`}
@@ -356,7 +359,7 @@ const Loan = () => {
           >
             Next
           </button>
-        </div>
+        </div>}
       </div>
       <LoanAcceptForm
         isOpen={isOverlayOpen}
