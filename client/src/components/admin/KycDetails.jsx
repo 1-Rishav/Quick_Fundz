@@ -18,6 +18,7 @@ const statusColorMap = {
 const KycDetails = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [allRequest, setAllRequest] = useState([]);
+  const [countKycUser,setCountKycUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showInput, setShowInput] = useState(null);
   const [inputValue, setInputValue] = useState(null)
@@ -46,16 +47,19 @@ const KycDetails = () => {
       try {
         const allKycUser = await dispatch(kycUser());
         setAllRequest(allKycUser);
+        setCountKycUser(allKycUser.length);
       } catch (error) {
         console.error("Error fetching KYC details:", error);
       } finally {
         setLoading(false);
       }
     };
+    
 
     fetchKycDetails();
   }, [dispatch, showInput, inputValue]);
 
+  
   /* const deleteUser = async (userId) => {
     try {
       await axios.delete(`http://localhost:3001/admin/deleteUser/${userId}`);
@@ -140,8 +144,8 @@ const KycDetails = () => {
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">
       <Sidebar />
-      <div className="flex flex-col flex-1 max-w-8xl mx-auto p-4 overflow-auto">
-        <h1 className="text-2xl font-bold mb-6 text-center md:text-left">KYC Details</h1>
+      <div className="flex flex-col flex-1 max-w-8xl mx-auto p-4 overflow-auto gradient-bg-transactions">
+        <h1 className="text-2xl font-bold mb-6 text-center md:text-left text-white flex items-center justify-center">KYC Details</h1>
 
         {loading ? (
           <p className="text-center">Loading...</p>
@@ -183,7 +187,7 @@ const KycDetails = () => {
 
 
         {/* Pagination */}
-        <div className="flex justify-end mt-6 space-x-2">
+       {countKycUser>7 && <div className="flex justify-end mt-6 space-x-2">
           <button
             className={`px-4 py-2 rounded-full ${currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-slate-800 text-white'}`}
             disabled={currentPage === 1}
@@ -209,7 +213,7 @@ const KycDetails = () => {
           >
             Next
           </button>
-        </div>
+        </div>}
       </div>
     </div>
   );
