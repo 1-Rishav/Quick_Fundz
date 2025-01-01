@@ -9,6 +9,7 @@ import RejectionOverlay from './RejectionOverlay';
 const KYCRequest = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [allRequest, setAllRequest] = useState(null);
+  const [countRequest , setCountRequest] = useState(null);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [currentRejectUserId, setCurrentRejectUserId] = useState(null);
   const [currentRejectUsersId, setCurrentRejectUsersId] = useState(null);
@@ -21,6 +22,7 @@ const KYCRequest = () => {
       try {
         const user = await dispatch(showKycRequest());
         setAllRequest(user.listOfRequest);
+        setCountRequest(user.listOfRequest.length);
       } catch (error) {
         console.error("Error fetching KYC requests: ", error);
       }
@@ -74,8 +76,8 @@ const KYCRequest = () => {
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
 
-      <div className="flex-1 flex flex-col max-w-8xl mx-auto p-4 overflow-hidden">
-        <h1 className="text-3xl font-bold text-center mb-8">KYC Requests</h1>
+      <div className="flex-1 flex flex-col max-w-8xl mx-auto p-4 overflow-hidden gradient-bg-transactions">
+        <h1 className="text-3xl font-bold text-center mb-8 text-neutral-50">KYC Requests</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {currentUsers.map((user, index) => (
             <div key={index} className="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
@@ -94,7 +96,7 @@ const KYCRequest = () => {
         </div>
 
         {/* Pagination */}
-        <div className="flex justify-center mt-8 space-x-2">
+       {countRequest>7 &&  <div className="flex justify-center mt-8 space-x-2">
           <button
             className={`px-4 py-2 rounded-full ${currentPage === 1 ? 'bg-gray-300' : 'bg-slate-800 text-white hover:bg-slate-900'}`}
             disabled={currentPage === 1}
@@ -120,7 +122,7 @@ const KYCRequest = () => {
           >
             Next
           </button>
-        </div>
+        </div>}
       </div>
 
       <RejectionOverlay
