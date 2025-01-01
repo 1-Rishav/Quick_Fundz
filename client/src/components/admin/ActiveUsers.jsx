@@ -4,7 +4,7 @@ import { DeleteIcon } from "../BuildFunction/DeleteIcon";
 import { EditIcon } from "../BuildFunction/EditIcon";
 
 import Sidebar from '../Sidebar';
-import { activeUser, adminUpdateCurrent_user } from '../../redux/slices/auth';
+import { activeUser, adminUpdateCurrent_user ,deleteUser} from '../../redux/slices/auth';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 
@@ -24,6 +24,7 @@ const role = {
 const ActiveUsers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [allRequest, setAllRequest] = useState([]);
+  const [countActiveUser, setCountActiveUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showInput, setShowInput] = useState(null);
   const [inputValue, setInputValue] = useState(null)
@@ -51,6 +52,7 @@ const ActiveUsers = () => {
       try {
         const allUser = await dispatch(activeUser());
         setAllRequest(allUser);
+        setCountActiveUser(allUser.length)
       } catch (error) {
         console.error("Error fetching KYC details:", error);
       } finally {
@@ -61,15 +63,24 @@ const ActiveUsers = () => {
     fetchKycDetails();
   }, [dispatch, showInput, inputValue]);
 
-  const deleteUser = async (userId) => {
-    try {
-      await axios.delete(`http://localhost:3001/admin/deleteUser/${userId}`);
-      setAllRequest(allRequest.filter((user) => user.user_id !== userId));
-    } catch (error) {
-      console.error("Error deleting user:", error);
+  // const deleteUser = async (userId) => {
+  //   try {
+  //     await axios.delete(`http://localhost:3001/admin/deleteUser/${userId}`);
+  //     setAllRequest(allRequest.filter((user) => user.user_id !== userId));
+  //   } catch (error) {
+  //     console.error("Error deleting user:", error);
+  //   }
+  // }; 
+  const handleDelete = async(userId)=>{
+    const data = {
+      userId
     }
-  }; 
-
+    try {
+      await dispatch(deleteUser(data))
+    } catch (error) {
+      console.log(error)
+    }
+  }
   const lastIndex = currentPage * usersPerPage;
   const firstIndex = lastIndex - usersPerPage;
   const currentUsers = allRequest.slice(firstIndex, lastIndex);
@@ -102,9 +113,9 @@ const ActiveUsers = () => {
       return (
         <Chip
         className='cursor-pointer'
-        color={user.id==user.kyc_usersuser_id || user.id==user.investor_usersuser_id || user.id==user.loan_usersuser_id?  'success':'danger'}
+        color={user.id==user.kyc_usersuser_id || user.id==user.investor_usersuser_id || user.id==user.loan_usersuser_id || user.id==user.repayment_userusers_id?  'success':'danger'}
         
-        title={user.id==user.kyc_usersuser_id || user.id==user.investor_usersuser_id || user.id==user.loan_usersuser_id? ('Active User'):'Passive User'}
+        title={user.id==user.kyc_usersuser_id || user.id==user.investor_usersuser_id || user.id==user.loan_usersuser_id || user.id==user.repayment_userusers_id? ('Active User'):'Passive User'}
         size='sm'
         variant='flat'
         >
@@ -160,7 +171,7 @@ const ActiveUsers = () => {
              <Tooltip content="Delete user" color="danger">
               <span
                 className="cursor-pointer text-danger"
-                onClick={() => deleteUser(user.user_id)}
+                onClick={() => handleDelete(user.id)}
               >
                 <DeleteIcon/>
               </span>
@@ -175,8 +186,8 @@ const ActiveUsers = () => {
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">
       <Sidebar />
-      <div className="flex flex-col flex-1 max-w-8xl mx-auto p-4 overflow-auto">
-        <h1 className="text-2xl font-bold mb-6 text-center md:text-left">KYC Details</h1>
+      <div className="flex flex-col flex-1 max-w-8xl mx-auto p-4 overflow-auto gradient-bg-transactions">
+        <h1 className="text-2xl font-bold mb-6 text-center md:text-left text-white flex items-center justify-center">Active Users</h1>
 
         {loading ? (
           <p className="text-center">Loading...</p>
@@ -218,7 +229,7 @@ const ActiveUsers = () => {
 
 
         {/* Pagination */}
-        <div className="flex justify-end mt-6 space-x-2">
+       {countActiveUser>7 && <div className="flex justify-end mt-6 space-x-2">
           <button
             className={`px-4 py-2 rounded-full ${currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-slate-800 text-white'}`}
             disabled={currentPage === 1}
@@ -244,7 +255,7 @@ const ActiveUsers = () => {
           >
             Next
           </button>
-        </div>
+        </div>}
       </div>
     </div>
   );
