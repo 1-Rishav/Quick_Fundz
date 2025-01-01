@@ -4,6 +4,11 @@ import Sidebar from './Sidebar';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { adminMessage, LogoutUser } from '../redux/slices/auth';
+import  frontImg from '../assets/peer-to-peer.jpg'
+import MileStones from './MileStones';
+import ReasonToJoin from './ReasonToJoin';
+import { AppleCardsCarouselDemo } from '../components/Carousel';
+import { BackgroundBeamsWithCollisionDemo } from './Footer_BeamsCollision';
 
 const Menu = () => {
   const dispatch = useDispatch();
@@ -72,17 +77,36 @@ const Menu = () => {
           </button>
         </div>
       </nav>
-      <div className="flex h-screen overflow-hidden">
-        <div className="z-index-50">
+      <div className="flex h-screen w-full  overflow-hidden">
+        <div className="z-index-50 absolute">
           <Sidebar />
         </div>
-        <div className="h-screen flex-1 flex-wrap flex items-center justify-around bg-gray-100">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold">Welcome to Your Dashboard</h1>
-            <p className="text-lg mt-4">You have successfully logged in!</p>
+        <div className="relative h-screen w-screen   gradient-bg-welcome  ">
+          <div className='flex flex-wrap justify-between items-center h-[85vh] w-screen object-contain'>
+          <div className="relative left-28 flex flex-col items-start justify-center h-full text-neutral-100">
+            <h1 className="text-4xl font-bold ">Your Financial Needs, Our Trusted Solution.</h1>
+            <p className="text-xl mt-4">Simplifying borrowing and lending, one connection at a time.Bringing lenders and <br/> borrowers together for mutual growth.</p>
           </div>
+          <div className='relative  flex justify-center items-center top-16  w-[38%] h-[50%] '>
+            <img src={frontImg} alt="Peer to peer img" className='rounded-xl h-[100%]'/>
+          </div>
+          </div>
+          <div className='flex flex-wrap items-center  justify-center gap-3'>
+          <div className='p-2 white-glassmorphism flex items-center justify-center gap-2 text-neutral-100 text-2xl  h-fit w-fit'>
+            <h3>Secure Digitised Processes | </h3>
+            <h3>Transforming Financial Opportunities | </h3>
+            <h3>Earn More with Your Savings</h3>
+          </div>
+          </div>
+          
         </div>
       </div>
+      <div className='pb-28 relative h-full w-full gradient-bg-transactions text-neutral-50'>
+        <MileStones/>
+          <ReasonToJoin/>
+         <AppleCardsCarouselDemo/>
+         <BackgroundBeamsWithCollisionDemo/>
+        </div>
     </>
   );
 };
