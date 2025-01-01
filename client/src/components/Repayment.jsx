@@ -6,6 +6,7 @@ import { createOrder, moneyRepayment, payingMoney, repayLoan } from '../redux/sl
 const LoanRepayment = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [repayLoanStatus, setRepayLoanStatus] = useState(null);
+  const [countRepayLoan , setCountRepayLoan] = useState(null);
   const dispatch = useDispatch();
   const { user_id } = useSelector((state) => state.auth);
 
@@ -26,6 +27,7 @@ const LoanRepayment = () => {
       try {
         const repayStatus = await dispatch(repayLoan(data));
         setRepayLoanStatus(repayStatus);
+        setCountRepayLoan(repayStatus.length);
       } catch (error) {
         console.error("Error fetching KYC requests: ", error);
       }
@@ -93,8 +95,8 @@ const LoanRepayment = () => {
       <div className="z-index-50 ">
         <Sidebar />
       </div>
-      <div className="flex flex-col flex-1 max-w-8xl mx-auto p-4 overflow-scroll overflow-x-hidden">
-        <h1 className="text-2xl font-bold mb-6 text-center">Re-Payment</h1>
+      <div className="flex flex-col flex-1 max-w-8xl mx-auto p-4 overflow-scroll overflow-x-hidden gradient-bg-transactions text-neutral-50">
+       {countRepayLoan>0 ? <h1 className="text-2xl font-bold mb-6 text-center">Re-Payment</h1>:<h1 className="text-2xl font-bold mb-6 flex items-center justify-center h-full">No Re-Payment Data</h1>}
         <div className="grid grid-cols-1 gap-4">
           {currentUsers?.map((user, index) => (
             <div key={index} className="border p-4 rounded-lg flex justify-between items-center">
@@ -141,7 +143,7 @@ const LoanRepayment = () => {
         </div>
 
         {/* Pagination */}
-        <div className="flex justify-end mt-6 space-x-2 ">
+       {countRepayLoan>0 && <div className="flex justify-end mt-6 space-x-2 ">
           <button
             className={`px-4 py-2 rounded-full cursor-pointer ${currentPage === 1 ? 'bg-gray-300' : 'bg-slate-800 text-white'}`}
             disabled={currentPage === 1}
@@ -167,7 +169,7 @@ const LoanRepayment = () => {
           >
             Next
           </button>
-        </div>
+        </div>}
       </div>
     </div>
   );
