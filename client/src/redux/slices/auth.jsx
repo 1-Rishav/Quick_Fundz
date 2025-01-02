@@ -608,3 +608,23 @@ try {
       }
     }
   }
+
+  export function loanPreRequest(formValues){
+    return async()=>{
+      try {
+        const response = await axios.post('loanRequest/preRequest',formValues,{withCredentials:true})
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
+
+  export function documents(formValues){
+    return async()=>{
+      try {
+        const response = await axios.post('auth/incomeDocuments',formValues,{withCredentials:true})
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
