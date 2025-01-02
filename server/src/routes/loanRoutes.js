@@ -12,5 +12,6 @@ router.post("/lastNegotiate", loanController.lastNegotiate);
 router.post("/paidStatus", loanController.paidStatus);
 router.get("/repayStatus", authenticate,loanController.repayStatus);
 router.post("/moneyRepay", loanController.moneyRepaid);
+router.post("/preRequest", loanController.borrowRequest);
 
 module.exports = router;
