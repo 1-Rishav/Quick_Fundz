@@ -4,6 +4,7 @@ import { FaSearch } from "react-icons/fa";
 import LoanAcceptForm from "./LoanAcceptForm";
 import { allInvestments, loanRequest,loanAccept } from "../redux/slices/auth";
 import { useDispatch, useSelector } from "react-redux";
+import LoanPre_Request from "./LoanPre_Request";
 
 const Loan = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -230,12 +231,14 @@ const Loan = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <>
+     {countLoan>0 ? (<>
+      <div className="flex h-screen overflow-hidden">
       <div className="z-index-50">
         <Sidebar />
       </div>
       <div className="flex flex-col flex-1 max-w-8xl mx-auto p-4 overflow-y-auto relative gradient-bg-transactions text-neutral-50">
-        {countLoan>0 ? <h1 className="text-2xl font-bold mb-6 text-center">Live Loans</h1> :<h1 className="text-2xl font-bold mb-6 text-center">Submit Your Request</h1>}  
+         <h1 className="text-2xl font-bold mb-6 text-center">Live Loans</h1>   
           {countLoan>2 &&  <button
           className="p-3 border border-black text-black rounded-full shadow-md hover:bg-gray-100 flex items-center space-x-2 w-44 absolute top-4 right-4"
           onClick={() => setShowFilter(!showFilter)}
@@ -367,8 +370,25 @@ const Loan = () => {
         onSubmit={handleSubmit} // Pass the rejection submission handler
       /*userId={currentRejectUserId} // Pass the userId to RejectionOverlay
       usersId={currentRejectUsersId} */
-      />
-    </div>
+      /></div></>): 
+      (<>
+      
+      <div className="flex h-screen w-screen">
+       
+      <div className="z-index-50">
+        <Sidebar />
+      </div>
+      
+      <div className=" flex items-center justify-center gradient-bg-transactions w-full">
+      
+      <LoanPre_Request/>
+      </div>
+       
+      
+
+      </div>
+       </>)} 
+    </>
   );
 };
 
