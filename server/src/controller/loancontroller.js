@@ -130,6 +130,22 @@ exports.moneyRepaid = asyncHandler(async (req, res) => {
     }
 })
 
+exports.borrowRequest = asyncHandler(async (req, res) => {
+    const {email, amount, duration, interestRate,userId} = req.body;
+    if(email.trim().length==0 || amount.trim().length==0 || interestRate.trim().length==0 || duration.trim().length==0){
+        return res.status(404).json({
+            message:"Fill all credential"
+        })
+    }
+    try {
+        const fetchName = await pool.query('Select name from users where id=$1',[userId])
+        const name = await fetchName.rows[0].name;
+        const insertpreLoanRequest = await pool.query('Insert into loanpre_request  (name,email ,amount , duration , rate_of_interest,user_id) values($1,$2,$3,$4,$5,$6)',[name,email,amount,duration,interestRate,userId])
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 corn.schedule('0 0 * * *', async () => {
     try {
         console.log('Running daily task: Decreasing remaining days...');
