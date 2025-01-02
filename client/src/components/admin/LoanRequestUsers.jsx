@@ -17,6 +17,7 @@ const statusColorMap = {
 const LoanRequestUsers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [allRequest, setAllRequest] = useState([]);
+  const [countloan , setCountLoan] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showInput, setShowInput] = useState(null);
   const [inputValue, setInputValue] = useState(null)
@@ -45,6 +46,7 @@ const LoanRequestUsers = () => {
       try {
         const allKycUser = await dispatch(loanRequestUsers());
         setAllRequest(allKycUser);
+        setCountLoan(allKycUser.length)
       } catch (error) {
         console.error("Error fetching KYC details:", error);
       } finally {
@@ -142,8 +144,8 @@ const LoanRequestUsers = () => {
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">
       <Sidebar />
-      <div className="flex flex-col flex-1 max-w-8xl mx-auto p-4 overflow-auto">
-        <h1 className="text-2xl font-bold mb-6 text-center md:text-left">KYC Details</h1>
+      <div className="flex flex-col flex-1 max-w-8xl mx-auto p-4 overflow-auto gradient-bg-transactions">
+        <h1 className="text-2xl font-bold mb-6 text-center md:text-left text-neutral-50 flex items-center justify-center">LoanRequest Details</h1>
 
         {loading ? (
           <p className="text-center">Loading...</p>
@@ -186,7 +188,7 @@ const LoanRequestUsers = () => {
 
 
         {/* Pagination */}
-        <div className="flex justify-end mt-6 space-x-2">
+       {countloan>7 &&  <div className="flex justify-end mt-6 space-x-2">
           <button
             className={`px-4 py-2 rounded-full ${currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-slate-800 text-white'}`}
             disabled={currentPage === 1}
@@ -212,7 +214,7 @@ const LoanRequestUsers = () => {
           >
             Next
           </button>
-        </div>
+        </div>}
       </div>
     </div>
   );
