@@ -13,6 +13,7 @@ const statusColorMap = {
   'Not verified': "danger",
   pending: "warning",
   confirm: "primary",
+  'NULL': "danger",
 };
 
 const role = {
@@ -125,7 +126,7 @@ const ActiveUsers = () => {
       case "name":
         return (
           <User
-            avatarProps={{ radius: "md", src: user.avatar }}
+            avatarProps={{ radius: "md", src: user.avatar_url }}
 
             name={cellValue}
           >
@@ -151,8 +152,8 @@ const ActiveUsers = () => {
         return <span>{user.ifsc_code}</span>; */
       case "status":
         return (
-          <Chip color={statusColorMap[user.is_verified]} size="sm" variant="flat">
-            {user.is_verified}
+          <Chip color={statusColorMap[user.is_verified ?? 'NULL']} size="sm" variant="flat">
+            {user.is_verified ?? 'NULL'}
           </Chip>
         );
       case "actions":
