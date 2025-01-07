@@ -17,6 +17,7 @@ import Menu from "../pages/dashboard/MenuPage"
 //import Payment from "../pages/dashboard/PaymentPage"
 import Page404 from "../pages/Page404";
 import KYCRequestPage from "../pages/dashboard/KYCRequestPage";
+import IncomeBank_Statement from "../pages/dashboard/IncomeBankDocsPage"
 import LoanRequestPage from "../pages/dashboard/LoanRequestPage";
 import NegotiateLoanPage from "../pages/dashboard/NegotiateLoanPage";
 import KycStatus from "../pages/dashboard/KYCStatusPage"
@@ -39,6 +40,7 @@ export default function Router(){
                {path:'/auth/signup', element:<SignupPage/>},
                {path:'/auth/verify', element:<VerifyPage/>},
                {path:'/auth/kyc', element:<KYC/>},
+               {path:'/auth/documents', element:<IncomeBank_Statement/>},
                {path:'/auth/kycstatus', element:<KycStatus/>},
                {path:'/auth/updatekyc',element:<UpdateKYC/>},
             ]
