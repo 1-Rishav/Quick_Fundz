@@ -82,7 +82,7 @@ const InvestedUsers = () => {
       case "name":
         return (
           <User
-            avatarProps={{ radius: "md", src: user.avatar }}
+            avatarProps={{ radius: "md", src: user.avatar_url }}
 
             name={cellValue}
           >
