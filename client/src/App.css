@@ -83,3 +83,10 @@
 html {
   scroll-behavior: smooth;
 }
+
+.avatarfit{
+  
+    object-fit: contain !important;
+    
+  
+}
