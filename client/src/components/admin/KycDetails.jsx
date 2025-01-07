@@ -12,6 +12,7 @@ const statusColorMap = {
   'Not verified': "danger",
   pending: "warning",
   confirm: "primary",
+  'NULL':"danger"
 };
 
 
@@ -85,7 +86,7 @@ const KycDetails = () => {
       case "name":
         return (
           <User
-            avatarProps={{ radius: "md", src: user.avatar }}
+            avatarProps={{ radius: "md", src: user.avatar_url }}
 
             name={cellValue}
           >
@@ -100,7 +101,7 @@ const KycDetails = () => {
       case "aadhar":
         return <span>{user.aadhar_number}</span>;
       case "user_id":
-        return showInput === user.id ? (<div className='flex flex-col justify-center gap-2'><input placeholder={user.user_id} className='w-14 border rounded p-1 border-solid-2 border-red-500' autoFocus onChange={handleInputChange} /> <div className='flex flex-row items-center justify-center gap-4'> <button className='border rounded p-1 max-w-fit text-white bg-slate-800 hover:bg-slate-400' onClick={() => setShowInput(false)}>Cancel</button> <button onClick={() => handleUpdate(user.id,user.user_id)} className={`border rounded p-1 max-w-fit text-white ${inputValue !== null ? 'bg-slate-800 hover:bg-slate-400' : 'bg-slate-200 cursor-not-allowed'}  `} disabled={inputValue === null}>Update</button></div></div>) : <span>{user.user_id}</span>;
+        return showInput === user.id ? (<div className='flex flex-col justify-center gap-2'><input placeholder={user.user_id} className='w-14 border rounded p-1 border-solid-2 border-red-500' autoFocus onChange={handleInputChange} /> <div className='flex flex-row items-center justify-center gap-4'> <button className='border rounded p-1 max-w-fit text-white bg-slate-800 hover:bg-slate-400' onClick={() => setShowInput(false)}>Cancel</button> <button onClick={() => handleUpdate(user.id,user.user_id)} className={`border rounded p-1 max-w-fit text-white ${inputValue !== null ? 'bg-slate-800 hover:bg-slate-400' : 'bg-slate-200 cursor-not-allowed'}  `} disabled={inputValue === null}>Update</button></div></div>) : <span>{user.user_id ?? 'NULL'}</span>;
       /* case "verified":
         return <span>{user.is_verified }</span>; */
       case "bank_account_number":
@@ -109,8 +110,8 @@ const KycDetails = () => {
         return <span>{user.ifsc_code}</span>;
       case "status":
         return (
-          <Chip color={statusColorMap[user.is_verified]} size="sm" variant="flat">
-            {user.is_verified}
+          <Chip color={statusColorMap[user.is_verified ?? 'NULL']} size="sm" variant="flat">
+            {user.is_verified ?? 'NULL'}
           </Chip>
         );
       case "actions":
