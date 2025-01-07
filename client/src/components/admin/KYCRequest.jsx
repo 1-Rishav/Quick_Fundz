@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { confirmOrRejectRequest, showKycRequest } from '../../redux/slices/auth';
 import { LogoutUser } from '../../redux/slices/auth';
 import { useDispatch } from 'react-redux';
 import Sidebar from '../Sidebar';
 import RejectionOverlay from './RejectionOverlay';
+import { GrDocumentPdf } from "react-icons/gr";
+
 
 const KYCRequest = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -78,21 +80,45 @@ const KYCRequest = () => {
 
       <div className="flex-1 flex flex-col max-w-8xl mx-auto p-4 overflow-hidden gradient-bg-transactions">
         <h1 className="text-3xl font-bold text-center mb-8 text-neutral-50">KYC Requests</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+          
+
+          
           {currentUsers.map((user, index) => (
-            <div key={index} className="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
-              <div>
-                <p className="text-lg font-semibold"><strong>Name:</strong> {user.name}</p>
+            <div key={index} className='flex pb-2 flex-wrap flex-col items-center justify-end w-full h-full  rounded-2xl bg-white'> 
+            <div  className="bg-white p-6 rounded-lg  flex flex-wrap flex-row gap-2 justify-between">
+              <div >
+                {/* <p className="text-lg font-semibold"><strong>Name:</strong> {user.name}</p> */}
                 <p className="text-sm text-gray-600"><strong>Email:</strong> {user.email}</p>
                 <p className="text-sm text-gray-600"><strong>Phone:</strong> {user.phone_number}</p>
                 <p className="text-sm text-gray-600"><strong>Aadhar Number:</strong> {user.aadhar_number}</p>
+                
               </div>
-              <div className="flex flex-col sm:flex-row gap-2 mt-4">
+              <div>
+              <p className="text-sm text-gray-600"><strong>Account Number:</strong> {user.bank_account_number}</p>
+              <p className="text-sm text-gray-600"><strong>Ifsc Code:</strong> {user.ifsc_code}</p>
+              </div>
+              <div className='flex flex-col w-full h-full justify-start items-center'>
+              <h1 className='text-lg font-bold'>Income Statement</h1>
+              {user.document_file ? (
+  <a href={user.document_file} target="_blank" rel="noopener noreferrer">
+    <GrDocumentPdf size={35} />
+  </a>
+) : (
+  <span className='font-semibold'>No document available</span>
+)}
+            </div>
+                
+            </div>
+            <div className="flex flex-col flex-wrap sm:flex-row gap-2 mt-4">
                 <button className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition" onClick={() => handleConfirm(user.id, user.user_id, 'confirm')}>Confirm</button>
                 <button className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 transition" onClick={() => handleReject(user.id, user.user_id)}>Reject</button>
               </div>
             </div>
           ))}
+            
+            
+          
         </div>
 
         {/* Pagination */}
