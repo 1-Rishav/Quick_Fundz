@@ -10,6 +10,7 @@ const initialState = {
   role: null,
   token: null,
   user_id: null,
+  docs_status:false,
   verificationStatus:'pending',
   kycMessage: null,
   loan_status:'processing',
@@ -30,6 +31,7 @@ const slice = createSlice({
       state.role = action.payload.role;
       state.verificationStatus = action.payload.verificationStatus;
       state.verified = action.payload.verified;
+      state.docs_status = action.payload.docs_Status;
       state.user_id = action.payload.user_id;
       state.email = action.payload.email;
       state.kycMessage = action.payload.kycMessage;
@@ -71,8 +73,8 @@ export function LoginUser(formValues) {
     try {
       const response = await axios.post("auth/login", formValues,{withCredentials: true});
 
-      const { token, role, user_id, message, verificationStatus,kycMessage,verified} = response.data;
-      if(verificationStatus === 'verified' && verified === true){
+      const { token, role, user_id, message, verificationStatus,kycMessage,verified,docs_status} = response.data;
+      if(verificationStatus === 'verified' && verified === true && docs_status===true ){
         dispatch(
           slice.actions.logIn({
             isLoggedIn: true,
@@ -80,20 +82,44 @@ export function LoginUser(formValues) {
             verificationStatus,
             token,
             user_id,
+            docs_status,
             verified,
             email: formValues.email,
           })
         );
-      }else{
+      }else if(verificationStatus===null && verified===false && docs_status===false){
+        dispatch(slice.actions.logIn({
+          user_id,
+          verificationStatus,
+          verified
+        }))
+        window.location.href='/auth/signup'
+      }else if(verificationStatus===null && verified===true && docs_status===false){
         dispatch(
           slice.actions.logIn({
             user_id,
             verificationStatus,
-            kycMessage
+            verified
           })
         )
-        window.location.href='/auth/kycstatus'
-        
+        window.location.href='/auth/kyc' 
+      }else if(verificationStatus==='pending' && verified===true && docs_status===false){
+        dispatch(
+          slice.actions.logIn({
+            user_id,
+            verificationStatus,
+            verified
+          })
+        )
+        window.location.href='/auth/documents'
+      }
+      else{
+        dispatch(slice.actions.logIn({
+          user_id,
+          verificationStatus,
+          kycMessage
+        }))
+        window.location.href='/auth/kycStatus'
       }
       
 
@@ -176,7 +202,7 @@ export function UserKyc(formValues){
      toast.success(message || "KYC under processing ");
 
      if(!getState().auth.error){
-      window.location.href = "/auth/kycstatus" 
+      window.location.href = "/auth/documents" 
           }
     } catch (error) {
       toast.error(error.message)
@@ -184,9 +210,26 @@ export function UserKyc(formValues){
       
   }
 }
+export function documents(formValues){
+  
+  return async(dispatch,getState)=>{
+    try {
+      const response = await axios.post('auth/incomeDocuments',formValues,{
+        headers: { 'Content-Type': 'multipart/form-data' },withCredentials:true
+      })
+      const {message}=response.data;
+      toast.success(message || 'Docuements successfully uploaded.')
+     
+      if(!getState().auth.error){
+        window.location.href = "/auth/kycstatus" 
+            }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
 
  export function verifiedKyc(formValues){
-  console.log(formValues);
   return async(dispatch)=>{
     try {
       const response= await axios.post('auth/verifiedKyc',formValues ,{withCredentials: true})
@@ -619,10 +662,23 @@ try {
     }
   }
 
-  export function documents(formValues){
+  export function changeProfile(formValues){
     return async()=>{
       try {
-        const response = await axios.post('auth/incomeDocuments',formValues,{withCredentials:true})
+        const response = await axios.post('auth/profileImage',formValues,{headers: { 'Content-Type': 'multipart/form-data' },withCredentials:true})
+        return response.data;
+        
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
+
+  export function userAvatar(){
+    return async()=>{
+      try {
+        const response = await axios.get('auth/userAvatar',{withCredentials:true})
+        return response.data
       } catch (error) {
         console.log(error)
       }
