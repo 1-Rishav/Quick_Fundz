@@ -7,6 +7,14 @@ const otpGenerator = require("otp-generator");
 const mailService = require("../services/mailer.js");
 const crypto = require("crypto");
 const otp = require("../Templates/Mail/otp.js");
+const cloudinary = require('cloudinary').v2;
+
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
  let pool;
  (async()=>{
@@ -25,35 +33,42 @@ exports.registerUser = asyncHandler(async(req, res, next)=>{
       [email]
     );
 
-    if (userExists.rows.length > 0) {
-      return res.status(400).json({ error: "User already exists" });
+    if (userExists.rows.length > 0 ) {
+      if(!userExists.rows[0].verified){
+        req.userId=userExists.rows[0].id;
+        next()
+      }else{
+        return res.status(400).json({ error: "User already exists" });
+      }
+    }else{
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      await pool.query(
+        "INSERT INTO users (name,username, email, password) VALUES ($1, $2, $3,$4)",
+        [filteredBody.fullName , filteredBody.username, filteredBody.email, hashedPassword]
+      );
+      const user = await pool.query("SELECT * FROM users WHERE email = $1", [
+        email,
+      ]);
+      
+      const role = user.rows[0].role
+      const user_id=user.rows[0].id; 
+      const verificationStatus=user.rows[0].is_verified;
+      const token = jwt.sign(
+        { userId: user.rows[0].id },
+        process.env.JWT_SECRET,
+        { expiresIn: "1y" }
+      );
+      const options = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: "strict", 
+  maxAge: 360000 * 24 * 60 * 60 * 1000,
     }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    await pool.query(
-      "INSERT INTO users (name,username, email, password) VALUES ($1, $2, $3,$4)",
-      [filteredBody.fullName , filteredBody.username, filteredBody.email, hashedPassword]
-    );
-    const user = await pool.query("SELECT * FROM users WHERE email = $1", [
-      email,
-    ]);
-    
-    const role = user.rows[0].role
-    const user_id=user.rows[0].id; 
-    const verificationStatus=user.rows[0].is_verified;
-    const token = jwt.sign(
-      { userId: user.rows[0].id },
-      process.env.JWT_SECRET,
-      { expiresIn: "360000h" }
-    );
-    const options = {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-  }
-    res.cookie("token",token,options).status(201).json({ message: "User registered successfully" ,role,user_id,verificationStatus});
-    req.userId = user_id;
-    next();
+      res.cookie("token",token,options).status(201).json({ message: "User registered successfully" ,role,user_id,verificationStatus});
+      req.userId = user_id;
+      next();
+    }
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
@@ -158,7 +173,7 @@ exports.verifyOTP = asyncHandler(async (req, res, next) => {
   const token = jwt.sign(
     { userId: user.id },
     process.env.JWT_SECRET,
-    { expiresIn: "360000h" }
+    { expiresIn: "1y" }
   );
 
   const cookieOptions = {
@@ -200,24 +215,107 @@ exports.loginUser= asyncHandler(async(req,res)=>{
       const token = jwt.sign(
         { userId: user.rows[0].id },
         process.env.JWT_SECRET,
-        { expiresIn: "360000h" }
+        { expiresIn: "1y" }
       );
       const options = {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
+        sameSite: "strict", 
+  maxAge: 360000 * 24 * 60 * 60 * 1000,
     }
   const kycMessage = kycUser.rows[0]?.message;
   const role = user.rows[0].role;
   const user_id=user.rows[0].id;
+  const docs_status = user.rows[0].docs_status;
   const verificationStatus=user.rows[0].is_verified;
   const verified = user.rows[0].verified;
-      res.cookie("token",token,options).status(201).json({ token, role , user_id,verificationStatus,kycMessage,verified});
+      res.cookie("token",token,options).status(201).json({ token, role , user_id,verificationStatus,kycMessage,verified,docs_status});
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: "Server error" });
     }
 })
 
+exports.incomeDocuments = asyncHandler(async(req,res)=>{
+  const {userId}= req
+  const fileOriginal = req.file.originalname;
+  console.log(userId)
+ 
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'File is required' });
+    }
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      resource_type: 'raw', // only for files 
+      folder: 'Quick_Fundz_docs',
+      use_filename: true,   // Use the original filename
+      unique_filename: false,
+      access_mode: 'public',
+      format: 'pdf',
+    });
+
+    const fileUrl = result.secure_url;
+    const publicId = result.public_id;
+    const extractName = await pool.query('Select name from users where id = $1',[userId]);
+    const name = extractName.rows[0]?.name;
+    const insertDocuemnts = await pool.query('Insert into incomebank_docs (name , user_id,file_name,file_url,cloudinary_id) values($1,$2,$3,$4,$5)',[name,userId,fileOriginal,fileUrl,publicId])
+    const updateUserDocs = await pool.query('Update users set docs_status=$1 where id=$2',[true,userId])
+    const updateKYCUser = await pool.query('Update user_kyc_details set document_file =$1 where user_id=$2',[fileUrl,userId])
+    return res.status(200).json({message:'Documents successfully uploaded '})
+  } catch (error) {
+    console.log('error',error);
+  }
+})
+
+exports.changeProfile = asyncHandler(async(req,res)=>{
+  const imgOriginal=req.file.originalname;
+  const {userId} = req;
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'File is required' });
+    }
+    const existingAvatar = await pool.query('Select avatar_id from users where id=$1',[userId])
+    const prevAvatar = existingAvatar.rows[0]
+    console.log(prevAvatar);
+    if(prevAvatar){
+      await cloudinary.uploader.destroy(prevAvatar.avatar_id, {
+        resource_type: 'image',
+      });
+    }
+
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      resource_type: 'image', // only for images 
+      folder: 'Quick_Fundz_avatars',
+      use_filename: true,   // Use the original filename
+      unique_filename: false,
+      access_mode: 'public',
+      
+    });
+
+    const fileUrl = result.secure_url;
+    const publicId = result.public_id;
+    const updateUserAvatar = await pool.query('Update users set avatar_url = $1,avatar_id=$2 where id=$3 RETURNING avatar_url' ,[fileUrl,publicId,userId] )
+    
+    const avatar=updateUserAvatar.rows[0].avatar_url
+
+    return res.status(200).json({status:'success', message:'Avatar changed successfully',avatar})
+  }catch(error){
+    return res.status(500).json({status:'error',message:error.message});
+  }
+})
+
+exports.changeUserAvatar=asyncHandler(async (req,res)=>{
+  const {userId} =req;
+  
+  try {
+    const showAvatar = await pool.query('Select avatar_url from users where id = $1',[userId])
+    const avatar = showAvatar.rows[0]?.avatar_url;
+    return res.status(200).json({status:'success', message:'Avatar changed successfully',avatar})
+  } catch (error) {
+    console.log(error)
+  }
+  
+})
 /* router.get("/me", (req, res) => {
   const token = req.headers.authorization.split(" ")[1];
 
