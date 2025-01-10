@@ -87,12 +87,12 @@ exports.userKyc = asyncHandler(async (req, res,next) => {
 
         // Insert data into user_kyc_details table
        const kycUser= await pool.query(
-            "INSERT INTO user_kyc_details (email, phone_number, aadhar_number,bank_account_number,ifsc_code,user_id) VALUES ($1, $2, $3, $4,$5,$6) RETURNING *",
-            [filteredBody.email, filteredBody.phoneNumber, filteredBody.aadharNumber,filteredBody.bankNumber,filteredBody.IFSCCode,userId]
+            "INSERT INTO user_kyc_details (email, phone_number, aadhar_number,bank_account_number,ifsc_code,user_id,is_verified) VALUES ($1, $2, $3, $4,$5,$6,$7) RETURNING *",
+            [filteredBody.email, filteredBody.phoneNumber, filteredBody.aadharNumber,filteredBody.bankNumber,filteredBody.IFSCCode,userId,'pending']
         );         
         // const kycDetails = await pool.query("SELECT * FROM user_kyc_details WHERE user_id=$1",[userId])
         // const kyc_id = kycDetails.rows[0].id
-        const usersKycUser_id= await pool.query("Update users set kyc_usersuser_id=$1 where id=$2",[userId,userId])
+        const usersKycUser_id= await pool.query("Update users set kyc_usersuser_id=$1,is_verified=$2 where id=$3",[userId,'pending',userId])
         // Successful insertion response
         res.status(200).json({
             status: 'success',
