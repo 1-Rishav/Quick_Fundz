@@ -31,9 +31,9 @@ const Sidebar = () => {
 
   const navigate = useNavigate();
   return (
-    <div className="flex md:block hidden">
+    <div className="flex md:block ">
       <div
-        className={` ${open ? "w-60" : "w-15"} z-50 blue-glassmorphism h-screen p-5 pt-8 relative transition-all duration-200 ease-in-out`}
+        className={` ${open ? "w-60" : "md:w-15 max-sm:w-10"} z-50 blue-glassmorphism h-screen p-5 pt-8 relative transition-all duration-200 ease-in-out`}
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
       >
@@ -42,7 +42,7 @@ const Sidebar = () => {
           className={`absolute z-10 cursor-pointer -right-3 top-9 w-7 border-dark-purple bg-white p-1 shadow-lg border-2 rounded-lg ${!open && "rotate-180"}`}
           onClick={() => setOpen(!open)}
         />
-        <div className="flex gap-x-4 items-center w-10">
+        <div className="flex gap-x-4 items-center md:w-10 w-5">
           <img src={dashicon} />
           <h1
             className={`text-white cursor-pointer hover:text-2xl origin-left font-medium text-xl duration-200 ${!open && "scale-0"}`}
