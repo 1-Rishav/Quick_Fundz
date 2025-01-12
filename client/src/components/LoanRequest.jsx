@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
-//import {load} from "@cashfreepayments/cashfree-js"
-//import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
 import { approvedLoan, investorNegotiate, rejectedLoan, requestInvestor,moneyPaid,createOrder, payingMoney } from '../redux/slices/auth';
 import NegotiateForm from './NegotiateForm'
+import { GrDocumentPdf } from 'react-icons/gr';
 
 const LoanRequest = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -47,11 +46,6 @@ const LoanRequest = () => {
 
     fetchKycRequests();
 
-    // Load approved and paid requests from localStorage
-    // const savedApprovedRequests = JSON.parse(localStorage.getItem('approvedRequests')) || {};
-    // const savedPaidRequests = JSON.parse(localStorage.getItem('paidRequests')) || {};
-    // setApprovedRequests(savedApprovedRequests);
-    // setPaidRequests(savedPaidRequests);
   }, [dispatch, user_id]);
 
   const handleApprove = (index, status, userId, loanId,pay_status) => {
@@ -62,12 +56,6 @@ const LoanRequest = () => {
       pay_status
     }
     dispatch(approvedLoan(data))
-    // const newApprovedRequests = {
-    //   ...approvedRequests,
-    //   [index]: true,
-    // };
-    // setApprovedRequests(newApprovedRequests);
-    // localStorage.setItem('approvedRequests', JSON.stringify(newApprovedRequests));
   };
 
   const handleRejected = (status, userId, loanId) => {
@@ -135,74 +123,7 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
   const rzp1 = new window.Razorpay(options);
   rzp1.open();
 }
-  
-  // let cashfree;
 
-  // let initializeSDK = async function(){
-  //   cashfree = await load({
-  //     mode:"sandbox",
-  //   })
-  // }
-  // initializeSDK()
-
-  // const [orderId,setOrderId] = useState("")
-
-  // const getSessionId = async()=>{
-  //   try {
-  //     let res = await axios.get("http://localhost:3001/payment") 
-   
-  //     if(res.data && res.data.payment_session_id){
-  //      console.log(res.data)
-  //      setOrderId(res.data.order_id)
-  //      return res.data.payment_session_id
-  //     }
-  //    } catch (error) {
-  //      console.log(error)
-  //    }
-  // }
-  // const verifyPayment= async(orderId,index)=>{
-  //   try {
-  //     // let res=await axios.post("http://localhost:3001/verify",{
-  //     //   orderId:orderId
-  //     // })
-  //     // if(res && res.data){
-  //     //   const newPaidRequests = {
-  //     //     ...paidRequests,
-  //     //     [index]: true,
-  //     //   };
-  //     //   setPaidRequests(newPaidRequests);
-  //     //   localStorage.setItem('paidRequests', JSON.stringify(newPaidRequests));
-  //     // }
-      
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-
-  // const handlePay = async (index)=>{
-    
-  //   try {
-  //     let sessionId = await getSessionId();
-  //     let checkoutOptions={
-  //       paymentSessionId:sessionId,
-  //       redirectTarget:"_modal",
-  //     }
-  
-  //     cashfree.checkout(checkoutOptions).then((res)=>{
-  //       console.log("Payment initiate")
-  //       verifyPayment(orderId,index)
-  //     })
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  //   /* const newPaidRequests = {
-  //     ...paidRequests,
-  //     [index]: true,
-  //   };
-  //   setPaidRequests(newPaidRequests);
-  //   localStorage.setItem('paidRequests', JSON.stringify(newPaidRequests)); */
-    
-  // };
   const handleNegotiate = (investor_email, investoruser_id, loan_amount, loan_duration, loan_rate_of_interest, loan_user_id, loan_id) => {
     setInvestor_email(investor_email);
     setInvestoruser_id(investoruser_id);
@@ -230,48 +151,51 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
     dispatch(investorNegotiate(data));
   };
 
-  // const handlePaid=(investorId,status)=>{
-  //   const data={
-  //     investorId:investorId,
-  //     status:status
-  //   }
-  //   dispatch(moneyPaid(data))
-  // }
-
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-full overflow-hidden">
       <div className="z-index-50 ">
         <Sidebar />
       </div>
-      <div className="flex flex-col flex-1 max-w-8xl mx-auto p-4 overflow-scroll overflow-x-hidden gradient-bg-transactions text-neutral-50">
-       {countRequest>0 ? <h1 className="text-2xl font-bold mb-6 text-center">Loan Requests</h1>:<h1 className="text-2xl font-bold mb-6 flex items-center justify-center h-full ">No Loan Request Yet</h1>} 
+      <div className="flex  flex-wrap sm:flex-col flex-1 max-w-8xl  mx-auto sm:p-4 overflow-scroll overflow-x-hidden gradient-bg-transactions text-neutral-50">
+       {countRequest>0 ? <h1 className="text-2xl font-bold mb-6 text-center ">Loan Requests</h1>:<h1 className="text-2xl w-full font-bold mb-6 flex-wrap flex-col flex text-center items-center justify-center h-full ">No Loan Request Yet</h1>} 
         <div className="grid grid-cols-1 gap-4">
           {currentUsers?.map((user, index) => (
-            <div key={index} className="border p-4 rounded-lg flex justify-between items-center">
-              <div className="relative border p-4 rounded-lg flex h-32 justify-between items-center gap-5">
-                <span className="absolute top-0 text-xl text-gray-600 font-bold ">Loan-Requirements</span>
-                <div className="flex flex-col ">
+            <div key={index} className="border p-4 rounded-lg flex flex-wrap gap-5 justify-between items-center">
+              <div className="relative border p-4 w-fit   rounded-lg flex  flex-wrap h-fit justify-between items-center ">
+                <div className='block w-full h-fit text-center text-xl text-gray-500 font-bold'>Loan Requirement</div>
+                <div className="relative w-fit h-fit flex flex-wrap flex-col  ">
                   <p><strong>Name:</strong> {user?.name}</p>
                   <p><strong>Email:</strong> {user?.email}</p>
                   <p><strong>Amount:</strong> {user?.loan_amount}</p>
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className=" relative w-fit h-fit flex flex-wrap flex-col gap-4">
                   <p><strong>Duration:</strong> {user?.duration}</p>
                   <p><strong>Interest Rate:</strong> {user?.rate_of_interest}</p>
                 </div>
+                <div className='relative  flex pr-2 flex-wrap  w-fit h-full justify-end items-end'>
+                           
+                              {user.document_file ? (
+                  <a href={user.document_file} target="_blank" rel="noopener noreferrer">
+                    <GrDocumentPdf size={30} />
+                  </a>
+                ) : (
+                  <span className='font-semibold'>NULL</span>
+                )}
+                            </div>
               </div>
-              <div className="relative border p-4 rounded-lg h-32 flex justify-between items-center gap-5">
-                <span className="absolute top-0 text-xl text-gray-600 font-bold ">Your Investment</span>
-                <div className="flex flex-col gap-4">
+              <div className="relative border  p-4 rounded-lg w-fit h-fit flex flex-wrap justify-between items-center gap-5">
+              <div className='block w-full h-fit text-center text-gray-500 text-xl font-bold'>Your Investment</div>
+                
+                <div className="flex flex-wrap w-fit h-fit flex-col gap-4">
                   <p><strong>Amount:</strong> {user?.original_amount}</p>
                   <p><strong>Duration:</strong> {user?.original_duration}</p>
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="w-fit h-fit flex flex-wrap flex-col gap-4">
                   <p><strong>Interest Rate:</strong> {user?.original_rate_of_interest}</p>
                 </div>
               </div>
-
-              <div className="space-2 gap-2 flex flex-col ">
+                
+              <div className="space-2 w-fit h-fit gap-2 flex flex-wrap md:flex-col justify-center ">
                 {/* approvedRequests[index] */}
                 {user.state === 'Approved' ? (
                    user.pay_status==='Paid' ? (
