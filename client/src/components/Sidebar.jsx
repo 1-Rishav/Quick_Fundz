@@ -4,7 +4,7 @@ import dashicon from "../assets/dashicon.svg";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const Sidebar = () => {
+const Sidebar = ({position}) => {
   const [open, setOpen] = useState(true);
   const { role } = useSelector((state) => state.auth);
 
@@ -31,15 +31,15 @@ const Sidebar = () => {
 
   const navigate = useNavigate();
   return (
-    <div className="flex md:block ">
+    <div className="flex md:block h-full min-h-screen">
       <div
-        className={` ${open ? "w-60" : "md:w-15 max-sm:w-10"} z-50 blue-glassmorphism h-screen p-5 pt-8 relative transition-all duration-200 ease-in-out`}
+        className={` ${open ? "w-60" : "md:w-15 max-sm:w-10"} z-50 blue-glassmorphism min-h-screen h-full p-5 pt-8 ${position} transition-all duration-200 ease-in-out`}
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
       >
         <img
           src={arrow}
-          className={`absolute z-10 cursor-pointer -right-3 top-9 w-7 border-dark-purple bg-white p-1 shadow-lg border-2 rounded-lg ${!open && "rotate-180"}`}
+          className={`absolute z-50 cursor-pointer -right-3 top-9 w-7 border-dark-purple bg-white p-1 shadow-lg border-2 rounded-lg ${!open && "rotate-180"}`}
           onClick={() => setOpen(!open)}
         />
         <div className="flex gap-x-4 items-center md:w-10 w-5">
