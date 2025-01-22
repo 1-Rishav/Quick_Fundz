@@ -684,3 +684,39 @@ try {
       }
     }
   }
+
+  export function screenRequestLoan(formValues){
+    return async()=>{
+      
+        try {
+          const response = await axios.post('loanRequest/smallScreenRequest',formValues,{withCredentials:true})
+          return response.data;
+        } catch (error) {
+          console.log(error)
+        }
+      
+    }
+  }
+
+  export function screenNegotiate(formValues){
+    return async()=>{
+      try {
+        const response = await axios.post('negotiateRequest/smallNegotiate',formValues,{withCredentials:true})
+        return response.data;
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
+
+  export function screenRepayment (formValues){
+    return async()=>{
+      try {
+        const response = await axios.post('loanRequest/smallRepayment',formValues,{withCredentials:true})
+        console.log(response.data)
+        return response.data
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
