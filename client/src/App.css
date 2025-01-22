@@ -87,6 +87,8 @@ html {
 .avatarfit{
   
     object-fit: contain !important;
-    
-  
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
