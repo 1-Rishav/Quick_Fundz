@@ -5,6 +5,7 @@ const authenticate = require('../middleware/authenticate.middleware');
 const router = express.Router();
 
 router.get('/allNegotiateAmount',authenticate, negotiateController.negotiateAmount);
+router.post('/smallNegotiate', negotiateController.smallNegotiateRequest);
 router.post('/approveNegotiation',negotiateController.negotiationApprove);
 router.post('/negotiationReject',negotiateController.negotiationReject);
 
