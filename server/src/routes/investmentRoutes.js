@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.post('/invest', investmentController.createInvestment);
 router.get("/moneyLender",authenticate,investmentController.getAllInvestments);
+router.get("/lendAmount",authenticate,investmentController.getUserLendAmount);
 
 
 module.exports = router;
