@@ -26,8 +26,12 @@ import NegotiationDetails from "../pages/dashboard/NegotiationDetailPage";
 import LoanRepaymentDetails from "../pages/dashboard/LoanRepaymentPage";
 import InvestedUser from "../pages/dashboard/InvestedUsersPage"
 import Repayment from "../pages/dashboard/RepaymentPage"
+import RepaymentDetailPage from "../pages/dashboard/RepaymentDetailPage"
 import LoanRequestUser from "../pages/dashboard/LoanRequestUsersPage"
+import LoanDetailPage from "../pages/dashboard/LoanDetailPage"
+import NegotiateDetailPage from "../pages/dashboard/NegotiateDetailPage"
 import ActiveUser from "../pages/dashboard/ActiveUserPage"
+import Investor_InvestmentPage from "../pages/dashboard/Investor_InvestmentPage";
 
 export default function Router(){
     return useRoutes([
@@ -72,9 +76,13 @@ export default function Router(){
                 {path:'menu',element:<Menu/>},
                 {path:'invest',element:<Invest/>},
                 {path:'loan',element:<Loan/>},
+                {path:'investor_investment',element:<Investor_InvestmentPage/>},
                 {path:'repayment',element:<Repayment/>},
+                {path:'repayment/:id',element:<RepaymentDetailPage/>},
                 {path:'loanRequest',element:<LoanRequestPage/>},
+                {path:'loanRequest/:id',element:<LoanDetailPage/>},
                 {path:'negotiate',element:<NegotiateLoanPage/>},
+                {path:'negotiate/:id',element:<NegotiateDetailPage/>},
                 {path:'404',element:<Page404/>},
                 { path: "*", element: <Navigate to="/404" replace /> }
             ]
