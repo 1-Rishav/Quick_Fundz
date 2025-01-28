@@ -720,3 +720,14 @@ try {
       }
     }
   }
+
+  export function allInvest(){
+    return async()=>{
+      try {
+        const response = await axios.get('investments/lendAmount',{withCredentials:true})
+      return response.data;
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
