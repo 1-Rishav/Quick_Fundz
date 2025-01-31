@@ -19,9 +19,14 @@ const Menu = () => {
   const [showMessage, setShowMessage] = useState([]);
   const [open , setOpen] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(""); // State to store avatar URL
+  const [mile , setMile] = useState(null);
+
+  const platformInfo= (...args)=>{
+   setMile(...args);
+  }
+  
 
   const handleAvatarChange = (newAvatarUrl) => {
-    console.log(newAvatarUrl);
     setAvatarUrl(newAvatarUrl); // Update avatar URL
   };
   const popupRef = useRef(null); 
@@ -91,7 +96,7 @@ const Menu = () => {
           <ProfileModal onAvatarChange={handleAvatarChange}/>
           <button 
             type='submit' 
-            onClick={handleLogout} 
+            onClick={()=>{navigate('/investor_investment')}} 
             className=" flex w-full  bg-gray-300 px-4 py-2 mt-2 hover:bg-gray-200"
           >
             Your Investment
@@ -108,7 +113,7 @@ const Menu = () => {
       )} 
       <div className="flex h-screen w-full  overflow-hidden">
         <div className="z-index-50 absolute">
-          <Sidebar />
+          <Sidebar position={'relative'}/>
         </div>
         <div className="relative h-screen w-screen   gradient-bg-welcome  ">
           <div className='flex flex-wrap justify-between items-center h-[85vh] w-full object-contain'>
@@ -131,8 +136,8 @@ const Menu = () => {
         </div>
       </div>
       <div className='pb-28 relative h-full w-full gradient-bg-transactions text-neutral-50'>
-        <MileStones/>
-          <ReasonToJoin/>
+        <MileStones platformMile={mile}/>
+          <ReasonToJoin handleDetail={platformInfo}/>
          <CarouselDemo/>
          <BackgroundBeamsWithCollisionDemo/>
         </div>
