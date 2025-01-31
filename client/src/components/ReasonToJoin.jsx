@@ -2,7 +2,7 @@ import React from 'react'
 import joinplatform from '../assets/WhytoJoin.jpg'
 import GraphCharts from './GraphCharts'
 
-function ReasonToJoin() {
+function ReasonToJoin({handleDetail}) {
   return (
 
     <div className='relative top-16 text-3xl flex flex-col items-center justify-center '>
@@ -13,7 +13,7 @@ function ReasonToJoin() {
             <img src={joinplatform} alt="Why P2P" className='rounded-sm h-full w-full'/>
         </div> */}
        <div className='flex items-center justify-center rounded-xl gradient-bg-services h-full w-full object-contain mt-8'>
-        <GraphCharts/>
+        <GraphCharts platformDetail={handleDetail}/>
        </div>
     </div>
 
