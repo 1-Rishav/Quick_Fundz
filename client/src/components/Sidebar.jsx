@@ -12,10 +12,10 @@ const Sidebar = ({position}) => {
   if (role === "user") {
     Menus = [
       { title: "Invest", svg: "https://img.icons8.com/?size=100&id=82688&format=png&color=FFFFFF", href: "invest" },
-      { title: "Loan", svg: "https://img.icons8.com/?size=100&id=9bwh9eISXZAz&format=png&color=FFFFFF", href: "loan" },
+      { title: "Live Loan", svg: "https://img.icons8.com/?size=100&id=9bwh9eISXZAz&format=png&color=FFFFFF", href: "loan" },
       { title: "Loan Request", svg: "https://img.icons8.com/?size=100&id=yAYeAE5xvjeu&format=png&color=FFFFFF", href: "loanRequest" },
-      { title: "Loan Negotiate", svg: "https://img.icons8.com/?size=100&id=irl0UrqGW2li&format=png&color=FFFFFF", href: "negotiate" },
-      { title: "Loan Re-Payment", svg: "https://img.icons8.com/?size=100&id=irl0UrqGW2li&format=png&color=FFFFFF", href: "repayment" },
+      { title: "Negotiate", svg: "https://img.icons8.com/?size=100&id=irl0UrqGW2li&format=png&color=FFFFFF", href: "negotiate" },
+      { title: "Re-Payment", svg: "https://img.icons8.com/?size=100&id=irl0UrqGW2li&format=png&color=FFFFFF", href: "repayment" },
     ];
   } else {
     Menus = [
@@ -24,8 +24,8 @@ const Sidebar = ({position}) => {
       { title: "Active Users", svg: "https://img.icons8.com/?size=100&id=33843&format=png&color=FFFFFF", href: "/admin/activeUsers" },
       { title: "Invested Users", svg: "https://img.icons8.com/?size=100&id=33843&format=png&color=FFFFFF", href: "/admin/investedUsers" },
       { title: "Loan Request Users", svg: "https://img.icons8.com/?size=100&id=33843&format=png&color=FFFFFF", href: "/admin/loanRequestUsers" },
-      { title: "NegotiationDetails", svg: "https://img.icons8.com/?size=100&id=33843&format=png&color=FFFFFF", href: "/admin/negotiationDetails" },
-      { title: "RepaymentDetails", svg: "https://img.icons8.com/?size=100&id=33843&format=png&color=FFFFFF", href: "/admin/loanRepaymentDetails" },
+      { title: "Negotiation Details", svg: "https://img.icons8.com/?size=100&id=33843&format=png&color=FFFFFF", href: "/admin/negotiationDetails" },
+      { title: "Repayment Details", svg: "https://img.icons8.com/?size=100&id=33843&format=png&color=FFFFFF", href: "/admin/loanRepaymentDetails" },
     ];
   }
 
