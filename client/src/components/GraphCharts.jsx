@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ReactApexChart from 'react-apexcharts'
 import { useDispatch } from 'react-redux'
 import { activeUser, allNegotiateData, investedUsers, loanRequestUsers } from '../redux/slices/auth';
-function GraphCharts() {
+function GraphCharts({platformDetail}) {
   const [allUser , setAllUser] = useState(null);
   const [allInvestor , setAllInvestor] = useState(null);
   const [allborrower , setAllBorrower] = useState(null);
@@ -10,13 +10,14 @@ const dispatch = useDispatch();
   useEffect(()=>{
     const getSummary = async()=>{
       const user = await dispatch(activeUser());
+      const userLength = user.length;
       setAllUser(user);
       const investor = await dispatch(investedUsers());
       setAllInvestor(investor)
       const borrower = await dispatch(loanRequestUsers());
       setAllBorrower(borrower)
       const loanApproval = borrower.reduce((count , item)=> {return item.state==='Approved'?count+1:count},0)
-      const percentageApproval = (loanApproval/borrower.length)*100;
+      const percentageApproval = ((loanApproval/borrower.length)*100).toFixed(2);
       setLoanApproval((prevState)=>({
         ...prevState, series: [percentageApproval]
       }))
@@ -64,6 +65,13 @@ const dispatch = useDispatch();
         ...prevState,
         series: [user.length, investor.length, borrower.length], // Example for Total Investment
     }));
+    const data = {
+      userLength,
+      loanApproval,
+      totalInvestment,
+      successNegotiation
+    }
+    platformDetail(data)
     }
     getSummary();
   },[])
