@@ -8,7 +8,7 @@ import LoanPre_Request from "./LoanPre_Request";
 
 const Loan = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const loansPerPage = 8;
+  const loansPerPage = 5;
   const [loans, setLoans] = useState([]);
   const [filteredLoans, setFilteredLoans] = useState([]);
   const [amount, setAmount] = useState("");
@@ -35,8 +35,8 @@ const Loan = () => {
       try {
         const InvestorDetail = await dispatch(allInvestments());
         const result = await InvestorDetail;
-        setShowInvestor(InvestorDetail)
-        setCountLoan(InvestorDetail.data.length);
+        setShowInvestor(InvestorDetail?.liveLoan)
+        setCountLoan(InvestorDetail?.liveloan?.length);
         if (result?.status === "success" && Array.isArray(result?.data)) {
           setLoans(result?.data);
           setFilteredLoans(result?.data);
@@ -233,11 +233,11 @@ const Loan = () => {
   return (
     <>
      {countLoan>0 ? (<>
-      <div className="flex h-screen overflow-hidden">
-      <div className="z-index-50">
+      <div className="flex h-full min-h-screen overflow-hidden">
+      <div className="z-index-50 max-sm:absolute">
         <Sidebar />
       </div>
-      <div className="flex flex-col flex-1 max-w-8xl mx-auto p-4 overflow-y-auto relative gradient-bg-transactions text-neutral-50">
+      <div className="flex max-sm:ml-8 flex-col flex-1 max-w-8xl mx-auto p-4 overflow-y-auto relative gradient-bg-transactions text-neutral-50">
          <h1 className="text-2xl font-bold mb-6 text-center">Live Loans</h1>   
           {countLoan>2 &&  <button
           className="p-3 border border-black text-black rounded-full shadow-md hover:bg-gray-100 flex items-center space-x-2 w-44 absolute top-4 right-4"
@@ -293,13 +293,13 @@ const Loan = () => {
             </div>
           </div>
         )}
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {currentLoans.map((loan, index) => (
             <div
               key={index}
-              className="border p-4 rounded-lg flex justify-between items-center"
+              className="border p-4 rounded-lg flex flex-wrap justify-between items-center gradient-bg-services"
             >
-              <div>
+              <div className="relative w-fit h-fit flex flex-wrap flex-col">
                 <p>
                   <strong>Name:</strong> {loan.name}
                 </p>
@@ -310,7 +310,7 @@ const Loan = () => {
                   <strong>Amount:</strong> {loan.amount}
                 </p>
               </div>
-              <div>
+              <div className="relative w-fit h-fit flex flex-wrap flex-col gap-4">
                 <p>
                   <strong>Duration:</strong> {loan.duration}
                 </p>
@@ -318,7 +318,7 @@ const Loan = () => {
                   <strong>Interest Rate:</strong> {loan.rate_of_interest}
                 </p>
               </div>
-              <div className="space-2 gap-2 flex flex-col">
+              <div className="space-2 gap-2 flex justify-center sm:flex-col">
                 <button className="bg-green-500 text-white px-4 py-2 rounded-full" onClick={() => handleAcceptClick(loan.id, loan.user_id, loan.amount, loan.duration, loan.rate_of_interest, loan.email, 'processing')}>
                   Accept
                 </button>
@@ -329,7 +329,7 @@ const Loan = () => {
             </div>
           ))}
         </div>
-         {countLoan>7 &&  <div className="flex justify-end mt-6 space-x-2">
+         {countLoan>4 &&  <div className="flex justify-end mt-6 space-x-2">
           <button
             className={`px-4 py-2 rounded-full cursor-pointer ${currentPage === 1 ? "bg-gray-300" : "bg-slate-800 text-white"
               }`}
@@ -373,10 +373,10 @@ const Loan = () => {
       /></div></>): 
       (<>
       
-      <div className="flex h-screen w-screen">
+      <div className="flex h-full min-h-screen w-screen">
        
-      <div className="z-index-50">
-        <Sidebar />
+      <div className="z-index-50 ">
+        <Sidebar position={'absolute'} />
       </div>
       
       <div className=" flex items-center justify-center gradient-bg-transactions w-full">
