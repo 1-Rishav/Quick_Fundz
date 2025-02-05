@@ -8,7 +8,6 @@ const Invest = () => {
   const [duration, setDuration] = useState("");
   const [interestRate, setInterestRate] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
   const dispatch = useDispatch();
@@ -17,16 +16,14 @@ const Invest = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage("");
     try {
       const data = { amount, duration, interestRate,userId };
       dispatch(investmentEntry(data));
-      setMessage("Investment done successfully.");
       setAmount("");
       setDuration("");
       setInterestRate("");
     } catch (error) {
-      setMessage("Error saving investment data.");
+      console.log(error)
     } finally {
       setLoading(false);
     }
@@ -88,14 +85,14 @@ const Invest = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex  h-full min-h-screen">
       <div className="z-index-50">
-        <Sidebar />
+        <Sidebar position={'absolute'}/>
       </div>
-      <div className="flex-1 flex items-center justify-center min-h-screen p-4 gradient-bg-transactions text-neutral-50">
-        <div className="gradient-bg-services text-neutral-50 p-8 rounded-2xl shadow-lg w-full max-w-lg">
+      <div className="flex-1 flex items-center justify-center h-full min-h-screen p-4 gradient-bg-transactions text-neutral-50">
+        <div className="gradient-bg-services h-full text-neutral-50 p-8 rounded-2xl shadow-lg w-full max-w-lg">
           <h1 className="text-3xl font-bold  mb-6 text-center">
-            Investment Form
+            Invest
           </h1>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
@@ -149,15 +146,6 @@ const Invest = () => {
             >
               {loading ? "Submitting..." : "Submit"}
             </button>
-            {message && (
-              <div
-                className={`text-center mt-4 ${
-                  message.startsWith("Error") ? "text-red-500" : "text-green-500"
-                }`}
-              >
-                {message}
-              </div>
-            )}
           </form>
         </div>
       </div>
