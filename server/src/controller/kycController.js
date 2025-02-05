@@ -94,14 +94,14 @@ exports.userKyc = asyncHandler(async (req, res,next) => {
         // const kyc_id = kycDetails.rows[0].id
         const usersKycUser_id= await pool.query("Update users set kyc_usersuser_id=$1,is_verified=$2 where id=$3",[userId,'pending',userId])
         // Successful insertion response
-        res.status(200).json({
+       return res.status(200).json({
             status: 'success',
             message: "KYC under processing"
         });
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({
+       return res.status(500).json({
             status: 'error',
             message: "Something went wrong",
             error: error.message
@@ -113,17 +113,24 @@ exports.userKyc = asyncHandler(async (req, res,next) => {
 exports.verifiedUser=asyncHandler(async(req,res)=>{
     const {status,user_id} = req.body;
 
-    const updateKyc_Is_verified=await pool.query("UPDATE user_kyc_details SET is_verified = $1 WHERE user_id = $2",[status,user_id])
-    const updateUsers_Is_verified=await pool.query("UPDATE users SET is_verified = $1 WHERE id = $2",[status,user_id])
-    const user = await pool.query("Select * from users where id=$1",[user_id])
-
-    const role = user.rows[0].role;
-    const verified = user.rows[0].verified;
-    const verificationStatus = user.rows[0].is_verified;
-    res.status(200).json({
-        status:'success',
-        message:'Entered in dashboard',role,verificationStatus,verified
-    })
+    try {
+        const updateKyc_Is_verified=await pool.query("UPDATE user_kyc_details SET is_verified = $1 WHERE user_id = $2",[status,user_id])
+        const updateUsers_Is_verified=await pool.query("UPDATE users SET is_verified = $1 WHERE id = $2",[status,user_id])
+        const user = await pool.query("Select * from users where id=$1",[user_id])
+    
+        const role = user.rows[0].role;
+        const verified = user.rows[0].verified;
+        const verificationStatus = user.rows[0].is_verified;
+       return res.status(200).json({
+            status:'success',
+            message:'Entered in dashboard',role,verificationStatus,verified
+        })
+    } catch (error) {
+        return res.status(401).json({
+            status:'error',
+            message:"Some error occurred"
+        })
+    }
 })
 
 exports.updateKyc=asyncHandler(async(req,res)=>{
@@ -155,14 +162,14 @@ exports.updateKyc=asyncHandler(async(req,res)=>{
         const user = await pool.query("Select * from users where id=$1",[userId])
 
     const verificationStatus = user.rows[0].is_verified;
-        res.status(200).json({
+       return res.status(200).json({
             status: 'success',
             message: "KYC under processing",verificationStatus
         });
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({
+       return res.status(500).json({
             status: 'error',
             message: "Something went wrong",
             error: error.message
