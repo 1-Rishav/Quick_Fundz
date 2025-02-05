@@ -125,10 +125,10 @@ export function LoginUser(formValues) {
 
       window.localStorage.setItem("user_id", user_id);
       //window.localStorage.setItem("token", token);
-      toast.success(message || "Login Successful");
+      toast.success(message );
 
     } catch (error) {
-      toast.error(error.message || "Login failed.");
+      toast.error(error.response.data.message);
       /* dispatch(slice.actions.updateIsLoading({ isLoading: false, error: true }));
     } finally {
       dispatch(slice.actions.updateIsLoading({ isLoading: false, error: false })); */
@@ -153,13 +153,13 @@ export function RegisterUser(formValues) {
       dispatch(slice.actions.updateRegisterEmail({email:formValues.email}))
       window.localStorage.setItem("user_id", user_id);
       //window.localStorage.setItem("token", token);
-      toast.success(message || "Login Successful");
+      toast.success(message);
 if (!getState().auth.error) {
         //window.location.href = "/auth/kyc"
         window.location.href = "/auth/verify"
 }
     } catch (error) {
-      toast.error(error.message || "Login failed.");
+      toast.error(error.response.data.message);
       //dispatch(slice.actions.updateIsLoading({ isLoading: false, error: true }));
     } 
       
@@ -188,7 +188,7 @@ export function VerifyEmail(formValues){
         window.location.href = "/auth/kyc"
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response.data.message);
      
     }
   }
@@ -199,13 +199,13 @@ export function UserKyc(formValues){
     try {
      const response =await axios.post("auth/kycEntry",formValues,{withCredentials: true})
       const {message}=response.data;
-     toast.success(message || "KYC under processing ");
+     toast.success(message );
 
      if(!getState().auth.error){
       window.location.href = "/auth/documents" 
           }
     } catch (error) {
-      toast.error(error.message)
+      toast.error(error.response.data.message)
     }
       
   }
@@ -218,13 +218,13 @@ export function documents(formValues){
         headers: { 'Content-Type': 'multipart/form-data' },withCredentials:true
       })
       const {message}=response.data;
-      toast.success(message || 'Docuements successfully uploaded.')
+      toast.success(message)
      
       if(!getState().auth.error){
         window.location.href = "/auth/kycstatus" 
             }
     } catch (error) {
-      console.log(error)
+      toast.error(error.response.data.message)
     }
   }
 }
@@ -247,7 +247,7 @@ export function documents(formValues){
       
 toast.success(message);
     } catch (error) {
-      toast.error(error.message)
+      toast.error(error.response.data.message)
     }
   } 
 } 
@@ -256,10 +256,11 @@ export function showKycRequest(){
   return async ()=>{
     try {
       const response = await axios.get('admin/showRequest')
+      toast.success(response.data.message)
+
       return response.data;
     } catch (error) {
-      console.log(error.message)
-    }
+toast.error(error.response.data.message)    }
   }
 }
 
@@ -267,9 +268,9 @@ export function confirmOrRejectRequest(formValues){
   return async()=>{
     try {
       const response = await axios.post('admin/confirmOrRejectUser',formValues);
+      toast.success(response.data.message)
     } catch (error) {
-      console.log(error.message)
-    }
+toast.error(error.response.data.message)    }
   }
 }
 
@@ -278,7 +279,7 @@ export function rejectedkyc(formValues){
     try {
       const response = await axios.post('auth/updatekyc',formValues);
       const {message,verificationStatus}=response.data;
-      toast.success(message || "KYC under processing ");
+      toast.success(message);
       dispatch(
         slice.actions.verifiedUser({
           verificationStatus
@@ -288,23 +289,21 @@ export function rejectedkyc(formValues){
        window.location.href = "/auth/kycstatus" 
            }
     } catch (error) {
-      toast.error(error.message)
+      toast.error(error.response.data.message)
 
     }
   }
 }
 
 export function investmentEntry(formValues){
-  console.log(formValues)
   return async()=>{
     try {
       const response = await axios.post(
         "investments/invest",formValues,{withCredentials:true}
       );
-
+      toast.success(response.data.message);
     } catch (error) {
-      console.log(error)
-    }
+toast.error(error.response.data.message)    }
   }
 }
 
@@ -312,10 +311,12 @@ export function allInvestments(){
   return async()=>{
     try {
       const response = await axios.get('investments/moneyLender',{withCredentials:true})
+      if(response.data.liveLoan.length>0){
+        toast.success(response.data.message)
+      }
       return response.data;
     } catch (error) {
-      console.log(error)
-    }
+toast.error(error.response.data.message)    }
   }
 }
 
@@ -323,9 +324,9 @@ export function loanAccept(formValues){
   return async()=>{
     try {
       const response  = await axios.post('loanRequest/loanAccepted',formValues,{withCredentials:true});
+      toast.success(response.data.message)
     } catch (error) {
-      console.log(error)
-    }
+toast.error(error.response.data.message)     }
   }
 }
 
@@ -333,10 +334,10 @@ export function loanRequest(formValues){
   return async()=>{
     try {
       const response = await axios.post('loanRequest/loan',formValues,{withCredentials:true})
-      
+      toast.success(response.data.message)
+
     } catch (error) {
-      console.log(error)
-    }
+      toast.error(error.response.data.message)     }
   }
 }
 
@@ -345,11 +346,11 @@ export function requestInvestor(formValues){
      
       try {
         const response = await axios.post('loanRequest/requestInvestor',formValues,{withCredentials:true})        
-  
+        toast.success(response.data.message)
         return response.data;
         
       } catch (error) {
-        console.log(error)
+        toast.error(error.response.data.message) 
       }
     
   }
@@ -359,8 +360,11 @@ export function rejectedLoan(formValues){
   return async()=>{
     try {
       const response = await axios.post('loanRequest/rejectLoan',formValues,{withCredentials:true})
+      toast.success(response.data.message)
+
     } catch (error) {
-      console.log(error)
+      toast.error(error.response.data.message) 
+
     }
   }
 }
@@ -369,8 +373,11 @@ export function approvedLoan(formValues){
   return async()=>{
     try {
       const response = await axios.post('loanRequest/acceptLoan',formValues,{withCredentials:true})
+      toast.success(response.data.message)
+
     } catch (error) {
-      console.log(error)
+      toast.error(error.response.data.message) 
+
     }
   }
 }
@@ -379,8 +386,11 @@ export function investorNegotiate(formValues){
   return async()=>{
     try {
       const response = await axios.post('loanRequest/lastNegotiate',formValues,{withCredirectials:true})
+      toast.success(response.data.message)
+
     } catch (error) {
-      console.log(error)
+      toast.error(error.response.data.message) 
+
     }
   }
 }
@@ -389,10 +399,10 @@ export function negotiateValue(){
   return async()=>{
     try {
       const response = await axios.get('negotiateRequest/allNegotiateAmount',{withCredentials:true})
-
+      toast.success(response.data.message)
       return response.data;
     } catch (error) {
-      console.log(error)
+      toast.error(error.response.data.message) 
     }
   }
 }
@@ -401,8 +411,9 @@ export function negotiationApprove(formValues){
   return async()=>{
     try {
       const response = await axios.post('negotiateRequest/approveNegotiation',formValues,{withCredentials:true})
+      toast.success(response.data.message)
     } catch (error) {
-      console.log(error)
+      toast.error(error.response.data.message) 
     }
   }
 }
@@ -411,8 +422,9 @@ export function rejectNegotiation(formValues){
   return async()=>{
     try {
       const response = await axios.post('negotiateRequest/negotiationReject',formValues,{withCredentials:true})
+      toast.success(response.data.message)
     } catch (error) {
-      console.log(error)
+      toast.error(error.response.data.message) 
     }
   }
 }
@@ -421,10 +433,10 @@ export function kycUser(){
   return async()=>{
     try {
       const response = await axios.get('admin/kycUsers');
+      
       return response.data;
     } catch (error) {
-      console.log(error)
-    }
+    console.log(error)    }
   }
 }
 
@@ -432,10 +444,10 @@ export function adminUpdateKyc_user(formValues){
   console.log(formValues);
   return async()=>{
 try {
-        const response = await axios.post('admin/adminUpdateKycUser',formValues,{withCredentials:true})
-  
+    const response = await axios.post('admin/adminUpdateKycUser',formValues,{withCredentials:true})
+    toast.success(response.data.message);
 } catch (error) {
-  console.log(error)
+    toast.error(error.response.data.message)
 }    
   }
 }
@@ -444,12 +456,11 @@ export function activeUser(){
   return async()=>{
     try {
       const response = await axios.get('admin/users');
-      
+
       return response.data;
 
     } catch (error) {
-      console.log(error)
-    }
+console.log(error)    }
   }
 }
 
@@ -457,9 +468,10 @@ export function deleteCurrentUser(formValues){
   return async()=>{
     try {
       const response = await axios.get(`admin/deleteUser/${formValues}`)
+      toast.success(response.data.message);
       return response.data;
     } catch (error) {
-      console.log(error)
+      toast.error(error.response.data.message);
     }
   }
 
@@ -469,8 +481,10 @@ export function adminUpdateCurrent_user(formValues){
   return async()=>{
     try {
       const response = await axios.post('admin/UpdateCurrent_user', formValues,{withCredentials:true});
+      toast.success(response.data.message);
+
     } catch (error) {
-      console.log(error)
+      toast.error(error.response.data.message);
     }
   }
 }
@@ -479,10 +493,9 @@ export function adminMessage(){
   return async()=>{
     try {
       const response = await axios.get('admin/message',{withCredentials:true})
-
       return response.data;
     } catch (error) {
-      console.log(error)
+console.error(error.response.data.message);
     }
   }
 }
@@ -514,8 +527,7 @@ export function adminMessage(){
         const response = await axios.get('admin/allLoanRequest',{withCredentials:true});
         return response.data;
       } catch (error) {
-        console.log(error)
-      }
+console.log(error)      }
     }
   }
 
@@ -523,9 +535,10 @@ export function adminMessage(){
 return async()=>{
   try {
     const response = await axios.post('admin/updateLoan_details',formValues);
+    toast.success(response.data.message);
 
   } catch (error) {
-    console.log(error)
+    toast.error(error.response.data.message);
   }
 }
   }
@@ -534,8 +547,10 @@ return async()=>{
     return async()=>{
       try {
         const response = await axios.post('admin/updateInvestor_details',formValues)
+        toast.success(response.data.message);
+
       } catch (error) {
-        console.log(error)
+        toast.error(error.response.data.message);
       }
     }
   }
@@ -545,10 +560,10 @@ return async()=>{
     return async()=>{
       try {
         const response = await axios.post('paymentRequest/orderCreation',formValues,{withCredentials:true});
-        
+        toast.success(response.data.message);
         return response.data;
       } catch (error) {
-        console.log(error)
+        toast.error(error.response.data.message);
       }
     }
   }
@@ -557,10 +572,10 @@ return async()=>{
     return async()=>{
       try {
         const response = await axios.post('paymentRequest/payingMoney',formValues,{withCredentials:true});
-        
+        toast.success(response.data.message);
         return response.data
       } catch (error) {
-        console.log(error)
+        toast.error(error.response.data.message);
       }
     }
   }
@@ -569,9 +584,10 @@ return async()=>{
     return async()=>{
       try {
         const response = await axios.post('loanRequest/paidStatus',formValues,{withCredentials:true})
+        toast.success(response.data.message)
         return response.data;
       } catch (error) {
-        console.log(error)
+        toast.error(error.response.data.message) 
       }
     }
   }
@@ -580,10 +596,12 @@ return async()=>{
     return async()=>{
 try {
       const response = await axios.get('loanRequest/repayStatus',{withCredentials:true});
-      
+      toast.success(response.data.message)
+
       return response.data;
 } catch (error) {
-  console.log(error);
+  toast.error(error.response.data.message) 
+
 }      
     }
   }
@@ -592,9 +610,10 @@ try {
     return async()=>{
       try {
         const response = await axios.post('loanRequest/moneyRepay',formValues,{withCredentials:true});
+        toast.success(response.data.message)
         return response.data;
       } catch (error) {
-        console.log(error);
+        toast.error(error.response.data.message)
       }
     }
   }
@@ -605,8 +624,7 @@ try {
         const response = await axios.get('admin/allNegotiateUser',{withCredentials:true})
         return response.data;
       } catch (error) {
-        console.log(error)
-      }
+console.log(error);      }
     }
   }
 
@@ -614,8 +632,10 @@ try {
     return async()=>{
       try {
         const response = await axios.post('admin/updateNegotiation_details',formValues)
+        toast.success(response.data.message);
+
       } catch (error) {
-        console.log(error)
+        toast.error(error.response.data.message);
       }
     }
   }
@@ -624,10 +644,10 @@ try {
     return async()=>{
       try {
         const response = await axios.get('admin/allRepaymentUser',{withCredentials:true})
-        return response.data;
+
+        return response?.data;
       } catch (error) {
-        console.log(error)
-      }
+        console.log(error);      }
     }
   }
 
@@ -635,8 +655,9 @@ try {
     return async()=>{
       try {
         const response = await axios.post('admin/updateRepayment_details',formValues)
+        toast.success(response.data.message);
       } catch (error) {
-        console.log(error)
+        toast.error(error.response.data.message);
       }
     }
   }
@@ -645,9 +666,10 @@ try {
     return async()=>{
       try {
         const response = await axios.post('admin/deleteUser',formValues,{withCredentials:true})
-        
+        toast.success(response.data.message);
+
       } catch (error) {
-        console.log(error)
+        toast.error(error.response.data.message);
       }
     }
   }
@@ -656,8 +678,10 @@ try {
     return async()=>{
       try {
         const response = await axios.post('loanRequest/preRequest',formValues,{withCredentials:true})
+        toast.success(response.data.message);
+
       } catch (error) {
-        console.log(error)
+        toast.error(error.response.data.message);
       }
     }
   }
@@ -666,10 +690,11 @@ try {
     return async()=>{
       try {
         const response = await axios.post('auth/profileImage',formValues,{headers: { 'Content-Type': 'multipart/form-data' },withCredentials:true})
+        toast.success(response.data.message);
         return response.data;
         
       } catch (error) {
-        console.log(error)
+        toast.error(error.response.data.message);
       }
     }
   }
@@ -690,9 +715,10 @@ try {
       
         try {
           const response = await axios.post('loanRequest/smallScreenRequest',formValues,{withCredentials:true})
+          toast.success(response.data.message);
           return response.data;
         } catch (error) {
-          console.log(error)
+          toast.error(error.response.data.message);
         }
       
     }
@@ -702,9 +728,10 @@ try {
     return async()=>{
       try {
         const response = await axios.post('negotiateRequest/smallNegotiate',formValues,{withCredentials:true})
+        toast.success(response.data.message)
         return response.data;
       } catch (error) {
-        console.log(error)
+        toast.error(error.response.data.message);
       }
     }
   }
@@ -713,10 +740,11 @@ try {
     return async()=>{
       try {
         const response = await axios.post('loanRequest/smallRepayment',formValues,{withCredentials:true})
-        console.log(response.data)
+        toast.success(response.data.message);
         return response.data
       } catch (error) {
-        console.log(error)
+        toast.error(error.response.data.message);
+
       }
     }
   }
@@ -725,9 +753,11 @@ try {
     return async()=>{
       try {
         const response = await axios.get('investments/lendAmount',{withCredentials:true})
+        toast.success(response.data.message)
+
       return response.data;
       } catch (error) {
-        console.log(error)
+        toast.error(error.response.data.message)
       }
     }
   }
