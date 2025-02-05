@@ -71,7 +71,7 @@ exports.registerUser = asyncHandler(async(req, res, next)=>{
     }
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Server error" });
+   return res.status(500).json({ error: "Error occured while registering user" });
   }
 })
 
@@ -120,7 +120,9 @@ exports.sendOTP = asyncHandler(async (req, res, next) => {
       message: "OTP Sent Successfully!",
     });
   } catch (error) {
-    console.log(error)
+    return res.status(500).json({
+      message:"Error sending OTP"
+    })
   }
 });
 
@@ -229,7 +231,8 @@ exports.loginUser= asyncHandler(async(req,res)=>{
   const docs_status = user.rows[0].docs_status;
   const verificationStatus=user.rows[0].is_verified;
   const verified = user.rows[0].verified;
-      res.cookie("token",token,options).status(201).json({ token, role , user_id,verificationStatus,kycMessage,verified,docs_status});
+     return res.cookie("token",token,options).status(201).json({
+      message:"Loggedin successfully", token, role , user_id,verificationStatus,kycMessage,verified,docs_status});
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: "Server error" });
@@ -263,7 +266,7 @@ exports.incomeDocuments = asyncHandler(async(req,res)=>{
     const updateKYCUser = await pool.query('Update user_kyc_details set document_file =$1 where user_id=$2',[fileUrl,userId])
     return res.status(200).json({message:'Documents successfully uploaded '})
   } catch (error) {
-    console.log('error',error);
+    return res.status(500).json({message:"Error uploading documents",})
   }
 })
 
@@ -300,7 +303,7 @@ exports.changeProfile = asyncHandler(async(req,res)=>{
 
     return res.status(200).json({status:'success', message:'Avatar changed successfully',avatar})
   }catch(error){
-    return res.status(500).json({status:'error',message:error.message});
+    return res.status(500).json({status:'error',message:"Error updating avatar"});
   }
 })
 
@@ -312,7 +315,7 @@ exports.changeUserAvatar=asyncHandler(async (req,res)=>{
     const avatar = showAvatar.rows[0]?.avatar_url;
     return res.status(200).json({status:'success', message:'Avatar changed successfully',avatar})
   } catch (error) {
-    console.log(error)
+    return res.status(500).json({status:'error',message:"Error updating avatar"});
   }
   
 })

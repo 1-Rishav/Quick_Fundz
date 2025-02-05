@@ -81,10 +81,10 @@ exports.order = asyncHandler(async(req,res)=>{
                 return res.status(500).json({message:"Something went wrong! "})
             }
             
-            res.status(200).json({data:order})
+           return res.status(200).json({message:"Order created",data:order})
         })
     } catch (error) {
-        console.log(error);
+        return res.status(500).json({message:"Error creating order"});
     }
 
 })
@@ -115,14 +115,13 @@ exports.Verify=asyncHandler(async(req,res)=>{
                 razorpay_payment_id,
                 razorpay_signature
             };
-            res.status(200).json({
+           return res.status(200).json({
                 message:"Payment Successful"
             })
             
         }
     } catch (error) {
-        res.status(500).json({ message: "Internal Server Error!" });
-        console.log(error);
+       return res.status(500).json({ message: "Internal Server Error!" });
     }
 
 })

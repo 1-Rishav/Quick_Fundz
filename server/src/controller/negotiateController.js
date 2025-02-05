@@ -13,11 +13,31 @@ exports.negotiateAmount = asyncHandler(async (req, res) => {
         const allData = await pool.query('Select * from investor_negotiation where loan_user_id =$1 AND negotiate_status!=$2', [userId, 'Rejected']);
         const finalAmount = allData.rows;
 
-        res.status(200).json({
+       return res.status(200).json({
             finalAmount,
+            message:"Fetched Investor request"
         })
     } catch (error) {
-        console.log(error);
+return res.status(500).json({
+    message:"Error fetching Investor request"
+})    }
+})
+
+exports.smallNegotiateRequest= asyncHandler(async(req, res) => {
+    const {id , user_id}= req.body;
+    try {
+        const data = await pool.query('Select * from investor_negotiation where id=$1 AND negotiate_status!=$2 AND loan_user_id =$3', [id , 'Rejected',user_id])
+        const finalAmount = data.rows;
+
+        return res.status(200).json({
+            finalAmount,
+            message:"Fetched Investor request"
+
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message:"Error fetching Investor request"
+        })
     }
 })
 
@@ -26,8 +46,14 @@ exports.negotiationApprove = asyncHandler(async (req, res) => {
     try {
         const updateNegotiateUser = await pool.query("Update investor_negotiation set negotiate_status=$1 where id=$2", [status, negotiateId])
         const updateLoanDetail = await pool.query("Update loan_request_details set state=$1,loan_amount=$2,duration=$3,rate_of_interest=$4, pay_status=$5 where id=$6", [status,negotiateAmount, negotiateDuration,negotiateROI, pay_status, loanId])
+        return res.status(200).json({
+            message:"Your Loan Approved"
+        })
+
     } catch (error) {
-        console.log(error);
+        return res.status(500).json({
+        message:"Error while processing request"
+        })
     }
 });
 
@@ -36,8 +62,11 @@ exports.negotiationReject = asyncHandler(async (req, res) => {
     try {
         const updateNegotiateUser = await pool.query("Update investor_negotiation set negotiate_status=$1 where id=$2", [status, negotiateId])
         const updateLoanDetail = await pool.query("Update loan_request_details set state=$1,pay_status=$2 where id=$3", [status, status, loanId])
-
+return res.status(200).json({
+message:"Rejection successfull"
+})
     } catch (error) {
-        console.log(error)
-    }
+return res.status(500).json({
+    message:"Error while processing request"
+})    }
 });
