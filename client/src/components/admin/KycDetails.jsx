@@ -5,6 +5,7 @@ import { EditIcon } from "../BuildFunction/EditIcon";
 import Sidebar from '../Sidebar';
 import {adminUpdateKyc_user, kycUser } from '../../redux/slices/auth';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 //import axios from 'axios';
 
 const statusColorMap = {
@@ -21,13 +22,16 @@ const KycDetails = () => {
   const [allRequest, setAllRequest] = useState([]);
   const [countKycUser,setCountKycUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showInput, setShowInput] = useState(null);
+  const [showInput, setShowInput] = useState(false);
+  const [inputId , setInputId] = useState(null);
+
   const [inputValue, setInputValue] = useState(null)
   const dispatch = useDispatch();
   const usersPerPage = 10;
 
   const handleEdit = (userId) => {
-    setShowInput(userId);
+    setShowInput(true);
+    setInputId(userId)
   }
   const handleInputChange = (e) => {
     e.preventDefault();
@@ -45,30 +49,32 @@ const KycDetails = () => {
   }
   useEffect(() => {
     const fetchKycDetails = async () => {
+      
+        const allKycUser = await dispatch(kycUser());
+        setAllRequest(allKycUser.kycDetail);
+      
+    };
+    
+
+    fetchKycDetails();
+  }, [dispatch, showInput,inputId, inputValue]);
+
+  useEffect(() => {
+    const fetchKycDetails = async () => {
       try {
         const allKycUser = await dispatch(kycUser());
-        setAllRequest(allKycUser);
-        setCountKycUser(allKycUser.length);
+        setAllRequest(allKycUser.kycDetail);
+        setCountKycUser(allKycUser.kycDetail.length);
+        toast.success(allKycUser.message)
       } catch (error) {
-        console.error("Error fetching KYC details:", error);
-      } finally {
+toast.error(error.allKycUser.message)      } finally {
         setLoading(false);
       }
     };
     
 
     fetchKycDetails();
-  }, [dispatch, showInput, inputValue]);
-
-  
-  /* const deleteUser = async (userId) => {
-    try {
-      await axios.delete(`http://localhost:3001/admin/deleteUser/${userId}`);
-      setAllRequest(allRequest.filter((user) => user.user_id !== userId));
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  }; */
+  }, [dispatch]);
 
   const lastIndex = currentPage * usersPerPage;
   const firstIndex = lastIndex - usersPerPage;
@@ -101,7 +107,7 @@ const KycDetails = () => {
       case "aadhar":
         return <span>{user.aadhar_number}</span>;
       case "user_id":
-        return showInput === user.id ? (<div className='flex flex-col justify-center gap-2'><input placeholder={user.user_id} className='w-14 border rounded p-1 border-solid-2 border-red-500' autoFocus onChange={handleInputChange} /> <div className='flex flex-row items-center justify-center gap-4'> <button className='border rounded p-1 max-w-fit text-white bg-slate-800 hover:bg-slate-400' onClick={() => setShowInput(false)}>Cancel</button> <button onClick={() => handleUpdate(user.id,user.user_id)} className={`border rounded p-1 max-w-fit text-white ${inputValue !== null ? 'bg-slate-800 hover:bg-slate-400' : 'bg-slate-200 cursor-not-allowed'}  `} disabled={inputValue === null}>Update</button></div></div>) : <span>{user.user_id ?? 'NULL'}</span>;
+        return showInput && inputId== user.id ? (<div className='flex flex-col justify-center gap-2'><input placeholder={user.user_id} className='w-14 border rounded p-1 border-solid-2 border-red-500' autoFocus onChange={handleInputChange} /> <div className='flex flex-row items-center justify-center gap-4'> <button className='border rounded p-1 max-w-fit text-white bg-slate-800 hover:bg-slate-400' onClick={() =>{ setShowInput(false);setInputValue(null)}}>Cancel</button> <button onClick={() => handleUpdate(user.id,user.user_id)} className={`border rounded p-1 max-w-fit text-white ${inputValue ? 'bg-slate-800 hover:bg-slate-400' : 'bg-slate-200 cursor-not-allowed'}  `} disabled={!inputValue }>Update</button></div></div>) : <span>{user.user_id ?? 'NULL'}</span>;
       /* case "verified":
         return <span>{user.is_verified }</span>; */
       case "bank_account_number":

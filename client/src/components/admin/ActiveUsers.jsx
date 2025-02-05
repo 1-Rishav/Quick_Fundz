@@ -7,6 +7,7 @@ import Sidebar from '../Sidebar';
 import { activeUser, adminUpdateCurrent_user ,deleteUser} from '../../redux/slices/auth';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const statusColorMap = {
   verified: "success",
@@ -27,14 +28,31 @@ const ActiveUsers = () => {
   const [allRequest, setAllRequest] = useState([]);
   const [countActiveUser, setCountActiveUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showInput, setShowInput] = useState(null);
+  const [showInput, setShowInput] = useState(false);
+  const [inputId , setInputId] = useState(null);
   const [inputValue, setInputValue] = useState(null)
   const dispatch = useDispatch();
   const usersPerPage = 10;
   
-  const handleEdit = (userId) => {
-    setShowInput(userId);
-  }
+ 
+    const handleEdit = (userId) => {
+    
+      setShowInput(true);
+      setInputId(userId)
+    }
+
+    useEffect(() => {
+      const fetchKycDetails = async () => {
+        
+          const allUser = await dispatch(activeUser());
+           setAllRequest(allUser.users);
+       
+      };
+  
+      fetchKycDetails();
+  
+  }, [showInput, inputId,inputValue]);
+  
   const handleInputChange = (e) => {
     e.preventDefault();
     setInputValue(e.target.value)
@@ -46,23 +64,24 @@ const ActiveUsers = () => {
       userId: userId
     }
     dispatch(adminUpdateCurrent_user(data))
+    setInputValue(null);
     setShowInput(false);
   }
   useEffect(() => {
     const fetchKycDetails = async () => {
       try {
         const allUser = await dispatch(activeUser());
-        setAllRequest(allUser);
-        setCountActiveUser(allUser.length)
+        setAllRequest(allUser.users);
+        setCountActiveUser(allUser.users.length)
+        toast.success(allUser.message)
       } catch (error) {
-        console.error("Error fetching KYC details:", error);
-      } finally {
+toast.error(error.allUser.message)      } finally {
         setLoading(false);
       }
     };
 
     fetchKycDetails();
-  }, [dispatch, showInput, inputValue]);
+  }, [dispatch]);
 
   // const deleteUser = async (userId) => {
   //   try {
@@ -142,12 +161,9 @@ const ActiveUsers = () => {
         return <Chip color={role[user.role]} size="sm" variant="flat">
         {user.role}
       </Chip>
-      /* case "user_id":
-        return showInput === user.id ? (<div className='flex flex-col justify-center gap-2'><input placeholder={user.user_id} className='w-14 border rounded p-1 border-solid-2 border-red-500' autoFocus onChange={handleInputChange} /> <div className='flex flex-row items-center justify-center gap-4'> <button className='border rounded p-1 max-w-fit text-white bg-slate-800 hover:bg-slate-400' onClick={() => setShowInput(false)}>Cancel</button> <button onClick={() => handleUpdate(user.id)} className={`border rounded p-1 max-w-fit text-white ${inputValue !== null ? 'bg-slate-800 hover:bg-slate-400' : 'bg-slate-200 cursor-not-allowed'}  `} disabled={inputValue === null}>Update</button></div></div>) : <span>{user.user_id}</span>; */
-      /* case "verified":
-        return <span>{user.is_verified }</span>; */
+      
       case "message":
-        return showInput === user.id ? (<div className='flex flex-col justify-center gap-2'><textarea placeholder={user.user_id} className='w-30  border rounded p-1 border-solid-2 border-red-500' autoFocus onChange={handleInputChange} rows='4'/> <div className='flex flex-row items-center justify-center gap-4'> <button className='border rounded p-1 max-w-fit text-white bg-slate-800 hover:bg-slate-400' onClick={() => setShowInput(false)}>Cancel</button> <button onClick={() => handleUpdate(user.id)} className={`border rounded p-1 max-w-fit text-white ${inputValue !== null ? 'bg-slate-800 hover:bg-slate-400' : 'bg-slate-200 cursor-not-allowed'}  `} disabled={inputValue === null}>Update</button></div></div>) : <span>{user.message}</span>;
+        return (showInput && inputId==user.id) ? (<div key={user.id} className='flex flex-col justify-center gap-2'><textarea placeholder={user.user_id} className='w-30  border rounded p-1 border-solid-2 border-red-500' autoFocus onChange={handleInputChange} rows='4'/> <div className='flex flex-row items-center justify-center gap-4'> <button className='border rounded p-1 max-w-fit text-white bg-slate-800 hover:bg-slate-400' onClick={() => {setShowInput(false);setInputValue(null);}}>Cancel</button> <button onClick={() => handleUpdate(user.id)} className={`border rounded p-1 max-w-fit text-white  ${inputValue  ? 'bg-slate-800 hover:bg-slate-400' : 'bg-slate-200 cursor-not-allowed'}  `} disabled={!inputValue} >Update</button></div></div>) : <span>{user.message}</span>;
      /*  case "ifsc_code":
         return <span>{user.ifsc_code}</span>; */
       case "status":
