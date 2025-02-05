@@ -55,8 +55,9 @@ export default function Router(){
             children:[
                 {element: <Navigate to="/admin/menu" replace/>,index:true},
                 {path:'/admin/menu', element:<Menu/>},
-                {path:'/admin/kycRequest',element:<KYCRequestPage/>},
+                {path:'kycRequest',element:<KYCRequestPage/>},
                 {path:'/admin/kycdetails',element:<KycDetails/>},
+                {path:'investor_investment',element:<Investor_InvestmentPage/>},
                 {path:'/admin/activeUsers',element:<ActiveUser/>},
                 {path:'/admin/investedUsers',element:<InvestedUser/>},
                 {path:'/admin/loanRequestUsers',element:<LoanRequestUser/>},
