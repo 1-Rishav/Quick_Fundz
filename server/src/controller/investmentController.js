@@ -21,16 +21,16 @@ exports.createInvestment = asyncHandler(async (req, res,next ) => {
         );
         const updateUsersInvestorUser_id= await pool.query("Update users set investor_usersuser_id=$1 where id=$2",[userId,userId])
 
-        res.status(201).json({
+       return res.status(201).json({
             status: 'success',
-            message: 'Investment created successfully',
+            message: 'Investment successfull',
             data: newInvestment.rows[0],
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({
+       return res.status(500).json({
             status: 'error',
-            message: 'Error saving investment data',
+            message: 'Investment failed',
             error: error.message,
         });
     }
@@ -42,8 +42,29 @@ exports.getAllInvestments = asyncHandler(async (req, res) => {
         const investments = await pool.query(
             "SELECT * FROM investor_details WHERE invest_status = $1 AND user_id != $2",['provider',userId] 
         );
+        const liveLoan = investments.rows
+       return res.status(200).json({
+            status: "success",
+            message:"Fetched all live loans",
+            liveLoan,
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: "error",
+            message: "Error fetching loans",
+            error: error.message,
+        });
+    }
+});
+exports.getUserLendAmount = asyncHandler(async (req, res) => {
+    const {userId} = req;
+    try {
+        const investments = await pool.query(
+            "SELECT * FROM investor_details WHERE  user_id = $1",[userId] 
+        );
         res.status(200).json({
             status: "success",
+            message:"Fetched your investment",
             data: investments.rows,
         });
     } catch (error) {
@@ -55,4 +76,3 @@ exports.getAllInvestments = asyncHandler(async (req, res) => {
         });
     }
 });
-
