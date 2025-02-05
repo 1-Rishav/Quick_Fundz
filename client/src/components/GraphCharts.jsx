@@ -10,26 +10,26 @@ const dispatch = useDispatch();
   useEffect(()=>{
     const getSummary = async()=>{
       const user = await dispatch(activeUser());
-      const userLength = user.length;
-      setAllUser(user);
+      const userLength = user.users.length;
+      setAllUser(user.users);
       const investor = await dispatch(investedUsers());
-      setAllInvestor(investor)
+      setAllInvestor(investor.investorDetail)
       const borrower = await dispatch(loanRequestUsers());
-      setAllBorrower(borrower)
-      const loanApproval = borrower.reduce((count , item)=> {return item.state==='Approved'?count+1:count},0)
-      const percentageApproval = ((loanApproval/borrower.length)*100).toFixed(2);
+      setAllBorrower(borrower.loanDetail)
+      const loanApproval = borrower.loanDetail.reduce((count , item)=> {return item.state==='Approved'?count+1:count},0)
+      const percentageApproval = ((loanApproval/borrower.loanDetail.length)*100).toFixed(2);
       setLoanApproval((prevState)=>({
         ...prevState, series: [percentageApproval]
       }))
       const investorNegotiation = await dispatch(allNegotiateData());
-      const successNegotiation = investorNegotiation.reduce((count,item)=>{return item.negotiate_status==="Approved"?count+1:count},0)
-      const percentageSuccessNegotiation = (successNegotiation/investorNegotiation.length)*100;
+      const successNegotiation = investorNegotiation.negotiateDetail.reduce((count,item)=>{return item.negotiate_status==="Approved"?count+1:count},0)
+      const percentageSuccessNegotiation = (successNegotiation/investorNegotiation.negotiateDetail.length)*100;
       setsuccessNegotiation(prevState=>({
         ...prevState,series:[percentageSuccessNegotiation]
       }))
 
 
-      const totalInvestment = investor.reduce((sum, item) => {
+      const totalInvestment = investor.investorDetail.reduce((sum, item) => {
         const numericAmount = Number(item.amount.replace(/₹\s*/, "")); // Remove ₹ and convert to number
         return sum + numericAmount;
     }, 0);
@@ -63,7 +63,7 @@ const dispatch = useDispatch();
       
       setState((prevState) => ({
         ...prevState,
-        series: [user.length, investor.length, borrower.length], // Example for Total Investment
+        series: [user.users.length, investor.investorDetail.length, borrower.loanDetail.length], // Example for Total Investment
     }));
     const data = {
       userLength,
