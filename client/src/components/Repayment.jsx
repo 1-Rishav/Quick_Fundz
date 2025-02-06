@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import { useDispatch, useSelector } from 'react-redux';
 import { createOrder, moneyRepayment, payingMoney, repayLoan } from '../redux/slices/auth';
+import { Repayment_Mobile_UI } from './Mobile_UI';
 
 const LoanRepayment = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -10,7 +11,7 @@ const LoanRepayment = () => {
   const dispatch = useDispatch();
   const { user_id } = useSelector((state) => state.auth);
 
-  const usersPerPage = 8;
+  const usersPerPage = 4;
 
   const lastIndex = currentPage * usersPerPage;
   const firstIndex = lastIndex - usersPerPage;
@@ -21,18 +22,19 @@ const LoanRepayment = () => {
     setCurrentPage(pageNumber);
   };
 
-  useEffect(() => {
-    const fetchRepayStatus = async () => {
-      const data = { investorUserId: user_id };
-      try {
-        const repayStatus = await dispatch(repayLoan(data));
-        setRepayLoanStatus(repayStatus);
-        setCountRepayLoan(repayStatus.length);
-      } catch (error) {
-        console.error("Error fetching KYC requests: ", error);
-      }
-    };
+  const fetchRepayStatus = async () => {
+    const data = { investorUserId: user_id };
+    try {
+      const repayStatus = await dispatch(repayLoan(data));
+      setRepayLoanStatus(repayStatus?.repayData);
+      setCountRepayLoan(repayStatus?.repayData?.length);
+    } catch (error) {
+      console.error("Error fetching KYC requests: ", error);
+    }
+  };
 
+  useEffect(() => {
+   
     fetchRepayStatus();
   }, [dispatch, user_id]);
 
@@ -78,6 +80,7 @@ const LoanRepayment = () => {
                  const pay_status= await dispatch(moneyRepayment(data))
                  console.log(pay_status);
                 } 
+                await fetchRepayStatus();
               } catch (error) {
                   console.log(error);
               }
@@ -91,38 +94,38 @@ const LoanRepayment = () => {
     }
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-full overflow-hidden">
       <div className="z-index-50 ">
         <Sidebar />
       </div>
-      <div className="flex flex-col flex-1 max-w-8xl mx-auto p-4 overflow-scroll overflow-x-hidden gradient-bg-transactions text-neutral-50">
-       {countRepayLoan>0 ? <h1 className="text-2xl font-bold mb-6 text-center">Re-Payment</h1>:<h1 className="text-2xl font-bold mb-6 flex items-center justify-center h-full">No Re-Payment Data</h1>}
+      <div className="flex max-lg:hidden sm:flex-col max-md:flex-wrap h-full min-h-screen  flex-1 max-w-8xl mx-auto sm:p-4 overflow-scroll overflow-x-hidden gradient-bg-transactions text-neutral-50">
+       {countRepayLoan>0 ? <h1 className="text-2xl h-fit w-full font-bold mb-6 text-center">Re-Payment</h1>:<h1 className=" text-2xl font-bold mb-6 flex justify-center items-center text-center w-full h-[90vh]">No Re-Payment Data</h1>}
         <div className="grid grid-cols-1 gap-4">
           {currentUsers?.map((user, index) => (
-            <div key={index} className="border p-4 rounded-lg flex justify-between items-center">
-              <div className="relative border p-4 rounded-lg flex h-32 justify-between items-center gap-5">
-                <span className="absolute top-0 text-xl text-gray-600 font-bold ">Money-Lender Credentials</span>
-                <div className="flex flex-col ">
+            <div key={index} className="border p-4 gradient-bg-services rounded-lg flex max-md:flex-wrap gap-5 justify-between items-center">
+              <div className="relative border p-4 rounded-lg flex flex-wrap h-fit justify-between items-center gap-2">
+                <div className="block w-full h-fit text-center text-xl text-gray-500 font-bold ">Money-Lender Credentials</div>
+                <div className="relative w-fit h-fit flex flex-wrap flex-col ">
                   <p><strong>Name:</strong> {user?.name}</p>
                   <p><strong>Loan_Amount:</strong> {user?.loan_amount}</p>
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="relative w-fit h-fit flex flex-wrap flex-col gap-4">
                   <p><strong>Duration:</strong> {user?.loan_duration}</p>
                   <p><strong>Interest Rate:</strong> {user?.loan_roi}</p>
                 </div>
               </div>
-              <div className="relative border p-4 rounded-lg h-32 flex justify-between items-center gap-5">
-                <span className="absolute top-0 text-xl text-gray-600 font-bold ">Re-payment</span>
-                <div className="flex flex-col gap-4">
+              <div className="relative border p-4 rounded-lg w-fit h-fit flex flex-wrap justify-between items-center gap-2">
+                <div className="block w-full h-fit text-center text-gray-500 text-xl font-bold ">Re-payment</div>
+                <div className=" flex flex-wrap w-fit h-fit flex-col gap-4">
                   <p><strong>Amount:</strong> {`₹ ${user?.interest_amount}`}</p>
                   <p><strong>Remain Days:</strong> {`${user?.remain_days} days`}</p>
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="w-fit h-fit flex flex-wrap flex-col gap-4">
                   <p><strong>Pay_Status:</strong> {user?.payment_status}</p>
                 </div>
               </div>
 
-              <div className="space-2 gap-2 flex flex-col ">
+              <div className="space-2 w-fit h-fit gap-2 flex flex-wrap md:flex-col justify-center">
                 {user.enable_pay === true ? (
 
                   user.payment_status === 'Paid' ? (
@@ -143,7 +146,7 @@ const LoanRepayment = () => {
         </div>
 
         {/* Pagination */}
-       {countRepayLoan>0 && <div className="flex justify-end mt-6 space-x-2 ">
+       {countRepayLoan>4 && <div className="flex justify-end mt-6 space-x-2 ">
           <button
             className={`px-4 py-2 rounded-full cursor-pointer ${currentPage === 1 ? 'bg-gray-300' : 'bg-slate-800 text-white'}`}
             disabled={currentPage === 1}
@@ -171,6 +174,24 @@ const LoanRepayment = () => {
           </button>
         </div>}
       </div>
+      <div className="max-lg:block hidden h-full w-full">
+  <div className="gradient-bg-transactions min-h-screen h-full w-full">
+    
+    {countRepayLoan>0 ? <h1 className="text-xl sm:text-2xl md:text-3xl text-neutral-100 lg:text-4xl h-fit w-full font-bold mb-6 text-center">Re-Payment</h1>:<h1 className=" text-xl sm:text-2xl md:text-3xl text-neutral-100 lg:text-4xl font-bold mb-6 flex justify-center items-center text-center w-full h-[90vh]">No Re-Payment Data</h1>}
+    {currentUsers?.map((user, index) => (
+      <div key={index}>
+        <Repayment_Mobile_UI
+        
+          name={user.name}
+          id={user.id}
+          amount={user.interest_amount}
+          pay_status={user.payment_status}
+          leftDays={user.remain_days}
+        />
+      </div>
+    ))}
+  </div>
+</div>
     </div>
   );
 };
