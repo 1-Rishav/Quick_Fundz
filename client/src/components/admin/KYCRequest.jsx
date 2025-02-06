@@ -19,17 +19,17 @@ const KYCRequest = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const fetchKycRequests = async () => {
-      try {
-        const user = await dispatch(showKycRequest());
-        setAllRequest(user.listOfRequest);
-        setCountRequest(user.listOfRequest.length);
-      } catch (error) {
-        console.error("Error fetching KYC requests: ", error);
-      }
-    };
+  const fetchKycRequests = async () => {
+    try {
+      const user = await dispatch(showKycRequest());
+      setAllRequest(user.listOfRequest);
+      setCountRequest(user.listOfRequest.length);
+    } catch (error) {
+      console.error("Error fetching KYC requests: ", error);
+    }
+  };
 
+  useEffect(() => {
     fetchKycRequests();
   }, [dispatch]);
 
@@ -45,10 +45,11 @@ const KYCRequest = () => {
     setAllRequest(updatedRequestList);
   };
 
-  const handleConfirm = (userId, usersId, status) => {
+  const handleConfirm = async(userId, usersId, status) => {
     const data = { userId, usersId, status };
     dispatch(confirmOrRejectRequest(data));
     handleUserRemoval(userId);
+   await fetchKycRequests();
   };
 
   const handleReject = (userId, usersId) => {
@@ -57,7 +58,7 @@ const KYCRequest = () => {
     setIsOverlayOpen(true);
   };
 
-  const handleSubmitRejection = (message) => {
+  const handleSubmitRejection = async(message) => {
     const data = {
       userId: currentRejectUserId,
       usersId: currentRejectUsersId,
@@ -66,12 +67,7 @@ const KYCRequest = () => {
     };
     dispatch(confirmOrRejectRequest(data));
     handleUserRemoval(currentRejectUserId);
-  };
-
-  const handleLogout = (e) => {
-    e.preventDefault();
-    dispatch(LogoutUser());
-    navigate("/auth/home");
+    await fetchKycRequests();
   };
 
   return (
