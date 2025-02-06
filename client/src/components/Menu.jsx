@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { IoIosNotificationsOutline } from "react-icons/io";
 import Sidebar from './Sidebar';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import { adminMessage, LogoutUser } from '../redux/slices/auth';
 import  frontImg from '../assets/peer-to-peer.jpg'
 import MileStones from './MileStones';
@@ -20,7 +20,7 @@ const Menu = () => {
   const [open , setOpen] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(""); // State to store avatar URL
   const [mile , setMile] = useState(null);
-
+  const {role} = useSelector((state)=>state.auth);
   const platformInfo= (...args)=>{
    setMile(...args);
   }
@@ -94,13 +94,16 @@ const Menu = () => {
         <div className='h-52 w-full flex items-end justify-center  mt-1 flex-col absolute z-50'>
           <div className='h-52 w-[16rem] bg-gray-50 flex flex-col justify-start items-start rounded-xl mr-5 '>
           <ProfileModal onAvatarChange={handleAvatarChange}/>
+          
           <button 
             type='submit' 
-            onClick={()=>{navigate('/investor_investment')}} 
+           
+              onClick= {role==="admin" ? ()=>{navigate('/admin/investor_investment')}:()=>{navigate('/investor_investment')}}
             className=" flex w-full  bg-gray-300 px-4 py-2 mt-2 hover:bg-gray-200"
           >
             Your Investment
           </button>
+          
           <button 
             type='submit' 
             onClick={handleLogout} 
@@ -117,7 +120,7 @@ const Menu = () => {
         </div>
         <div className="relative h-screen w-screen   gradient-bg-welcome  ">
           <div className='flex flex-wrap justify-between items-center h-[85vh] w-full object-contain'>
-          <div className="relative ml-28 flex flex-col items-start justify-center h-fit w-fit text-neutral-100">
+          <div className="relative ml-28 flex flex-col items-center justify-center h-fit w-fit max-md:w-full text-neutral-100">
             <h1 className="text-4xl font-bold ">Your Financial Needs, Our Trusted Solution.</h1>
             <p className="text-xl mt-4">Simplifying borrowing and lending, one connection at a time.Bringing lenders and <br/> borrowers together for mutual growth.</p>
           </div>
