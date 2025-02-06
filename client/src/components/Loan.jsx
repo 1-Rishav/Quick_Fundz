@@ -30,23 +30,25 @@ const Loan = () => {
   const dispatch = useDispatch();
   const [showFilter, setShowFilter] = useState(false);
 
-  useEffect(() => {
-    const fetchLoans = async () => {
-      try {
-        const InvestorDetail = await dispatch(allInvestments());
-        const result = await InvestorDetail;
-        setShowInvestor(InvestorDetail?.liveLoan)
-        setCountLoan(InvestorDetail?.liveloan?.length);
-        if (result?.status === "success" && Array.isArray(result?.data)) {
-          setLoans(result?.data);
-          setFilteredLoans(result?.data);
-        } else {
-          console.error("Unexpected data format:", result);
-        }
-      } catch (error) {
-        console.error("Error fetching loans:", error);
+
+  const fetchLoans = async () => {
+    try {
+      const InvestorDetail = await dispatch(allInvestments());
+      const result = await InvestorDetail;
+      setShowInvestor(InvestorDetail?.liveLoan)
+      setCountLoan(InvestorDetail?.liveloan?.length);
+      if (result?.status === "success" && Array.isArray(result?.data)) {
+        setLoans(result?.data);
+        setFilteredLoans(result?.data);
+      } else {
+        console.error("Unexpected data format:", result);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching loans:", error);
+    }
+  };
+
+  useEffect(() => {
 
     fetchLoans();
   }, [dispatch]);
@@ -116,7 +118,7 @@ const Loan = () => {
     setShowInvestor(updatedRequestList);
   }
 
-  const handleAcceptClick = (investorId, investorUserId, investorAmount, investorDuration, investorRate, investorEmail, status)=>{
+  const handleAcceptClick = async(investorId, investorUserId, investorAmount, investorDuration, investorRate, investorEmail, status)=>{
     const data = {
       investorId,
       investorUserId,
@@ -128,6 +130,7 @@ const Loan = () => {
       status
     }
     dispatch(loanAccept(data))
+    await fetchLoans();
   }
 
   const handleClick = (investorId, investorUserId, investorAmount, investorDuration, investorRate, investorEmail, status) => {
@@ -142,7 +145,7 @@ const Loan = () => {
     setIsOverlayOpen(true);
   }
 
-  const handleSubmit = (amount, duration, interestRate) => {
+  const handleSubmit = async(amount, duration, interestRate) => {
     const data = {
       investorUserId: investorUserId,
       investorEmail: investorEmail,
@@ -159,6 +162,7 @@ const Loan = () => {
 
     dispatch(loanRequest(data));
     handleUserRemoval(loanAcceptUserId); // Remove user from the list after rejection
+    await fetchLoans();
   };
   const handleChangeAmount = (e) => {
     const value = e.target.value.replace(/[^\d]/g, " "); // Strip non-numeric characters
