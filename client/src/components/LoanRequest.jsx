@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { approvedLoan, investorNegotiate, rejectedLoan, requestInvestor,moneyPaid,createOrder, payingMoney } from '../redux/slices/auth';
 import NegotiateForm from './NegotiateForm'
 import { GrDocumentPdf } from 'react-icons/gr';
+import Mobile_UI from './Mobile_UI';
 
 const LoanRequest = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,34 +22,34 @@ const LoanRequest = () => {
   const dispatch = useDispatch();
   const { user_id } = useSelector((state) => state.auth);
 
-  const usersPerPage = 8;
+  const usersPerPage = 3;
 
   const lastIndex = currentPage * usersPerPage;
   const firstIndex = lastIndex - usersPerPage;
   const currentUsers = showLoanRequest?.slice(firstIndex, lastIndex);
   const totalPages = Math.ceil(showLoanRequest?.length / usersPerPage);
-
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  useEffect(() => {
-    const fetchKycRequests = async () => {
-      const data = { investorUserId: user_id };
-      try {
-        const loanRequestUser = await dispatch(requestInvestor(data));
-        setShowLoanRequest(loanRequestUser.loanTaker);
-        setCountRequest(loanRequestUser.loanTaker.length)
-      } catch (error) {
-        console.error("Error fetching KYC requests: ", error);
-      }
-    };
+  const fetchLoanRequests = async () => {
+    const data = { investorUserId: user_id };
+    try {
+      const loanRequestUser = await dispatch(requestInvestor(data));
+      setShowLoanRequest(loanRequestUser.loanTaker);
+      setCountRequest(loanRequestUser.loanTaker.length)
+    } catch (error) {
+      console.error("Error fetching KYC requests: ", error);
+    }
+  };
 
-    fetchKycRequests();
+  useEffect(() => {
+    
+    fetchLoanRequests();
 
   }, [dispatch, user_id]);
 
-  const handleApprove = (index, status, userId, loanId,pay_status) => {
+  const handleApprove = async(index, status, userId, loanId,pay_status) => {
     const data = {
       status: status,
       userId: userId,
@@ -56,16 +57,17 @@ const LoanRequest = () => {
       pay_status
     }
     dispatch(approvedLoan(data))
+    await fetchLoanRequests();
   };
 
-  const handleRejected = (status, userId, loanId) => {
+  const handleRejected = async(status, userId, loanId) => {
     const data = {
       status: status,
       userId: userId,
       loanId: loanId,
     };
     dispatch(rejectedLoan(data));
-    window.location.reload();
+await fetchLoanRequests()
   };
 
   const handlePay = async (loan_Amount,investor_id,original_duration,invest_status,loan_status) => {
@@ -112,6 +114,7 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
              const pay_status= await dispatch(moneyPaid(data))
              console.log(pay_status);
             } 
+            await fetchLoanRequests();
           } catch (error) {
               console.log(error);
           }
@@ -134,7 +137,7 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
     setLoanId(loan_id);
     setIsOverlayOpen(true)
   }
-  const handleSubmit = (amount, duration, interestRate) => {
+  const handleSubmit = async(amount, duration, interestRate) => {
     const data = {
       investor_email: investor_email,
       investoruser_id: investoruser_id,
@@ -149,19 +152,20 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
     };
 
     dispatch(investorNegotiate(data));
+    await fetchLoanRequests();
   };
 
   return (
-    <div className="flex h-full overflow-hidden">
+    <div className="flex h-full overflow-hidden ">
       <div className="z-index-50 ">
         <Sidebar />
       </div>
-      <div className="flex  flex-wrap sm:flex-col flex-1 max-w-8xl  mx-auto sm:p-4 overflow-scroll overflow-x-hidden gradient-bg-transactions text-neutral-50">
+      <div className="flex max-lg:hidden max-md:flex-wrap sm:flex-col flex-1 max-w-8xl  mx-auto sm:p-4 overflow-scroll overflow-x-hidden gradient-bg-transactions text-neutral-50">
        {countRequest>0 ? <h1 className="text-2xl font-bold mb-6 text-center ">Loan Requests</h1>:<h1 className="text-2xl w-full font-bold mb-6 flex-wrap flex-col flex text-center items-center justify-center h-full ">No Loan Request Yet</h1>} 
         <div className="grid grid-cols-1 gap-4">
           {currentUsers?.map((user, index) => (
-            <div key={index} className="border p-4 rounded-lg flex flex-wrap gap-5 justify-between items-center">
-              <div className="relative border p-4 w-fit   rounded-lg flex  flex-wrap h-fit justify-between items-center ">
+            <div key={index} className="border p-4 rounded-lg gradient-bg-services flex max-md:flex-wrap gap-5 justify-between items-center">
+              <div className="relative border p-4 w-62 rounded-lg flex  flex-wrap h-fit justify-between items-center ">
                 <div className='block w-full h-fit text-center text-xl text-gray-500 font-bold'>Loan Requirement</div>
                 <div className="relative w-fit h-fit flex flex-wrap flex-col  ">
                   <p><strong>Name:</strong> {user?.name}</p>
@@ -220,7 +224,7 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
         </div>
 
         {/* Pagination */}
-       {countRequest>7 &&  <div className="flex justify-end mt-6 space-x-2 ">
+       {countRequest>3 &&  <div className="flex justify-end mt-6 space-x-2 ">
           <button
             className={`px-4 py-2 rounded-full cursor-pointer ${currentPage === 1 ? 'bg-gray-300' : 'bg-slate-800 text-white'}`}
             disabled={currentPage === 1}
@@ -255,6 +259,25 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
       /*userId={currentRejectUserId} // Pass the userId to RejectionOverlay
       usersId={currentRejectUsersId} */
       />
+      <div className="max-lg:block hidden h-full w-full">
+  <div className="gradient-bg-transactions min-h-screen h-full w-full">
+    <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl 4xl:text-5xl text-neutral-100 font-bold mb-6 text-center">
+      Loan Requests
+    </h1>
+    {currentUsers?.map((user, index) => (
+      <div key={index}>
+        <Mobile_UI
+        type={'Loan Requirements'}
+          name={user.name}
+          id={user.id}
+          amount={user.loan_amount}
+          email={user.email}
+        />
+      </div>
+    ))}
+  </div>
+</div>
+
     </div>
   );
 };
