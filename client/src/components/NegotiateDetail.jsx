@@ -11,23 +11,24 @@ function NegotiateDetail() {
     const {id} = params;
     const {user_id} = useSelector((state) => state.auth)
 
-useEffect(() => {
-    const fetchKycRequests = async () => {
+    const fetchNegotiateRequests = async () => {
             
-            const data={id,user_id}
-            try {
-              const negotiateRequest = await dispatch(screenNegotiate(data));
-              setShowNegotiateRequest(negotiateRequest.finalAmount);
-              
-            } catch (error) {
-              console.error("Error fetching KYC requests: ", error);
-            }
-          };
-      
-          fetchKycRequests();
+      const data={id,user_id}
+      try {
+        const negotiateRequest = await dispatch(screenNegotiate(data));
+        setShowNegotiateRequest(negotiateRequest.finalAmount);
+        
+      } catch (error) {
+        console.error("Error fetching KYC requests: ", error);
+      }
+    };
+
+useEffect(() => {
+    
+          fetchNegotiateRequests();
       
         }, [dispatch, user_id,id]);
-    const handleApprove=(negotiateId,loanId,negotiateAmount,negotiateDuration,negotiateROI,status,pay_status)=>{
+    const handleApprove= async(negotiateId,loanId,negotiateAmount,negotiateDuration,negotiateROI,status,pay_status)=>{
         const data={
           negotiateId: negotiateId,
           loanId: loanId,
@@ -38,10 +39,9 @@ useEffect(() => {
           pay_status
         }
         dispatch(negotiationApprove(data))
-        window.location.reload();
-      }
+await fetchNegotiateRequests()      }
     
-      const handleReject=(negotiateId,loanId,status)=>{
+      const handleReject=async(negotiateId,loanId,status)=>{
         const data={
           negotiateId:negotiateId,
           loanId:loanId,
@@ -49,6 +49,7 @@ useEffect(() => {
           
         }
         dispatch(rejectNegotiation(data))
+        await fetchNegotiateRequests();
       };
   return (
     <>
