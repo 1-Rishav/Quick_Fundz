@@ -20,17 +20,17 @@ import KYCRequestPage from "../pages/dashboard/KYCRequestPage";
 import IncomeBank_Statement from "../pages/dashboard/IncomeBankDocsPage"
 import LoanRequestPage from "../pages/dashboard/LoanRequestPage";
 import NegotiateLoanPage from "../pages/dashboard/NegotiateLoanPage";
-import KycStatus from "../pages/dashboard/KYCStatusPage"
-import KycDetails from "../pages/dashboard/KycDetailsPage";
-import NegotiationDetails from "../pages/dashboard/NegotiationDetailPage";
-import LoanRepaymentDetails from "../pages/dashboard/LoanRepaymentPage";
-import InvestedUser from "../pages/dashboard/InvestedUsersPage"
-import Repayment from "../pages/dashboard/RepaymentPage"
+import KycStatusPage from "../pages/dashboard/KYCStatusPage"
+import KycDetailsPage from "../pages/dashboard/KycDetailsPage";
+import NegotiationDetailsPage from "../pages/dashboard/NegotiationDetailPage";
+import LoanRepaymentDetailsPage from "../pages/dashboard/LoanRepaymentPage";
+import InvestedUserPage from "../pages/dashboard/InvestedUsersPage"
+import RepaymentPage from "../pages/dashboard/RepaymentPage"
 import RepaymentDetailPage from "../pages/dashboard/RepaymentDetailPage"
-import LoanRequestUser from "../pages/dashboard/LoanRequestUsersPage"
+import LoanRequestUserPage from "../pages/dashboard/LoanRequestUsersPage"
 import LoanDetailPage from "../pages/dashboard/LoanDetailPage"
 import NegotiateDetailPage from "../pages/dashboard/NegotiateDetailPage"
-import ActiveUser from "../pages/dashboard/ActiveUserPage"
+import ActiveUserPage from "../pages/dashboard/ActiveUserPage"
 import Investor_InvestmentPage from "../pages/dashboard/Investor_InvestmentPage";
 
 export default function Router(){
@@ -45,7 +45,7 @@ export default function Router(){
                {path:'/auth/verify', element:<VerifyPage/>},
                {path:'/auth/kyc', element:<KYC/>},
                {path:'/auth/documents', element:<IncomeBank_Statement/>},
-               {path:'/auth/kycstatus', element:<KycStatus/>},
+               {path:'/auth/kycstatus', element:<KycStatusPage/>},
                {path:'/auth/updatekyc',element:<UpdateKYC/>},
             ]
         },
@@ -56,13 +56,13 @@ export default function Router(){
                 {element: <Navigate to="/admin/menu" replace/>,index:true},
                 {path:'/admin/menu', element:<Menu/>},
                 {path:'kycRequest',element:<KYCRequestPage/>},
-                {path:'/admin/kycdetails',element:<KycDetails/>},
+                {path:'/admin/kycdetails',element:<KycDetailsPage/>},
                 {path:'investor_investment',element:<Investor_InvestmentPage/>},
-                {path:'/admin/activeUsers',element:<ActiveUser/>},
-                {path:'/admin/investedUsers',element:<InvestedUser/>},
-                {path:'/admin/loanRequestUsers',element:<LoanRequestUser/>},
-                {path:'/admin/negotiationDetails',element:<NegotiationDetails/>},
-                {path:'/admin/loanRepaymentDetails',element:<LoanRepaymentDetails/>},
+                {path:'/admin/activeUsers',element:<ActiveUserPage/>},
+                {path:'/admin/investedUsers',element:<InvestedUserPage/>},
+                {path:'/admin/loanRequestUsers',element:<LoanRequestUserPage/>},
+                {path:'/admin/negotiationDetails',element:<NegotiationDetailsPage/>},
+                {path:'/admin/loanRepaymentDetails',element:<LoanRepaymentDetailsPage/>},
                 
                 {path:'404',element:<Page404/>},
                 { path: "*", element: <Navigate to="/404" replace /> }
@@ -78,7 +78,7 @@ export default function Router(){
                 {path:'invest',element:<Invest/>},
                 {path:'loan',element:<Loan/>},
                 {path:'investor_investment',element:<Investor_InvestmentPage/>},
-                {path:'repayment',element:<Repayment/>},
+                {path:'repayment',element:<RepaymentPage/>},
                 {path:'repayment/:id',element:<RepaymentDetailPage/>},
                 {path:'loanRequest',element:<LoanRequestPage/>},
                 {path:'loanRequest/:id',element:<LoanDetailPage/>},
