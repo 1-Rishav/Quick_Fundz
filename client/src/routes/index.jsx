@@ -20,7 +20,7 @@ import KYCRequestPage from "../pages/dashboard/KYCRequestPage";
 import IncomeBank_Statement from "../pages/dashboard/IncomeBankDocsPage"
 import LoanRequestPage from "../pages/dashboard/LoanRequestPage";
 import NegotiateLoanPage from "../pages/dashboard/NegotiateLoanPage";
-import KycStatusPage from "../pages/dashboard/KYCStatusPage"
+import KycStatusPage from "../pages/dashboard/KycStatusPage"
 import KycDetailsPage from "../pages/dashboard/KycDetailsPage";
 import NegotiationDetailsPage from "../pages/dashboard/NegotiationDetailPage";
 import LoanRepaymentDetailsPage from "../pages/dashboard/LoanRepaymentPage";
