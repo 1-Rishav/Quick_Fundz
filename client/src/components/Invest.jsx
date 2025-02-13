@@ -147,6 +147,7 @@ const Invest = () => {
               {loading ? "Submitting..." : "Submit"}
             </button>
           </form>
+          
         </div>
       </div>
     </div>

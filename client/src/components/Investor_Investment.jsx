@@ -2,6 +2,7 @@ import  { useEffect, useState } from 'react'
 import Sidebar from './Sidebar';
 import { useDispatch } from 'react-redux';
 import {allInvest} from '../redux/slices/auth'
+import {motion} from 'motion/react'
 
 const Investor_Investment = () => {
 
@@ -55,7 +56,22 @@ const Investor_Investment = () => {
               key={index}
               className="border p-4 rounded-lg flex flex-wrap justify-between items-center gradient-bg-services"
             >
-              <div className="relative w-fit h-fit flex flex-wrap flex-col">
+              <motion.div className="[perspective::1000px] [transform-style:preserve-3d] relative w-fit h-fit flex flex-wrap flex-col"
+              
+              whileHover={{
+                rotateX:10,
+                rotateY:10,
+                //rgba(8,112,184,0.7)
+                boxShadow:`0px 10px 30px rgba(150, 200, 189, 0.888)`,
+                y: -6,
+            }}
+            whileTap={{
+                y:0
+            }}
+            style={{
+                translateZ:100,
+            }}
+              >
                 
                 <p>
                   <strong>Email:</strong> {loan.email}
@@ -63,7 +79,7 @@ const Investor_Investment = () => {
                 <p>
                   <strong>Amount:</strong> {loan.amount}
                 </p>
-              </div>
+              </motion.div>
               <div className="relative w-fit h-fit flex flex-wrap flex-col gap-4">
                 <p>
                   <strong>Duration:</strong> {loan.duration}
