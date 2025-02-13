@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { confirmOrRejectRequest, showKycRequest } from '../../redux/slices/auth';
-import { LogoutUser } from '../../redux/slices/auth';
 import { useDispatch } from 'react-redux';
 import Sidebar from '../Sidebar';
 import RejectionOverlay from './RejectionOverlay';
@@ -49,6 +48,7 @@ const KYCRequest = () => {
     const data = { userId, usersId, status };
     dispatch(confirmOrRejectRequest(data));
     handleUserRemoval(userId);
+    window.location.reload();
    await fetchKycRequests();
   };
 
@@ -67,6 +67,7 @@ const KYCRequest = () => {
     };
     dispatch(confirmOrRejectRequest(data));
     handleUserRemoval(currentRejectUserId);
+    window.location.reload();
     await fetchKycRequests();
   };
 
@@ -101,7 +102,7 @@ const KYCRequest = () => {
     <GrDocumentPdf size={35} />
   </a>
 ) : (
-  <span className='font-semibold'>No document available</span>
+  <span className='font-semibold'>N/A</span>
 )}
             </div>
                 
@@ -145,6 +146,7 @@ const KYCRequest = () => {
             Next
           </button>
         </div>}
+        
       </div>
 
       <RejectionOverlay
