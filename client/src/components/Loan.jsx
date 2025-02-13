@@ -5,6 +5,8 @@ import LoanAcceptForm from "./LoanAcceptForm";
 import { allInvestments, loanRequest,loanAccept } from "../redux/slices/auth";
 import { useDispatch, useSelector } from "react-redux";
 import LoanPre_Request from "./LoanPre_Request";
+import CustomButton from "./UI/CustomButton"
+import {motion} from 'motion/react';
 
 const Loan = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,6 +27,7 @@ const Loan = () => {
   const [loanStatus, setLoanStatus] = useState(null);
   const [countLoan , setCountLoan] = useState(null);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const [refresh , setRefresh] = useState(false)
   const [error, setError] = useState("");
   const { user_id } = useSelector((state) => state.auth)
   const dispatch = useDispatch();
@@ -36,10 +39,10 @@ const Loan = () => {
       const InvestorDetail = await dispatch(allInvestments());
       const result = await InvestorDetail;
       setShowInvestor(InvestorDetail?.liveLoan)
-      setCountLoan(InvestorDetail?.liveloan?.length);
-      if (result?.status === "success" && Array.isArray(result?.data)) {
-        setLoans(result?.data);
-        setFilteredLoans(result?.data);
+      setCountLoan(InvestorDetail?.liveLoan?.length);
+      if (result?.status === "success" && Array.isArray(result?.liveLoan)) {
+        setLoans(result?.liveLoan);
+        setFilteredLoans(result?.liveLoan);
       } else {
         console.error("Unexpected data format:", result);
       }
@@ -51,8 +54,9 @@ const Loan = () => {
   useEffect(() => {
 
     fetchLoans();
-  }, [dispatch]);
+  }, [dispatch,refresh]);
 
+  console.log(refresh)
   
   const applyFilter = () => {
     const filtered = loans.filter((loan) => {
@@ -113,12 +117,13 @@ const Loan = () => {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-  const handleUserRemoval = (userId) => {
-    const updatedRequestList = showInvestor.filter(user => user.id !== userId);
-    setShowInvestor(updatedRequestList);
-  }
+  // const handleUserRemoval = (userId) => {
+  //   const updatedRequestList = showInvestor.filter(user => user.id !== userId);
+  //   setShowInvestor(updatedRequestList);
+  // }
 
   const handleAcceptClick = async(investorId, investorUserId, investorAmount, investorDuration, investorRate, investorEmail, status)=>{
+    
     const data = {
       investorId,
       investorUserId,
@@ -129,8 +134,9 @@ const Loan = () => {
       user_id,
       status
     }
-    dispatch(loanAccept(data))
-    await fetchLoans();
+   await dispatch(loanAccept(data))
+    setRefresh(prev=>!prev);
+  //  await fetchLoans()
   }
 
   const handleClick = (investorId, investorUserId, investorAmount, investorDuration, investorRate, investorEmail, status) => {
@@ -146,6 +152,7 @@ const Loan = () => {
   }
 
   const handleSubmit = async(amount, duration, interestRate) => {
+    
     const data = {
       investorUserId: investorUserId,
       investorEmail: investorEmail,
@@ -160,9 +167,9 @@ const Loan = () => {
       loanInterestRate: interestRate
     };
 
-    dispatch(loanRequest(data));
-    handleUserRemoval(loanAcceptUserId); // Remove user from the list after rejection
-    await fetchLoans();
+   await dispatch(loanRequest(data));
+   setRefresh(prev=>!prev)
+    //handleUserRemoval(loanAcceptUserId); // Remove user from the list after rejection
   };
   const handleChangeAmount = (e) => {
     const value = e.target.value.replace(/[^\d]/g, " "); // Strip non-numeric characters
@@ -243,7 +250,7 @@ const Loan = () => {
       </div>
       <div className="flex max-sm:ml-8 flex-col flex-1 max-w-8xl mx-auto p-4 overflow-y-auto relative gradient-bg-transactions text-neutral-50">
          <h1 className="text-2xl font-bold mb-6 text-center">Live Loans</h1>   
-          {countLoan>2 &&  <button
+          {countLoan>4 &&  <button
           className="p-3 border border-black text-black rounded-full shadow-md hover:bg-gray-100 flex items-center space-x-2 w-44 absolute top-4 right-4"
           onClick={() => setShowFilter(!showFilter)}
         >
@@ -282,26 +289,40 @@ const Loan = () => {
               />
             </div>
             <div className="flex gap-2 justify-end">
-              <button
-                className="bg-green-600 text-white px-4 py-2 rounded-full"
+              <div
+                className=" px-4 py-2 rounded-full"
                 onClick={applyFilter}
               >
-                Apply
-              </button>
-              <button
-                className="bg-red-500 text-white px-4 py-2 rounded-full"
+                <CustomButton button='Apply' textColor='text-green-400' bottomColor='via-green-500' rgbColor='rgba(83, 197, 66,0.7)'/>
+              </div>
+              <div
+                className=" px-4 py-2 rounded-full"
                 onClick={resetFilter}
               >
-                Reset
-              </button>
+               <CustomButton button='Reset' textColor='text-red-400' bottomColor='via-red-500' rgbColor='rgba(235, 48, 20,0.7)'/>
+              </div>
             </div>
           </div>
         )}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {currentLoans.map((loan, index) => (
-            <div
+            <motion.div
               key={index}
-              className="border p-4 rounded-lg flex flex-wrap justify-between items-center gradient-bg-services"
+              className="[perspective::1000px] [transform-style:preserve-3d] border p-4 rounded-lg flex flex-wrap justify-between items-center gradient-bg-services"
+              //onClick={()=>console.log('Hii')}
+              whileHover={{
+                rotateX:10,
+                rotateY:10,
+                //rgba(8,112,184,0.7)
+                boxShadow:`0px 10px 30px rgba(150, 200, 189, 0.888)`,
+                y: -6,
+            }}
+            whileTap={{
+                y:0
+            }}
+            style={{
+                translateZ:100,
+            }}
             >
               <div className="relative w-fit h-fit flex flex-wrap flex-col">
                 <p>
@@ -323,14 +344,14 @@ const Loan = () => {
                 </p>
               </div>
               <div className="space-2 gap-2 flex justify-center sm:flex-col">
-                <button className="bg-green-500 text-white px-4 py-2 rounded-full" onClick={() => handleAcceptClick(loan.id, loan.user_id, loan.amount, loan.duration, loan.rate_of_interest, loan.email, 'processing')}>
-                  Accept
-                </button>
-                <button className="bg-amber-500 text-white px-4 py-2 rounded-full" onClick={() => handleClick(loan.id, loan.user_id, loan.amount, loan.duration, loan.rate_of_interest, loan.email, 'processing')}>
-                  Negotiate
-                </button>
+                <div className=" px-4 py-2 rounded-full" onClick={() => {handleAcceptClick(loan.id, loan.user_id, loan.amount, loan.duration, loan.rate_of_interest, loan.email, 'processing') }}>
+                  <CustomButton button='Accept' textColor='text-green-400' bottomColor='via-green-500' rgbColor='rgba(83, 197, 66,0.7)'/>
+                </div>
+                <div className=" px-2 py-2 rounded-full" onClick={() => handleClick(loan.id, loan.user_id, loan.amount, loan.duration, loan.rate_of_interest, loan.email, 'processing')}>
+                <CustomButton button='Negotiate' textColor='text-amber-400' bottomColor='via-amber-500' rgbColor='rgba(220, 211, 43,0.7)'/>
+                </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
          {countLoan>4 &&  <div className="flex justify-end mt-6 space-x-2">
