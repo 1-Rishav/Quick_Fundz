@@ -88,8 +88,8 @@ const LoanAcceptForm = ({ isOpen, onClose, onSubmit}) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 shadow-lg w-full max-w-md mx-4 md:mx-0">
-        <h2 className="text-xl font-semibold mb-4 text-center">Reason for Rejection</h2>
+      <div className="gradient-bg-services rounded-lg p-6 shadow-lg w-full max-w-md mx-4 md:mx-0">
+        <h2 className="text-xl font-semibold mb-4 text-center text-neutral-100">Negotiation Request</h2>
         <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-semibold mb-1">
