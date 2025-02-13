@@ -60,7 +60,7 @@ exports.requestInvestor = asyncHandler(async (req, res) => {
     const { investorUserId } = req.body;
 
     try {
-        const userLoanRequest = await pool.query("SELECT * from loan_request_details where investoruser_id=$1 AND state!=$2 ", [investorUserId, 'Rejected'])
+        const userLoanRequest = await pool.query("SELECT * from loan_request_details where investoruser_id=$1 AND state!=$2 AND state!=$3", [investorUserId, 'Rejected','Negotiate'])
     
         const loanTaker = userLoanRequest.rows
         //const loan_status=userLoanRequest.rows[0].state;
@@ -70,8 +70,11 @@ exports.requestInvestor = asyncHandler(async (req, res) => {
             loanTaker
         })
     } catch (error) {
-        return res.status(401).json({
-            message:"Error occured"
+        
+        return res.status(500).json({
+           
+            message:"Error occured",
+            
         })
     }
 })
@@ -122,14 +125,14 @@ exports.acceptLoan = asyncHandler(async (req, res) => {
 });
 
 exports.lastNegotiate = asyncHandler(async (req, res) => {
-    const { investor_email, investoruser_id, negotiateAmount, negotiateDuration, negotiateInterestRate, loan_amount, loan_duration, loanInterestRate, loanUserId, loanId } = req.body;
+    const {status, investor_email, investoruser_id, negotiateAmount, negotiateDuration, negotiateInterestRate, loan_amount, loan_duration, loanInterestRate, loanUserId, loanId } = req.body;
 
     try {
-        const filteredBody = filterObj(req.body, 'investor_email', 'investoruser_id', 'negotiateAmount', 'negotiateDuration', 'negotiateInterestRate', 'loan_amount', 'loan_duration', 'loanInterestRate', 'loanUserId', 'loanId')
+        const filteredBody = filterObj(req.body,'status', 'investor_email', 'investoruser_id', 'negotiateAmount', 'negotiateDuration', 'negotiateInterestRate', 'loan_amount', 'loan_duration', 'loanInterestRate', 'loanUserId', 'loanId')
         const user = await pool.query("SELECT * FROM users where id=$1", [investoruser_id])
         const name = user.rows[0].name;
         const insertNegotiateRequest = await pool.query("INSERT INTO investor_negotiation (name,email,user_id,negotiate_amount,negotiate_duration,negotiate_rate_of_interest,loan_amount,loan_duration,loan_rate_of_interest,loan_user_id,loan_id) Values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)", [name, filteredBody.investor_email, filteredBody.investoruser_id, filteredBody.negotiateAmount, filteredBody.negotiateDuration, filteredBody.negotiateInterestRate, filteredBody.loan_amount, filteredBody.loan_duration, filteredBody.loanInterestRate, filteredBody.loanUserId, filteredBody.loanId])
-        const updateLoanRequstDetails = await pool.query("Update loan_request_details set original_amount=$1 , original_duration=$2 ,original_rate_of_interest=$3 where investoruser_id=$4", [filteredBody.negotiateAmount, filteredBody.negotiateDuration, filteredBody.negotiateInterestRate, filteredBody.investoruser_id])
+        const updateLoanRequstDetails = await pool.query("Update loan_request_details set original_amount=$1 , original_duration=$2 ,original_rate_of_interest=$3,state=$4 where id=$5", [filteredBody.negotiateAmount, filteredBody.negotiateDuration, filteredBody.negotiateInterestRate, filteredBody.status , filteredBody.loanId])
         return res.status(200).json({
             message:"Negotiation Request sent successfully"
         })
