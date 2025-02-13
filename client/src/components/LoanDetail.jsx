@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { GrDocumentPdf } from 'react-icons/gr'
 import { useDispatch, useSelector } from 'react-redux';
+import {motion} from 'motion/react'
 import { approvedLoan, createOrder, investorNegotiate, moneyPaid, payingMoney, rejectedLoan, screenRequestLoan } from '../redux/slices/auth';
 import NegotiateForm from './NegotiateForm'
 function LoanDetail() {
@@ -12,6 +13,7 @@ function LoanDetail() {
   const [loan_amount, setLoan_amount] = useState(null);
   const [loan_duration, setLoan_duration] = useState(null);
   const [loanInterestRate, setLoanInterestRate] = useState(null);
+  const [refresh, setRefresh] = useState(false);
   const [loanUserId, setLoanUserId] = useState(null);
   const [loanId, setLoanId] = useState(null);
   const dispatch = useDispatch();
@@ -35,7 +37,7 @@ function LoanDetail() {
   
       fetchLoanRequests();
   
-    }, [dispatch, user_id,id]);
+    }, [dispatch, user_id,id,refresh]);
    
 
   const handleApprove = async(index, status, userId, loanId,pay_status) => {
@@ -45,8 +47,8 @@ function LoanDetail() {
         loanId: loanId,
         pay_status
       }
-      dispatch(approvedLoan(data))
-      await fetchLoanRequests()
+      await dispatch(approvedLoan(data))
+      setRefresh(prev=>!prev)
     };
   
     const handleRejected = async(status, userId, loanId) => {
@@ -55,8 +57,8 @@ function LoanDetail() {
         userId: userId,
         loanId: loanId,
       };
-      dispatch(rejectedLoan(data));
-      await fetchLoanRequests();
+     await dispatch(rejectedLoan(data));
+      setRefresh(prev=>!prev)
     };
   
     const handlePay = async (loan_Amount,investor_id,original_duration,invest_status,loan_status) => {
@@ -102,8 +104,9 @@ function LoanDetail() {
                 }
                const pay_status= await dispatch(moneyPaid(data))
                console.log(pay_status);
+               setRefresh(prev=>!prev)
               } 
-              await fetchLoanRequests();
+              
             } catch (error) {
                 console.log(error);
             }
@@ -140,8 +143,8 @@ function LoanDetail() {
         negotiateInterestRate: interestRate
       };
   
-      dispatch(investorNegotiate(data));
-      await fetchLoanRequests();
+     await dispatch(investorNegotiate(data));
+      setRefresh(prev=>!prev)
     };
   return (
     <>
@@ -151,7 +154,21 @@ function LoanDetail() {
       <div className="grid grid-cols-1 gap-4 gradient-bg-services  ">
                  {showLoanRequest?.map((user, index) => ( 
                   <div key={'index'} className="border  p-4 rounded-lg flex max-md:flex-wrap gap-5 justify-between items-center">
-                    <div className="relative border p-4 w-62 rounded-lg flex  flex-wrap h-fit justify-between items-center ">
+                    <motion.div className="[perspective::1000px] [transform-style:preserve-3d] relative border p-4 w-62 rounded-lg flex  flex-wrap h-fit justify-between items-center "
+                    whileHover={{
+                      rotateX:10,
+                      rotateY:10,
+                      //rgba(8,112,184,0.7)
+                      boxShadow:`0px 10px 30px rgba(150, 200, 189, 0.888)`,
+                      y: -6,
+                  }}
+                  whileTap={{
+                      y:0
+                  }}
+                  style={{
+                      translateZ:100,
+                  }}
+                    >
                       <div className='block w-full h-fit text-center text-xl text-gray-500 font-bold'>Loan Requirement</div>
                       <div className="relative w-fit h-fit flex flex-wrap flex-col  ">
                         <p><strong>Name:</strong> {user?.name}</p>
@@ -169,11 +186,25 @@ function LoanDetail() {
                           <GrDocumentPdf size={30} className='mt-2'/>
                         </a>
                       ) : (
-                        <span className='font-semibold'>NULL</span>
+                        <span className='font-semibold'>N/A</span>
                       )}
                                   </div>
-                    </div>
-                    <div className="relative border  p-4 rounded-lg w-fit h-fit flex flex-wrap justify-between items-center gap-5">
+                    </motion.div>
+                    <motion.div className="[perspective::1000px] [transform-style:preserve-3d] relative border  p-4 rounded-lg w-fit h-fit flex flex-wrap justify-between items-center gap-5"
+                    whileHover={{
+                      rotateX:10,
+                      rotateY:-10,
+                      //rgba(8,112,184,0.7)
+                      boxShadow:`0px 10px 30px rgba(150, 200, 189, 0.888)`,
+                      y: -6,
+                  }}
+                  whileTap={{
+                      y:0
+                  }}
+                  style={{
+                      translateZ:100,
+                  }}
+                    >
                     <div className='block w-full h-fit text-center text-gray-500 text-xl font-bold'>Your Investment</div>
                       
                       <div className="flex flex-wrap w-fit h-fit flex-col gap-4">
@@ -183,7 +214,7 @@ function LoanDetail() {
                       <div className="w-fit h-fit flex flex-wrap flex-col gap-4">
                         <p><strong>Interest Rate:</strong> {user?.original_rate_of_interest}</p>
                       </div>
-                    </div>
+                    </motion.div>
                       
                      <div className="space-2 w-fit h-fit gap-2 flex flex-wrap md:flex-col justify-center ">
                       

@@ -70,6 +70,7 @@ function RepaymentDetail() {
                      const pay_status= await dispatch(moneyRepayment(data))
                      console.log(pay_status);
                     } 
+                    window.location.reload();
                     await fetchRepayStatus();
                   } catch (error) {
                       console.log(error);

@@ -3,11 +3,14 @@ import Sidebar from './Sidebar';
 import { useDispatch, useSelector } from 'react-redux';
 import { createOrder, moneyRepayment, payingMoney, repayLoan } from '../redux/slices/auth';
 import { Repayment_Mobile_UI } from './Mobile_UI';
+import { motion} from 'motion/react';
+import CustomButton from './UI/CustomButton';
 
 const LoanRepayment = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [repayLoanStatus, setRepayLoanStatus] = useState(null);
   const [countRepayLoan , setCountRepayLoan] = useState(null);
+  const [refresh , setRefresh] = useState(false);
   const dispatch = useDispatch();
   const { user_id } = useSelector((state) => state.auth);
 
@@ -36,7 +39,7 @@ const LoanRepayment = () => {
   useEffect(() => {
    
     fetchRepayStatus();
-  }, [dispatch, user_id]);
+  }, [dispatch, user_id,refresh]);
 
      const handlePay = async ( repay_amount,pay_id,paid_status ) => {
          try {
@@ -79,8 +82,9 @@ const LoanRepayment = () => {
                   }
                  const pay_status= await dispatch(moneyRepayment(data))
                  console.log(pay_status);
+                 setRefresh(prev=>!prev)
                 } 
-                await fetchRepayStatus();
+                
               } catch (error) {
                   console.log(error);
               }
@@ -103,7 +107,21 @@ const LoanRepayment = () => {
         <div className="grid grid-cols-1 gap-4">
           {currentUsers?.map((user, index) => (
             <div key={index} className="border p-4 gradient-bg-services rounded-lg flex max-md:flex-wrap gap-5 justify-between items-center">
-              <div className="relative border p-4 rounded-lg flex flex-wrap h-fit justify-between items-center gap-2">
+              <motion.div className=" [perspective::1000px] [transform-style:preserve-3d] relative border p-4 rounded-lg flex flex-wrap h-fit justify-between items-center gap-2"
+              whileHover={{
+                rotateX:10,
+                rotateY:-10,
+                //rgba(8,112,184,0.7)
+                boxShadow:`0px 10px 30px rgba(150, 200, 189, 0.888)`,
+                y: -6,
+            }}
+            whileTap={{
+                y:0
+            }}
+            style={{
+                translateZ:100,
+            }}
+              >
                 <div className="block w-full h-fit text-center text-xl text-gray-500 font-bold ">Money-Lender Credentials</div>
                 <div className="relative w-fit h-fit flex flex-wrap flex-col ">
                   <p><strong>Name:</strong> {user?.name}</p>
@@ -113,8 +131,22 @@ const LoanRepayment = () => {
                   <p><strong>Duration:</strong> {user?.loan_duration}</p>
                   <p><strong>Interest Rate:</strong> {user?.loan_roi}</p>
                 </div>
-              </div>
-              <div className="relative border p-4 rounded-lg w-fit h-fit flex flex-wrap justify-between items-center gap-2">
+              </motion.div>
+              <motion.div className="[perspective::1000px] [transform-style:preserve-3d] relative border p-4 rounded-lg w-fit h-fit flex flex-wrap justify-between items-center gap-2"
+              whileHover={{
+                rotateX:10,
+                rotateY:-10,
+                //rgba(8,112,184,0.7)
+                boxShadow:`0px 10px 30px rgba(150, 200, 189, 0.888)`,
+                y: -6,
+            }}
+            whileTap={{
+                y:0
+            }}
+            style={{
+                translateZ:100,
+            }}
+              >
                 <div className="block w-full h-fit text-center text-gray-500 text-xl font-bold ">Re-payment</div>
                 <div className=" flex flex-wrap w-fit h-fit flex-col gap-4">
                   <p><strong>Amount:</strong> {`₹ ${user?.interest_amount}`}</p>
@@ -123,22 +155,22 @@ const LoanRepayment = () => {
                 <div className="w-fit h-fit flex flex-wrap flex-col gap-4">
                   <p><strong>Pay_Status:</strong> {user?.payment_status}</p>
                 </div>
-              </div>
+              </motion.div>
 
               <div className="space-2 w-fit h-fit gap-2 flex flex-wrap md:flex-col justify-center">
                 {user.enable_pay === true ? (
 
                   user.payment_status === 'Paid' ? (
-                    <button className="bg-gray-400 text-white px-4 py-2 rounded-full cursor-not-allowed">Paid</button>
+                    <button className="bg-gray-800 text-white px-4 py-2 rounded-lg cursor-not-allowed">Paid</button>
                   ) :
                     (
                       <>
-                        <button className="bg-blue-500 text-white px-4 py-2 rounded-full"  onClick={()=>handlePay( user.interest_amount,user.id,"Paid")} >Pay</button>
+                        <div className="px-4 py-2 rounded-lg"  onClick={()=>handlePay( user.interest_amount,user.id,"Paid")} ><CustomButton button='Pay' textColor='text-green-400' bottomColor='via-green-500' rgbColor='rgba(83, 197, 66,0.7)'/></div>
                         {/* <p className="text-sm text-red-600 text-center">Pay within three days.<br/> Otherwise Your account will block.</p> */}
                       </>
                     )
 
-                ) : <button className="bg-gray-500 text-white px-4 py-2 rounded-full cursor-not-allowed" >Pay</button>}
+                ) : <button className="bg-gray-800 text-white px-4 py-2 rounded-lg cursor-not-allowed" >Pay</button>}
 
               </div>
             </div>
@@ -148,7 +180,7 @@ const LoanRepayment = () => {
         {/* Pagination */}
        {countRepayLoan>4 && <div className="flex justify-end mt-6 space-x-2 ">
           <button
-            className={`px-4 py-2 rounded-full cursor-pointer ${currentPage === 1 ? 'bg-gray-300' : 'bg-slate-800 text-white'}`}
+            className={`px-4 py-2 rounded-lg ${currentPage === 1 ? 'bg-gray-700 cursor-not-allowed' : 'bg-black text-white hover:text-green-500 cursor-pointer'}`}
             disabled={currentPage === 1}
             onClick={() => handlePageChange(currentPage - 1)}
           >
@@ -166,7 +198,7 @@ const LoanRepayment = () => {
           ))}
 
           <button
-            className={`px-4 py-2 rounded-full cursor-pointer ${currentPage === totalPages ? 'bg-gray-300' : 'bg-green-600 text-white'}`}
+            className={`px-4 py-2 rounded-lg  ${currentPage === totalPages ? 'bg-gray-700 cursor-not-allowed' : 'bg-black text-white hover:text-green-500 cursor-pointer'}`}
             disabled={currentPage === totalPages}
             onClick={() => handlePageChange(currentPage + 1)}
           >
