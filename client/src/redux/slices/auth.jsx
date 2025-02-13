@@ -128,7 +128,7 @@ export function LoginUser(formValues) {
       toast.success(message );
 
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.message);
       /* dispatch(slice.actions.updateIsLoading({ isLoading: false, error: true }));
     } finally {
       dispatch(slice.actions.updateIsLoading({ isLoading: false, error: false })); */
@@ -159,7 +159,7 @@ if (!getState().auth.error) {
         window.location.href = "/auth/verify"
 }
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.message);
       //dispatch(slice.actions.updateIsLoading({ isLoading: false, error: true }));
     } 
       
@@ -188,7 +188,7 @@ export function VerifyEmail(formValues){
         window.location.href = "/auth/kyc"
       }
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.message);
      
     }
   }
@@ -205,7 +205,7 @@ export function UserKyc(formValues){
       window.location.href = "/auth/documents" 
           }
     } catch (error) {
-      toast.error(error.response.data.message)
+      toast.error(error.message)
     }
       
   }
@@ -224,7 +224,7 @@ export function documents(formValues){
         window.location.href = "/auth/kycstatus" 
             }
     } catch (error) {
-      toast.error(error.response.data.message)
+      toast.error(error.message)
     }
   }
 }
@@ -247,7 +247,7 @@ export function documents(formValues){
       
 toast.success(message);
     } catch (error) {
-      toast.error(error.response.data.message)
+      toast.error(error.message)
     }
   } 
 } 
@@ -260,7 +260,7 @@ export function showKycRequest(){
 
       return response.data;
     } catch (error) {
-toast.error(error.response.data.message)    }
+toast.error(error.message)    }
   }
 }
 
@@ -270,7 +270,7 @@ export function confirmOrRejectRequest(formValues){
       const response = await axios.post('admin/confirmOrRejectUser',formValues);
       toast.success(response.data.message)
     } catch (error) {
-toast.error(error.response.data.message)    }
+toast.error(error.message)    }
   }
 }
 
@@ -289,7 +289,7 @@ export function rejectedkyc(formValues){
        window.location.href = "/auth/kycstatus" 
            }
     } catch (error) {
-      toast.error(error.response.data.message)
+      toast.error(error.message)
 
     }
   }
@@ -303,7 +303,7 @@ export function investmentEntry(formValues){
       );
       toast.success(response.data.message);
     } catch (error) {
-toast.error(error.response.data.message)    }
+toast.error(error.message)    }
   }
 }
 
@@ -316,7 +316,7 @@ export function allInvestments(){
       }
       return response.data;
     } catch (error) {
-toast.error(error.response.data.message)    }
+toast.error(error.message)    }
   }
 }
 
@@ -326,7 +326,7 @@ export function loanAccept(formValues){
       const response  = await axios.post('loanRequest/loanAccepted',formValues,{withCredentials:true});
       toast.success(response.data.message)
     } catch (error) {
-toast.error(error.response.data.message)     }
+toast.error(error.message)     }
   }
 }
 
@@ -337,20 +337,21 @@ export function loanRequest(formValues){
       toast.success(response.data.message)
 
     } catch (error) {
-      toast.error(error.response.data.message)     }
+      toast.error(error.message)     }
   }
 }
 
 export function requestInvestor(formValues){
+
   return async()=>{
-     
+    
       try {
         const response = await axios.post('loanRequest/requestInvestor',formValues,{withCredentials:true})        
         toast.success(response.data.message)
         return response.data;
-        
       } catch (error) {
-        toast.error(error.response.data.message) 
+       
+        toast.error(error.message) 
       }
     
   }
@@ -363,7 +364,7 @@ export function rejectedLoan(formValues){
       toast.success(response.data.message)
 
     } catch (error) {
-      toast.error(error.response.data.message) 
+      toast.error(error.message) 
 
     }
   }
@@ -376,7 +377,7 @@ export function approvedLoan(formValues){
       toast.success(response.data.message)
 
     } catch (error) {
-      toast.error(error.response.data.message) 
+      toast.error(error.message) 
 
     }
   }
@@ -389,7 +390,7 @@ export function investorNegotiate(formValues){
       toast.success(response.data.message)
 
     } catch (error) {
-      toast.error(error.response.data.message) 
+      toast.error(error.message) 
 
     }
   }
@@ -402,7 +403,7 @@ export function negotiateValue(){
       toast.success(response.data.message)
       return response.data;
     } catch (error) {
-      toast.error(error.response.data.message) 
+      toast.error(error.message) 
     }
   }
 }
@@ -413,7 +414,7 @@ export function negotiationApprove(formValues){
       const response = await axios.post('negotiateRequest/approveNegotiation',formValues,{withCredentials:true})
       toast.success(response.data.message)
     } catch (error) {
-      toast.error(error.response.data.message) 
+      toast.error(error.message) 
     }
   }
 }
@@ -424,7 +425,7 @@ export function rejectNegotiation(formValues){
       const response = await axios.post('negotiateRequest/negotiationReject',formValues,{withCredentials:true})
       toast.success(response.data.message)
     } catch (error) {
-      toast.error(error.response.data.message) 
+      toast.error(error.message) 
     }
   }
 }
@@ -447,7 +448,7 @@ try {
     const response = await axios.post('admin/adminUpdateKycUser',formValues,{withCredentials:true})
     toast.success(response.data.message);
 } catch (error) {
-    toast.error(error.response.data.message)
+    toast.error(error.message)
 }    
   }
 }
@@ -471,7 +472,7 @@ export function deleteCurrentUser(formValues){
       toast.success(response.data.message);
       return response.data;
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.message);
     }
   }
 
@@ -484,7 +485,7 @@ export function adminUpdateCurrent_user(formValues){
       toast.success(response.data.message);
 
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.message);
     }
   }
 }
@@ -495,7 +496,7 @@ export function adminMessage(){
       const response = await axios.get('admin/message',{withCredentials:true})
       return response.data;
     } catch (error) {
-console.error(error.response.data.message);
+console.error(error.message);
     }
   }
 }
@@ -538,7 +539,7 @@ return async()=>{
     toast.success(response.data.message);
 
   } catch (error) {
-    toast.error(error.response.data.message);
+    toast.error(error.message);
   }
 }
   }
@@ -550,7 +551,7 @@ return async()=>{
         toast.success(response.data.message);
 
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.message);
       }
     }
   }
@@ -563,7 +564,7 @@ return async()=>{
         toast.success(response.data.message);
         return response.data;
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.message);
       }
     }
   }
@@ -575,7 +576,7 @@ return async()=>{
         toast.success(response.data.message);
         return response.data
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.message);
       }
     }
   }
@@ -587,7 +588,7 @@ return async()=>{
         toast.success(response.data.message)
         return response.data;
       } catch (error) {
-        toast.error(error.response.data.message) 
+        toast.error(error.message) 
       }
     }
   }
@@ -600,7 +601,7 @@ try {
 
       return response.data;
 } catch (error) {
-  toast.error(error.response.data.message) 
+  toast.error(error.message) 
 
 }      
     }
@@ -613,7 +614,7 @@ try {
         toast.success(response.data.message)
         return response.data;
       } catch (error) {
-        toast.error(error.response.data.message)
+        toast.error(error.message)
       }
     }
   }
@@ -635,7 +636,7 @@ console.log(error);      }
         toast.success(response.data.message);
 
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.message);
       }
     }
   }
@@ -657,7 +658,7 @@ console.log(error);      }
         const response = await axios.post('admin/updateRepayment_details',formValues)
         toast.success(response.data.message);
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.message);
       }
     }
   }
@@ -669,7 +670,7 @@ console.log(error);      }
         toast.success(response.data.message);
 
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.message);
       }
     }
   }
@@ -681,7 +682,7 @@ console.log(error);      }
         toast.success(response.data.message);
 
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.message);
       }
     }
   }
@@ -694,7 +695,7 @@ console.log(error);      }
         return response.data;
         
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.message);
       }
     }
   }
@@ -718,7 +719,7 @@ console.log(error);      }
           toast.success(response.data.message);
           return response.data;
         } catch (error) {
-          toast.error(error.response.data.message);
+          toast.error(error.message);
         }
       
     }
@@ -731,7 +732,7 @@ console.log(error);      }
         toast.success(response.data.message)
         return response.data;
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.message);
       }
     }
   }
@@ -743,7 +744,7 @@ console.log(error);      }
         toast.success(response.data.message);
         return response.data
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.message);
 
       }
     }
@@ -757,7 +758,7 @@ console.log(error);      }
 
       return response.data;
       } catch (error) {
-        toast.error(error.response.data.message)
+        toast.error(error.message)
       }
     }
   }
