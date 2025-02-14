@@ -5,9 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import {motion} from 'motion/react'
 import { approvedLoan, createOrder, investorNegotiate, moneyPaid, payingMoney, rejectedLoan, screenRequestLoan } from '../redux/slices/auth';
 import NegotiateForm from './NegotiateForm'
+import CustomButton from './UI/CustomButton';
 function LoanDetail() {
   const [showLoanRequest, setShowLoanRequest] = useState(null);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const [Status , setStatus] = useState(null);
   const [investor_email, setInvestor_email] = useState(null);
   const [investoruser_id, setInvestoruser_id] = useState(null);
   const [loan_amount, setLoan_amount] = useState(null);
@@ -119,8 +121,9 @@ function LoanDetail() {
     rzp1.open();
   }
   
-    const handleNegotiate = (investor_email, investoruser_id, loan_amount, loan_duration, loan_rate_of_interest, loan_user_id, loan_id) => {
+    const handleNegotiate = (status,investor_email, investoruser_id, loan_amount, loan_duration, loan_rate_of_interest, loan_user_id, loan_id) => {
       setInvestor_email(investor_email);
+      setStatus(status)
       setInvestoruser_id(investoruser_id);
       setLoan_amount(loan_amount);
       setLoan_duration(loan_duration);
@@ -131,6 +134,7 @@ function LoanDetail() {
     }
     const handleSubmit = async(amount, duration, interestRate) => {
       const data = {
+        status:Status,
         investor_email: investor_email,
         investoruser_id: investoruser_id,
         loan_amount: loan_amount,
@@ -220,20 +224,20 @@ function LoanDetail() {
                       
                       {user.state === 'Approved' ? (
                          user.pay_status==='Paid' ? (
-                           <button className="bg-gray-400 text-white px-4 py-2 rounded-full cursor-not-allowed">Paid</button>
+                           <button className="bg-gray-800 text-white px-4 py-2 rounded-lg cursor-not-allowed">Paid</button>
                        ) : 
-                        (
-                          <>
-                            <button className="bg-blue-500 text-white px-4 py-2 rounded-full" onClick={()=>handlePay(user.original_amount,user.investor_id,user.original_duration,"paid","Paid")}>Pay</button>
-                            <p className="text-sm text-red-600 text-center">Pay within three days.<br/> Otherwise Your account will block.</p>
-                          </>
-                        )
-                      ) : (
+                       (
                         <>
-                          <button className="bg-green-500 text-white px-4 py-2 rounded-full" onClick={() => handleApprove(index, 'Approved', user.investor_id, user.id,'Not-paid')}>Approve</button>
-                          <button className="bg-yellow-500 text-white px-4 py-2 rounded-full" onClick={() => handleNegotiate(user.investor_email, user.investoruser_id, user.loan_amount, user.duration, user.rate_of_interest, user.user_id, user.id)}>Negotiate</button>
-                          <button className="bg-red-500 text-white px-4 py-2 rounded-full" onClick={() => handleRejected('Rejected', user.investor_id, user.id)}>Reject</button>
+                          <div className=" px-4 py-2 rounded-lg " onClick={()=>handlePay(user.original_amount,user.investor_id,user.original_duration,"paid","Paid")}><CustomButton button='Pay' textColor='text-green-400' bottomColor='via-green-500' rgbColor='rgba(83, 197, 66,0.7)'/></div>
+                          <p className="text-sm text-red-600 text-center">Pay within three days.<br/> Otherwise Your account will block.</p>
                         </>
+                      )
+                    ) : (
+                      <>
+                        <div className=" px-4 py-2 rounded-full" onClick={() => handleApprove(index, 'Approved', user.investor_id, user.id,'Not-paid')}><CustomButton button='Approve' textColor='text-green-400' bottomColor='via-green-500' rgbColor='rgba(83, 197, 66,0.7)' /></div>
+                        <div className=" px-4 py-2 rounded-full" onClick={() => handleNegotiate('Negotiate',user.investor_email, user.investoruser_id, user.loan_amount, user.duration, user.rate_of_interest, user.user_id, user.id)}><CustomButton button='Negotiate' textColor='text-yellow-400' bottomColor='via-yellow-500' rgbColor='rgba(220, 211, 43,0.7)'/></div>
+                        <div className=" px-4 py-2 rounded-full" onClick={() => handleRejected('Rejected', user.investor_id, user.id)}><CustomButton button='Reject' textColor='text-red-400' bottomColor='via-red-500' rgbColor='rgba(235, 48, 20,0.7)'/></div>
+                      </>
                       )}
                     </div> 
                   </div>
