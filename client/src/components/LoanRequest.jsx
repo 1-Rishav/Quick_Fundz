@@ -8,8 +8,14 @@ import Mobile_UI from './Mobile_UI';
 import CustomButton from './UI/CustomButton';
 import {motion} from 'motion/react'
 import { toast } from 'react-toastify';
+import Model from './Modal';
+import {useDisclosure } from "@heroui/react";
+
+
 
 const LoanRequest = () => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
   const [currentPage, setCurrentPage] = useState(1);
   const [showLoanRequest, setShowLoanRequest] = useState(null);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
@@ -43,7 +49,7 @@ const LoanRequest = () => {
       setShowLoanRequest(loanRequestUser.loanTaker);
       setCountRequest(loanRequestUser.loanTaker.length)
     } catch (error) {
-      toast.error(error.loanRequestUser.message);
+      toast.error(error.message);
     }
   };
 
@@ -196,8 +202,9 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
             style={{
                 translateZ:100,
             }}
-              
+             onClick={onOpen}
               >
+                
                 <div className='block w-full h-fit text-center text-xl text-gray-500 font-bold'>Loan Requirement</div>
                 <div className="relative w-fit h-fit flex flex-wrap flex-col  ">
                   <p><strong>Name:</strong> {user?.name}</p>
@@ -324,6 +331,7 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
   </div>
 </div>
 
+<Model isOpen={isOpen} onOpenChange={onOpenChange}/>
     </div>
   );
 };
