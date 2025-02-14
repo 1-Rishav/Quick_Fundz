@@ -55,8 +55,6 @@ const Loan = () => {
 
     fetchLoans();
   }, [dispatch,refresh]);
-
-  console.log(refresh)
   
   const applyFilter = () => {
     const filtered = loans.filter((loan) => {
