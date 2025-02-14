@@ -1,6 +1,6 @@
 import React from 'react'
 import {motion} from 'motion/react'
-const CustomButton = ({button , textColor , bottomColor,rgbColor,props,disabled}) => {
+const CustomButton = ({button , textColor , bottomColor,rgbColor,disabled,...props}) => {
   return (
    <div className='[perspective::1000px] [transform-style:preserve-3d] h-full w-full  flex items-center justify-center' style={{
     backgroundImage:`radial-gradient(circle at 1px 1px, rgba(6,182,212 ,0.2) 0.5px, transparent 0)`,

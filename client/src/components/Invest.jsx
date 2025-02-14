@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import { investmentEntry } from "../redux/slices/auth";
 import { useDispatch, useSelector } from "react-redux";
+import CustomButton from "./UI/CustomButton";
 
 const Invest = () => {
   const [amount, setAmount] = useState("");
@@ -140,12 +141,12 @@ const Invest = () => {
                 required
               />
             </div>
-            <button
+            <div
               type="submit"
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md w-full mb-4 hover:bg-blue-700 transition"
+              className="px-6 py-3 rounded-lg shadow-md w-full mb-4 "
             >
-              {loading ? "Submitting..." : "Submit"}
-            </button>
+              <CustomButton button='Submit' textColor='text-green-400' bottomColor='via-green-500' rgbColor='rgba(83, 197, 66,0.7)' className='w-full rounded-lg p-3 bg-black text-neutral-100'/>
+            </div>
           </form>
           
         </div>

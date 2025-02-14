@@ -13,8 +13,8 @@ const RejectionOverlay = ({ isOpen, onClose, onSubmit}) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 gradient-bg-services text-neutral-50">
-      <div className="bg-white rounded-lg p-6 shadow-lg w-full max-w-md mx-4 md:mx-0">
-        <h2 className="text-xl font-semibold mb-4 text-center">Reason for Rejection</h2>
+      <div className="gradient-bg-services rounded-lg p-6 shadow-lg w-full max-w-md mx-4 md:mx-0">
+        <h2 className="text-xl font-semibold mb-4 text-center text-neutral-100 ">Reason for Rejection</h2>
         <textarea
           className="w-full text-black h-32 p-2 border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Write message..."

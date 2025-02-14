@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import CustomButton from './UI/CustomButton';
+import { RxCross2 } from "react-icons/rx";
 
 const LoanAcceptForm = ({ isOpen, onClose, onSubmit}) => {
   
@@ -16,6 +18,10 @@ const LoanAcceptForm = ({ isOpen, onClose, onSubmit}) => {
     onSubmit(amount,duration,interestRate);
     onClose();
   };
+
+  const handleClose=()=>{
+    onClose();
+  }
 
   const handleChangeAmount = (e) => {
     const value = e.target.value.replace(/[^\d]/g, " "); // Strip non-numeric characters
@@ -89,6 +95,8 @@ const LoanAcceptForm = ({ isOpen, onClose, onSubmit}) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="gradient-bg-services rounded-lg p-6 shadow-lg w-full max-w-md mx-4 md:mx-0">
+      <div className='w-full h-fit flex justify-end items-center'>
+      <button className='text-white w-10 h-fit flex text-center justify-center items-center p-2 hover:bg-gray-700 rounded-full' onClick={handleClose}><RxCross2 size={22} /></button></div>
         <h2 className="text-xl font-semibold text-neutral-100 mb-4 text-center">Negotiation Request</h2>
         <form onSubmit={handleSubmit}>
             <div className="mb-4 text-black">
@@ -136,13 +144,13 @@ const LoanAcceptForm = ({ isOpen, onClose, onSubmit}) => {
         required
       />
             </div>
-            <button
+            <div
             type='submit'
               
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md w-full mb-4 hover:bg-blue-700 transition"
+              className="px-6 py-3 rounded-lg shadow-md w-full mb-4 transition"
             >
-              Submit
-            </button>
+               <CustomButton button='Submit' textColor='text-green-400' bottomColor='via-green-500' rgbColor='rgba(83, 197, 66,0.7)' className='w-full rounded-lg p-3 bg-black text-neutral-100'/>
+            </div>
             {loading && (
               <div className="text-center text-blue-500 mt-4">Loading...</div>
             )}
