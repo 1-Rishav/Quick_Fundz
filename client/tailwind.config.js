@@ -8,7 +8,7 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
     "./node_modules/acertenity-ui/dist/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/@heroui/theme/dist/components/modal.js"
+    "./node_modules/@heroui/theme/dist/components/(chip|modal).js"
   ],
   theme: {
   	extend: {
