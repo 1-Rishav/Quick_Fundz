@@ -78,6 +78,9 @@ exports.registerUser = asyncHandler(async(req, res, next)=>{
 exports.sendOTP = asyncHandler(async (req, res, next) => {
   const { userId } = req;
 
+  if (!userId) {
+    return res.status(400).json({ error: "User ID is required to send OTP" });
+  }
   // Generate OTP
   try {
     const new_otp = otpGenerator.generate(6, {
@@ -86,7 +89,7 @@ exports.sendOTP = asyncHandler(async (req, res, next) => {
       lowerCaseAlphabets: false,
     });
   
-    const otp_expiry_time = new Date(Date.now() + 5 * 60 * 1000); // 10 minutes from now
+    const otp_expiry_time = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes from now
   
     // Update user in PostgreSQL
     const updateQuery = `
@@ -100,7 +103,9 @@ exports.sendOTP = asyncHandler(async (req, res, next) => {
     const { rows } = await pool.query(updateQuery, values);
   
     if (rows.length === 0) {
-      return next(new AppError('User not found', 404));
+      return res.status(404).json({
+        message:'User not found'
+      }) ;
     }
   
     const user = rows[0];
