@@ -114,7 +114,7 @@ const Menu = () => {
           </div>
         </div>
       )} 
-      <div className="flex h-screen w-full  overflow-hidden">
+      <div className="flex h-screen w-full overflow-hidden">
         <div className="z-index-50 absolute">
           <Sidebar position={'relative'}/>
         </div>
@@ -128,13 +128,13 @@ const Menu = () => {
             <img src={frontImg} alt="Peer to peer img" className='rounded-xl h-[100%] sm:h-[100%] 2xl:w-[90%] '/>
           </div>
           </div>
-          <div className=' max-md:hidden flex flex-wrap items-center  justify-center gap-3'>
+          {/* <div className=' max-md:hidden flex flex-wrap items-center  justify-center gap-3'>
           <div className=' p-2 white-glassmorphism flex items-center justify-center gap-2 text-neutral-100 text-2xl  h-fit w-fit'>
             <h3>Secure Digitised Processes | </h3>
             <h3>Transforming Financial Opportunities | </h3>
             <h3>Earn More with Your Savings</h3>
           </div>
-          </div>
+          </div> */}
           
         </div>
       </div>

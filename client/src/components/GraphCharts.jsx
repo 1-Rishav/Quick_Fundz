@@ -23,7 +23,7 @@ const dispatch = useDispatch();
       }))
       const investorNegotiation = await dispatch(allNegotiateData());
       const successNegotiation = investorNegotiation.negotiateDetail.reduce((count,item)=>{return item.negotiate_status==="Approved"?count+1:count},0)
-      const percentageSuccessNegotiation = (successNegotiation/investorNegotiation.negotiateDetail.length)*100;
+      const percentageSuccessNegotiation = ((successNegotiation/investorNegotiation.negotiateDetail.length)*100).toFixed(2);
       setsuccessNegotiation(prevState=>({
         ...prevState,series:[percentageSuccessNegotiation]
       }))
@@ -256,18 +256,18 @@ const dispatch = useDispatch();
       
         <div className='flex flex-wrap items-center justify-center h-full w-full gap-36 text-black'>
           
-          <div id="chart">
+          <div id="chart" >
               <ReactApexChart options={state.options} series={state.series} type="pie"  width={450} />
             </div>
           <div id="html-dist"></div>
           <div className='text-white'>
-                <div id="chart">
+                <div id="chart" >
                 <ReactApexChart options={loanApproval.options} series={loanApproval.series} type="radialBar" height={350} />
               </div>
               </div>
             <div id="html-dist"></div>
             
-            <div id="chart">
+            <div id="chart" >
                 <ReactApexChart options={successNegotiation.options} series={successNegotiation.series} type="radialBar" height={350} />
               </div>
             <div id="html-dist"></div>

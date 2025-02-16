@@ -1,8 +1,13 @@
 import React from "react";
 import { BackgroundBeamsWithCollision } from "../components/UI/footer_beams_collision";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 
 export function BackgroundBeamsWithCollisionDemo() {
+    const navigate = useNavigate();
+    const {role} = useSelector((state)=>state.auth);
+
   return (
     (<BackgroundBeamsWithCollision>
       <div className="w-full h-full flex items-center justify-center">
@@ -10,25 +15,25 @@ export function BackgroundBeamsWithCollisionDemo() {
           {/* <div className="bg-white rounded-br-3xl row-start-1 col-start-1"></div> */}
           <div className=" md:row-start-2 md:col-end-1 row-start-1 col-start-2 ">
             <div className="h-full w-full list-none flex flex-wrap items-center justify-center gap-2 text-white text-gradient cursor-pointer text-3xl font-bold">
-              <li>Driven by Code, Defined by Quality.</li>
+              <li>Empowering Loans, Ensuring Excellence.</li>
             </div>
           </div>
           <div className="row-start-2 col-start-2">
             <div className="mx-0 h-fit w-full flex items-center justify-between gap-2 ">
               <div className="h-full w-1/2  text-neutral-100 list-none  text-xl cursor-pointer">
                 <li className="sm:my-7 max-sm:my-3 text-gray-500 cursor-not-allowed">Know</li>
-                <li >About</li>
-                <li >Resume</li>
-                <li>FAQs</li>
-                <li>Contact</li>
+                <li onClick= {role==="admin" ? ()=>{navigate('/admin/investor_investment')}:()=>{navigate('/investor_investment')}}>Your Investment</li>
+                <li onClick={()=>navigate('/invest')}>Invest</li>
+                <li onClick={()=>navigate('/help')}>Help Desk</li>
+                
               </div>
 
               <div className="h-fit w-full text-neutral-100 list-none text-xl cursor-pointer">
                 <li className="sm:my-7 max-sm:my-3 text-gray-500 cursor-not-allowed">Explore</li>
-                <li>MERN Project</li>
-                <li>PERN Project</li>
-                <li>Web Design</li>
-                <li>Web Development</li>
+                <li onClick={()=>navigate('/loan')}>Live Loan</li>
+                <li onClick={()=>navigate('/loanRequest')}>Loan Request</li>
+                <li onClick={()=>navigate('/negotiate')}>Negotiation Detail</li>
+                <li onClick={()=>navigate('/repayment')}>Repayment Detail</li>
               </div>
             </div>
           </div>

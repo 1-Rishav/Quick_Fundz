@@ -7,8 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import LoanPre_Request from "./LoanPre_Request";
 import CustomButton from "./UI/CustomButton"
 import {motion} from 'motion/react';
+import { useDisclosure } from "@heroui/modal";
+import Model from "./Modal";
 
 const Loan = () => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [userid , setuserid] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const loansPerPage = 5;
   const [loans, setLoans] = useState([]);
@@ -238,6 +242,9 @@ const Loan = () => {
   const handleFocus = () => {
     setInterestRate(interestRate.replace('%', '')); // Remove '%' on focus for editing
   };
+  const handleModal = (id) => {
+    setuserid(id)
+  }
 
   return (
     <>
@@ -321,6 +328,9 @@ const Loan = () => {
             style={{
                 translateZ:100,
             }}
+
+            onClick={onOpen}
+            onClickCapture={()=>handleModal(loan.user_id)}
             >
               <div className="relative w-fit h-fit flex flex-wrap flex-col">
                 <p>
@@ -386,6 +396,8 @@ const Loan = () => {
             Next
           </button>
         </div>}
+        <Model isOpen={isOpen} onOpenChange={onOpenChange} userId={userid}/>
+
       </div>
       <LoanAcceptForm
         isOpen={isOverlayOpen}

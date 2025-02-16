@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import CustomButton from "../../components/UI/CustomButton";
 
 function Home() {
   return (
@@ -13,18 +14,18 @@ function Home() {
         <p className="mb-8 text-lg text-gray-700 max-w-md mx-auto drop-shadow">
           The smarter way to fund your dreams. Sign up now and start your journey with us!
         </p>
-        <div className="space-x-4">
+        <div className="space-x-4 flex justify-center items-center">
           <Link 
             to="/auth/signup" 
-            className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-full shadow-lg transform transition duration-300 hover:-translate-y-1"
+            className="px-6 py-3 text-white rounded-full transform transition duration-300 hover:-translate-y-1"
           >
-            Sign Up
+           <CustomButton button='Signup' textColor='text-green-400' bottomColor='via-green-500' rgbColor='rgba(83, 197, 66,0.7)' className='w-32 rounded-lg p-3 bg-black text-neutral-100'/>
           </Link>
           <Link 
             to="/auth/login" 
-            className="px-6 py-3 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg transform transition duration-300 hover:-translate-y-1"
+            className="px-6 py-3 text-white rounded-full transform transition duration-300 hover:-translate-y-1"
           >
-            Login
+            <CustomButton button='Login' textColor='text-green-400' bottomColor='via-green-500' rgbColor='rgba(83, 197, 66,0.7)' className='w-32 rounded-lg p-3 bg-black text-neutral-100'/>
           </Link>
         </div>
       </div>

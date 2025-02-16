@@ -2,6 +2,7 @@ import { useState } from 'react';
 //import { supabase } from '../supabaseClient';
 import { UserKyc } from '../redux/slices/auth';
 import { useDispatch } from 'react-redux';
+import CustomButton from './UI/CustomButton';
 
 const KYC = () => {
   const [email, setEmail] = useState('');
@@ -26,17 +27,17 @@ const KYC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-b from-blue-50 via-white to-blue-50 p-2">
-      <div className="bg-white p-4 rounded-xl shadow-lg w-full sm:max-w-md lg:max-w-xl mx-auto">
-        <h1 className="text-2xl font-bold text-center text-gray-800 mb-3">Submit Your KYC Details</h1>
-        <p className="text-gray-600 mb-3 text-center text-sm">
+    <div className="flex flex-col items-center justify-center h-screen gradient-bg-transactions p-2">
+      <div className="gradient-bg-services  p-4 rounded-xl shadow-lg w-full sm:max-w-md lg:max-w-xl mx-auto">
+        <h1 className="text-2xl font-bold text-center text-gray-100 mb-3">Submit Your KYC Details</h1>
+        <p className="text-gray-200 mb-3 text-center text-sm">
           <span className="font-semibold">Know Your Customer (KYC)</span> is a critical process for verifying your identity and ensuring security.
         </p>
         <form onSubmit={handleSubmit} className="space-y-3">
           {error && <p className="text-red-500 mb-2">{error}</p>}
           
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
+            <label className="block text-sm font-semibold text-gray-100 mb-1">Email Address</label>
             <input
               type="email"
               value={email}
@@ -46,7 +47,7 @@ const KYC = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Phone Number</label>
+            <label className="block text-sm font-semibold text-gray-100 mb-1">Phone Number</label>
             <input
               type="tel"
               value={phoneNumber}
@@ -56,7 +57,7 @@ const KYC = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Aadhar Number</label>
+            <label className="block text-sm font-semibold text-gray-100 mb-1">Aadhar Number</label>
             <input
               type="number"
               value={aadharNumber}
@@ -66,7 +67,7 @@ const KYC = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">Bank Account Number</label>
+            <label className="block text-sm font-semibold text-gray-100 mb-1">Bank Account Number</label>
             <input
               type="number"
               value={bankNumber}
@@ -76,7 +77,7 @@ const KYC = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">IFSC Code</label>
+            <label className="block text-sm font-semibold text-gray-100 mb-1">IFSC Code</label>
             <input
               type="text"
               value={IFSCCode}
@@ -85,12 +86,12 @@ const KYC = () => {
               required
             />
           </div>
-          <button
+          <div
             type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded-lg w-full font-semibold hover:bg-blue-600 transition"
+            className=" text-white py-2 px-4 rounded-lg w-full font-semibold  transition"
           >
-            Submit
-          </button>
+             <CustomButton button='Submit' textColor='text-green-400' bottomColor='via-green-500' rgbColor='rgba(83, 197, 66,0.7)' className='w-full rounded-lg p-3 bg-black text-neutral-100'/>
+          </div>
         </form>
       </div>
     </div>

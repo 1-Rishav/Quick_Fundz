@@ -22,6 +22,7 @@ const LoanRequest = () => {
   const [Status , setStatus] = useState(null);
   const [investor_email, setInvestor_email] = useState(null);
   const [investoruser_id, setInvestoruser_id] = useState(null);
+  const [userid , setuserid] = useState(null);
   const [loan_amount, setLoan_amount] = useState(null);
   const [loan_duration, setLoan_duration] = useState(null);
   const [loanInterestRate, setLoanInterestRate] = useState(null);
@@ -29,6 +30,7 @@ const LoanRequest = () => {
   const [loanId, setLoanId] = useState(null);
   const [countRequest , setCountRequest] = useState(null);
   const [refresh, setRefresh] = useState(false);
+
   const dispatch = useDispatch();
   const { user_id } = useSelector((state) => state.auth);
 
@@ -176,7 +178,10 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
   };
   
 
- 
+ const handleModal = (id)=>{
+    setuserid(id);
+ }
+
 
   return (
     <div className="flex h-full overflow-hidden ">
@@ -203,6 +208,7 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
                 translateZ:100,
             }}
              onClick={onOpen}
+             onClickCapture={()=>handleModal(user.user_id)}
               >
                 
                 <div className='block w-full h-fit text-center text-xl text-gray-500 font-bold'>Loan Requirement</div>
@@ -240,6 +246,9 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
             style={{
                 translateZ:100,
             }}
+
+onClick={onOpen}
+            onClickCapture={()=>handleModal(user.investoruser_id)}
               >
               <div className='block w-full h-fit text-center text-gray-500 text-xl font-bold'>Your Investment</div>
                 
@@ -331,7 +340,7 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
   </div>
 </div>
 
-<Model isOpen={isOpen} onOpenChange={onOpenChange}/>
+<Model isOpen={isOpen} onOpenChange={onOpenChange} userId={userid}/>
     </div>
   );
 };

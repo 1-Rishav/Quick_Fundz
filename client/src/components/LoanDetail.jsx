@@ -6,7 +6,12 @@ import {motion} from 'motion/react'
 import { approvedLoan, createOrder, investorNegotiate, moneyPaid, payingMoney, rejectedLoan, screenRequestLoan } from '../redux/slices/auth';
 import NegotiateForm from './NegotiateForm'
 import CustomButton from './UI/CustomButton';
+import Model from './Modal';
+import { useDisclosure } from '@heroui/modal';
 function LoanDetail() {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [userid , setuserid] = useState(null);
+
   const [showLoanRequest, setShowLoanRequest] = useState(null);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [Status , setStatus] = useState(null);
@@ -150,6 +155,10 @@ function LoanDetail() {
      await dispatch(investorNegotiate(data));
       setRefresh(prev=>!prev)
     };
+
+    const handleModal = (id)=>{
+      setuserid(id);
+   }
   return (
     <>
     <div className=' h-full w-full text-neutral-100 gradient-bg-transactions'>
@@ -172,6 +181,8 @@ function LoanDetail() {
                   style={{
                       translateZ:100,
                   }}
+                  onClick={onOpen}
+                  onClickCapture={()=>handleModal(user.user_id)}
                     >
                       <div className='block w-full h-fit text-center text-xl text-gray-500 font-bold'>Loan Requirement</div>
                       <div className="relative w-fit h-fit flex flex-wrap flex-col  ">
@@ -201,6 +212,7 @@ function LoanDetail() {
                       //rgba(8,112,184,0.7)
                       boxShadow:`0px 10px 30px rgba(150, 200, 189, 0.888)`,
                       y: -6,
+                      
                   }}
                   whileTap={{
                       y:0
@@ -208,6 +220,8 @@ function LoanDetail() {
                   style={{
                       translateZ:100,
                   }}
+                  onClick={onOpen}
+            onClickCapture={()=>handleModal(user.investoruser_id)}
                     >
                     <div className='block w-full h-fit text-center text-gray-500 text-xl font-bold'>Your Investment</div>
                       
@@ -243,7 +257,8 @@ function LoanDetail() {
                   </div>
                  ))} 
               </div>
-              
+              <Model isOpen={isOpen} onOpenChange={onOpenChange} userId={userid}/>
+
     </div>
     <NegotiateForm
         isOpen={isOverlayOpen}
@@ -252,6 +267,7 @@ function LoanDetail() {
       /*userId={currentRejectUserId} // Pass the userId to RejectionOverlay
       usersId={currentRejectUsersId} */
       />
+
     </div>
     </>
   )

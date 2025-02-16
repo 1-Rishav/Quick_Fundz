@@ -5,8 +5,12 @@ import { createOrder, moneyRepayment, payingMoney, repayLoan } from '../redux/sl
 import { Repayment_Mobile_UI } from './Mobile_UI';
 import { motion} from 'motion/react';
 import CustomButton from './UI/CustomButton';
+import Model from './Modal';
+import { useDisclosure } from '@heroui/modal';
 
 const LoanRepayment = () => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [userid , setuserid] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [repayLoanStatus, setRepayLoanStatus] = useState(null);
   const [countRepayLoan , setCountRepayLoan] = useState(null);
@@ -97,6 +101,10 @@ const LoanRepayment = () => {
       rzp1.open();
     }
 
+    const handleModal = (id)=>{
+      setuserid(id);
+   }
+
   return (
     <div className="flex h-full overflow-hidden">
       <div className="z-index-50 ">
@@ -121,6 +129,8 @@ const LoanRepayment = () => {
             style={{
                 translateZ:100,
             }}
+            onClick={onOpen}
+            onClickCapture={()=>handleModal(user.provider_user_id)}
               >
                 <div className="block w-full h-fit text-center text-xl text-gray-500 font-bold ">Money-Lender Credentials</div>
                 <div className="relative w-fit h-fit flex flex-wrap flex-col ">
@@ -146,6 +156,8 @@ const LoanRepayment = () => {
             style={{
                 translateZ:100,
             }}
+            onClick={onOpen}
+            onClickCapture={()=>handleModal(user.repayment_user_id)}
               >
                 <div className="block w-full h-fit text-center text-gray-500 text-xl font-bold ">Re-payment</div>
                 <div className=" flex flex-wrap w-fit h-fit flex-col gap-4">
@@ -205,6 +217,8 @@ const LoanRepayment = () => {
             Next
           </button>
         </div>}
+        <Model isOpen={isOpen} onOpenChange={onOpenChange} userId={userid}/>
+
       </div>
       <div className="max-lg:block hidden h-full w-full">
   <div className="gradient-bg-transactions min-h-screen h-full w-full">

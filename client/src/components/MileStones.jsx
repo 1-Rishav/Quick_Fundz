@@ -3,9 +3,9 @@ import React from 'react'
 function MileStones({platformMile}) {
  
   return (
-    <div className=' p-5 md:ml-1 lg:ml-2 xl:ml-3 flex  max-lg:flex-wrap items-center gap-5 justify-evenly h-fit w-[96vw] relative text-neutral-100 left-3 right-3 top-5 white-glassmorphism'>
+    <div className=' p-10 md:ml-1 lg:ml-2 xl:ml-3 flex  max-lg:flex-wrap items-center gap-5 justify-evenly h-fit w-[96vw] relative text-neutral-100 left-3 right-3 top-5 white-glassmorphism'>
         
-        <div className=' absolute flex flex-col  underline h-full w-fit text-5xl font-bold '>
+        <div className='absolute flex flex-col  underline h-full w-fit text-5xl font-bold '>
             <h1>Live Feed</h1>
             
         </div>

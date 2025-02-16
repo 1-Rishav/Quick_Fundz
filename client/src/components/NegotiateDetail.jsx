@@ -4,8 +4,12 @@ import { negotiationApprove, rejectNegotiation , screenNegotiate} from '../redux
 import { useParams } from 'react-router-dom';
 import {motion} from 'motion/react'
 import CustomButton from './UI/CustomButton';
+import Model from './Modal';
+import { useDisclosure } from '@heroui/modal';
 
 function NegotiateDetail() {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [userid , setuserid] = useState(null);
     const [showNegotiateRequest , setShowNegotiateRequest] = useState(null);
     const [refresh , setRefresh] = useState(false);
 
@@ -54,6 +58,10 @@ useEffect(() => {
        await dispatch(rejectNegotiation(data))
         setRefresh(prev=>!prev)
       };
+
+      const handleModal = (id)=>{
+        setuserid(id);
+     }
   return (
     <>
     <div className=' h-full w-full text-neutral-100 gradient-bg-transactions'>
@@ -77,6 +85,8 @@ useEffect(() => {
                   style={{
                       translateZ:100,
                   }}
+                  onClick={onOpen}
+            onClickCapture={()=>handleModal(user.user_id)}
                     >
                       <div className='block w-full h-fit text-center text-xl text-gray-500 font-bold'>Negotiation-Requirements</div>
                       <div className="relative w-fit h-fit flex flex-wrap flex-col  ">
@@ -103,6 +113,9 @@ useEffect(() => {
                   style={{
                       translateZ:100,
                   }}
+
+                  onClick={onOpen}
+            onClickCapture={()=>handleModal(user.loan_user_id)}
                     >
                     <div className='block w-full h-fit text-center text-gray-500 text-xl font-bold'>Your Requirements</div>
                       
@@ -127,6 +140,8 @@ useEffect(() => {
               </div>
               
     </div>
+    <Model isOpen={isOpen} onOpenChange={onOpenChange} userId={userid}/>
+
     </div>
     </>
   )

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { documents } from '../redux/slices/auth';
+import CustomButton from './UI/CustomButton';
 
 function IncomeBankDocs() {
     const [file , setFile] = useState("")
@@ -56,12 +57,12 @@ const dispatch = useDispatch();
             required
           />
         </div>
-        <button
+        <div
           type="submit"
-          className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md w-full mb-4 hover:bg-blue-700 transition"
+          className=" text-white px-6 py-3 rounded-lg shadow-md w-full mb-4 transition"
         >
-          Submit
-        </button>
+           <CustomButton button='Submit' textColor='text-green-400' bottomColor='via-green-500' rgbColor='rgba(83, 197, 66,0.7)' className='w-full rounded-lg p-3 bg-black text-neutral-100'/>
+        </div>
         {/* {message && (
           <div
             className={`text-center mt-4 ${

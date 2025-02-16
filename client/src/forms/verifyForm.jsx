@@ -62,19 +62,19 @@ export default function VerifyForm() {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={3}>
+      <Stack spacing={5} className="flex items-center justify-center w-full h-full text text-neutral-100">
         <RHFCodes
           keyName="code"
           inputs={["code1", "code2", "code3", "code4", "code5", "code6"]}
         />
 
         <Button
-          fullWidth
-          size="large"
-          type="submit"
-          variant="contained"
+          // fullWidth
+          // size="large"
+           type="submit"
+          // variant="contained"
           sx={{
-            mt: 3,
+            mt: 5,
             bgcolor: "text.secondary",
             color: (theme) =>
               theme.palette.mode === "light" ? "common.white" : "grey.800",
@@ -84,6 +84,7 @@ export default function VerifyForm() {
                 theme.palette.mode === "light" ? "common.white" : "grey.800",
             },
           }}
+          className=" text-center w-[25%]"
         >
           Verify
         </Button>

@@ -1,6 +1,7 @@
 import {useDispatch, useSelector} from 'react-redux';
 import { verifiedKyc } from '../redux/slices/auth';
 import { useNavigate } from 'react-router-dom';
+import CustomButton from './UI/CustomButton';
 const KYCStatus = () => {
   const {verificationStatus,user_id,kycMessage}=useSelector((state)=>state.auth)
   const navigate = useNavigate();
@@ -39,22 +40,22 @@ const KYCStatus = () => {
     dispatch(verifiedKyc(data))
   };
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-gray-100 to-gray-300 p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen  gradient-bg-transactions p-4">
       <div className={`p-6 md:p-8 rounded-lg shadow-lg max-w-sm w-full sm:max-w-md lg:max-w-lg mx-auto ${bgColor}`}>
         <h1 className={`text-3xl font-bold text-center mb-6 ${textColor}`}>KYC Status</h1>
         <p className={`text-lg text-center font-semibold ${textColor}`}>{message}</p>
         <div className="mt-8 text-center">
           {status === 'Rejected' && (
-            <button onClick={() => navigate('/auth/updatekyc')} className="bg-blue-600 text-white py-2 px-4 rounded-lg w-full font-semibold hover:bg-blue-700 transition">
-              Update Details
-            </button>
+            <div onClick={() => navigate('/auth/updatekyc')} className=" py-2 px-4 rounded-lg w-full font-semibold  transition">
+              <CustomButton button='Update Details' textColor='text-green-400' bottomColor='via-amber-500' rgbColor='rgba(220, 211, 43,0.7)' className='w-full rounded-lg p-3 bg-black text-neutral-100'/>
+            </div>
           )}
         </div>
         <div className="mt-8 text-center">
           {status === 'Approved' && (
-            <button onClick={()=>handleClick('verified')} className="bg-cyan-800 text-white py-2 px-4 rounded-lg w-full font-semibold hover:bg-blue-700 transition">
-              Explore
-            </button>
+            <div onClick={()=>handleClick('verified')} className="  py-2 px-4 rounded-lg w-full font-semibold  transition">
+              <CustomButton button='Explore' textColor='text-green-400' bottomColor='via-green-500' rgbColor='rgba(83, 197, 66,0.7)' className='w-full rounded-lg p-3 bg-black text-neutral-100'/>
+            </div>
           )}
         </div>
       </div>

@@ -5,8 +5,13 @@ import {  negotiateValue ,negotiationApprove,rejectNegotiation} from '../redux/s
 import {motion} from 'motion/react';
 import Mobile_UI from './Mobile_UI';
 import CustomButton from './UI/CustomButton';
+import Model from './Modal';
+import { useDisclosure } from '@heroui/modal';
 
 const NegotiateLoan = () => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [userid , setuserid] = useState(null);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [lastAmount,setLastAmount]=useState(null); 
   const [refresh , setRefresh] = useState(false)
@@ -66,6 +71,10 @@ const NegotiateLoan = () => {
    await dispatch(rejectNegotiation(data));
     setRefresh(prev=>!prev)
   };
+
+  const handleModal = (id)=>{
+    setuserid(id);
+ }
   return (
     <div className="flex h-full overflow-hidden">
       <div className="z-index-50 ">
@@ -90,6 +99,9 @@ const NegotiateLoan = () => {
             style={{
                 translateZ:100,
             }}
+
+            onClick={onOpen}
+            onClickCapture={()=>handleModal(user.user_id)}
               >
                 <span className="block w-full h-fit text-center text-xl text-gray-500 font-bold">Negotiation-Requirements</span>
                 <div className="relative w-fit h-fit flex flex-wrap flex-col ">
@@ -116,6 +128,8 @@ const NegotiateLoan = () => {
             style={{
                 translateZ:100,
             }}
+            onClick={onOpen}
+            onClickCapture={()=>handleModal(user.loan_user_id)}
               >
                 <span className="block w-full h-fit text-center text-gray-500 text-xl font-bold">Your Requirements</span>
                 <div className="flex flex-wrap w-fit h-fit flex-col gap-4">
@@ -166,6 +180,8 @@ const NegotiateLoan = () => {
             Next
           </button>
         </div>}
+        <Model isOpen={isOpen} onOpenChange={onOpenChange} userId={userid}/>
+
       </div>
      
       <div className="max-lg:block hidden h-full w-full">
