@@ -1,5 +1,5 @@
 const express = require('express');
-const loanController = require('../controller/loanController')
+const loanController = require('../controller/loancontroller')
 const authenticate = require('../middleware/authenticate.middleware')
 const router = express.Router();
 
