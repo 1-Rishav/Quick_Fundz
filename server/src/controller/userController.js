@@ -51,21 +51,21 @@ exports.registerUser = asyncHandler(async(req, res, next)=>{
         email,
       ]);
       
-      const role = user.rows[0].role
-      const user_id=user.rows[0].id; 
-      const verificationStatus=user.rows[0].is_verified;
-      const token = jwt.sign(
-        { userId: user.rows[0].id },
-        process.env.JWT_SECRET,
-        { expiresIn: "1y" }
-      );
-      const options = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: "strict", 
-  maxAge: 360000 * 24 * 60 * 60 * 1000,
-    }
-      res.cookie("token",token,options).status(201).json({ message: "User registered successfully" ,role,user_id,verificationStatus});
+      const user_id=user.rows[0].id;
+  //      const role = user.rows[0].role     
+  //     const verificationStatus=user.rows[0].is_verified;
+  //     const token = jwt.sign(
+  //       { userId: user.rows[0].id },
+  //       process.env.JWT_SECRET,
+  //       { expiresIn: "1y" }
+  //     );
+  //     const options = {
+  //       httpOnly: true,
+  //       secure: process.env.NODE_ENV === 'production',
+  //       sameSite: "strict", 
+  // maxAge: 360000 * 24 * 60 * 60 * 1000,
+  //   }
+  //     res.cookie("token",token,options).status(201).json({ message: "User registered successfully" ,role,user_id,verificationStatus});
       req.userId = user_id;
       next();
     }
