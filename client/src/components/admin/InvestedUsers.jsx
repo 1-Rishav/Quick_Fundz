@@ -79,14 +79,6 @@ toast.error(error.allInvestor.message)      } finally {
     fetchKycDetails();
   }, [dispatch]);
 
-  /* const deleteUser = async (userId) => {
-    try {
-      await axios.delete(`http://localhost:3001/admin/deleteUser/${userId}`);
-      setAllRequest(allRequest.filter((user) => user.user_id !== userId));
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  }; */
 
   const lastIndex = currentPage * usersPerPage;
   const firstIndex = lastIndex - usersPerPage;

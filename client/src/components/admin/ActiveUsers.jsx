@@ -83,14 +83,6 @@ toast.error(error.allUser.message)      } finally {
     fetchKycDetails();
   }, [dispatch]);
 
-  // const deleteUser = async (userId) => {
-  //   try {
-  //     await axios.delete(`http://localhost:3001/admin/deleteUser/${userId}`);
-  //     setAllRequest(allRequest.filter((user) => user.user_id !== userId));
-  //   } catch (error) {
-  //     console.error("Error deleting user:", error);
-  //   }
-  // }; 
   const handleDelete = async(userId)=>{
     const data = {
       userId

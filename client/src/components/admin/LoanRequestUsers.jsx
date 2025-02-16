@@ -74,15 +74,6 @@ toast.error(error.loanRequest.message)      } finally {
   }, [dispatch]);
 
 
-  /* const deleteUser = async (userId) => {
-    try {
-      await axios.delete(`http://localhost:3001/admin/deleteUser/${userId}`);
-      setAllRequest(allRequest.filter((user) => user.user_id !== userId));
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  }; */
-
   const lastIndex = currentPage * usersPerPage;
   const firstIndex = lastIndex - usersPerPage;
   const currentUsers = allRequest.slice(firstIndex, lastIndex);

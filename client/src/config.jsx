@@ -7,7 +7,7 @@ import { PATH_ADMIN } from "./routes/paths";
 import { PATH_FACULTY } from "./routes/paths"; 
 import { PATH_STUDENT } from "./routes/paths"; */
 
-export const BASE_URL = "http://localhost:3001/"
+export const BASE_URL = "https://quick-fundz.onrender.com/" /* "http://localhost:3001/" */
 /* export const defaultSettings = {
   themeMode: "light",
   themeDirection: "ltr",
