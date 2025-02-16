@@ -35,7 +35,7 @@ exports.registerUser = asyncHandler(async(req, res, next)=>{
 
     if (userExists.rows.length > 0 ) {
       if(!userExists.rows[0].verified){
-        req.body.userId=userExists.rows[0].id;
+        req.userId=userExists.rows[0].id;
        return next()
       }else{
         return res.status(400).json({ error: "User already exists" });
@@ -50,10 +50,8 @@ exports.registerUser = asyncHandler(async(req, res, next)=>{
       const user = await pool.query("SELECT * FROM users WHERE email = $1", [
         email,
       ]);
-      console.log(user);
       
       const user_id=user.rows[0].id;
-      console.log(user_id)
   //      const role = user.rows[0].role     
   //     const verificationStatus=user.rows[0].is_verified;
   //     const token = jwt.sign(
@@ -68,7 +66,7 @@ exports.registerUser = asyncHandler(async(req, res, next)=>{
   // maxAge: 360000 * 24 * 60 * 60 * 1000,
   //   }
   //     res.cookie("token",token,options).status(201).json({ message: "User registered successfully" ,role,user_id,verificationStatus});
-  req.body.userId = user_id;
+  req.userId = user_id;
     return next();
     }
   } catch (err) {
@@ -79,7 +77,7 @@ exports.registerUser = asyncHandler(async(req, res, next)=>{
 
 exports.sendOTP = asyncHandler(async (req, res, next) => {
   const { userId } = req.body;
-  console.log(userId)
+  
   if (!userId) {
     return res.status(400).json({ message: "User ID is required to send OTP" });
   }
