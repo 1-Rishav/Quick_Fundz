@@ -32,6 +32,7 @@ import LoanDetailPage from "../pages/dashboard/LoanDetailPage"
 import NegotiateDetailPage from "../pages/dashboard/NegotiateDetailPage"
 import ActiveUserPage from "../pages/dashboard/ActiveUserPage"
 import Investor_InvestmentPage from "../pages/dashboard/Investor_InvestmentPage";
+import HelpPage from "../pages/dashboard/HelpPage";
 
 export default function Router(){
     return useRoutes([
@@ -84,6 +85,7 @@ export default function Router(){
                 {path:'loanRequest/:id',element:<LoanDetailPage/>},
                 {path:'negotiate',element:<NegotiateLoanPage/>},
                 {path:'negotiate/:id',element:<NegotiateDetailPage/>},
+                {path:'help',element:<HelpPage/>},
                 {path:'404',element:<Page404/>},
                 { path: "*", element: <Navigate to="/404" replace /> }
             ]
