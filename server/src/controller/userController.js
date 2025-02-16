@@ -36,7 +36,7 @@ exports.registerUser = asyncHandler(async(req, res, next)=>{
     if (userExists.rows.length > 0 ) {
       if(!userExists.rows[0].verified){
         req.userId=userExists.rows[0].id;
-        next()
+       return next()
       }else{
         return res.status(400).json({ error: "User already exists" });
       }
@@ -67,11 +67,11 @@ exports.registerUser = asyncHandler(async(req, res, next)=>{
   //   }
   //     res.cookie("token",token,options).status(201).json({ message: "User registered successfully" ,role,user_id,verificationStatus});
       req.userId = user_id;
-      next();
+    return next();
     }
   } catch (err) {
     console.error(err);
-   return res.status(500).json({ error: "Error occured while registering user" });
+   return res.status(500).json({ message: "Error occured while registering user" });
   }
 })
 
@@ -79,7 +79,7 @@ exports.sendOTP = asyncHandler(async (req, res, next) => {
   const { userId } = req;
 
   if (!userId) {
-    return res.status(400).json({ error: "User ID is required to send OTP" });
+    return res.status(400).json({ message: "User ID is required to send OTP" });
   }
   // Generate OTP
   try {
