@@ -81,7 +81,7 @@ exports.requestInvestor = asyncHandler(async (req, res) => {
 exports.smallRequest = asyncHandler(async (req, res)=>{
     const {id,user_id} = req.body;
     try {
-        const userLoanRequest = await pool.query("SELECT * from loan_request_details where id=$1 AND state!=$2 AND investoruser_id=$3", [id, 'Rejected',user_id ])
+        const userLoanRequest = await pool.query("SELECT * from loan_request_details where id=$1 AND state!=$2 AND investoruser_id=$3 AND state!=$4", [id, 'Rejected',user_id,'Negotiate' ])
     
         const requestLoan = userLoanRequest.rows
         //const loan_status=userLoanRequest.rows[0].state;
@@ -183,9 +183,11 @@ return res.status(500).json({
 
 exports.repayStatus = asyncHandler(async (req, res) => {
     const { userId } = req
+    console.log(userId)
     try {
         const RepayData = await pool.query('Select * from loan_repayment where repayment_user_id = $1', [userId])
         const repayData = RepayData.rows
+        
         res.status(200).json({message:"Fetched all Repayment data",repayData})
     } catch (error) {
         return res.status(500).json({

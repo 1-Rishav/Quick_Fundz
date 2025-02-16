@@ -242,7 +242,6 @@ exports.loginUser= asyncHandler(async(req,res)=>{
 exports.incomeDocuments = asyncHandler(async(req,res)=>{
   const {userId}= req
   const fileOriginal = req.file.originalname;
-  console.log(userId)
  
   try {
     if (!req.file) {
@@ -278,10 +277,10 @@ exports.changeProfile = asyncHandler(async(req,res)=>{
       return res.status(400).json({ message: 'File is required' });
     }
     const existingAvatar = await pool.query('Select avatar_id from users where id=$1',[userId])
-    const prevAvatar = existingAvatar.rows[0]
+    const prevAvatar = existingAvatar?.rows[0]
     console.log(prevAvatar);
-    if(prevAvatar){
-      await cloudinary.uploader.destroy(prevAvatar.avatar_id, {
+    if(prevAvatar?.avatar_id){
+      await cloudinary?.uploader?.destroy(prevAvatar?.avatar_id, {
         resource_type: 'image',
       });
     }
@@ -294,9 +293,10 @@ exports.changeProfile = asyncHandler(async(req,res)=>{
       access_mode: 'public',
       
     });
-
+    
     const fileUrl = result.secure_url;
     const publicId = result.public_id;
+    console.log(publicId)
     const updateUserAvatar = await pool.query('Update users set avatar_url = $1,avatar_id=$2 where id=$3 RETURNING avatar_url' ,[fileUrl,publicId,userId] )
     
     const avatar=updateUserAvatar.rows[0].avatar_url
@@ -318,6 +318,47 @@ exports.changeUserAvatar=asyncHandler(async (req,res)=>{
     return res.status(500).json({status:'error',message:"Error updating avatar"});
   }
   
+})
+
+exports.getDetail=asyncHandler(async(req,res)=>{
+  const {userId} = req.body;
+  
+  try {
+    const userDetail = await pool.query('Select * from users where id = $1',[userId])
+    const userAvatar = userDetail.rows[0]?.avatar_url
+    const userName = userDetail.rows[0]?.name;
+    const userEmail = userDetail.rows[0]?.email;
+    const verified = userDetail.rows[0]?.is_verified;
+    const startDate = userDetail.rows[0]?.otp_expiry_time;
+    const endDate = new Date();
+    //console.log(endDate);
+    let yearsDiff = endDate.getFullYear() - startDate?.getFullYear();
+      let monthsDiff = endDate.getMonth() - startDate?.getMonth();
+      let daysDiff = endDate.getDate() - startDate?.getDate();
+  
+      // Convert the year and month difference to total months
+      let totalMonths = yearsDiff * 12 + monthsDiff;
+  
+      // Adjust if days are negative (i.e., the end date is before the same day of the next month)
+      if (daysDiff < 0) {
+          totalMonths -= 1;
+      }
+     // console.log(totalMonths)
+    const loanDetail = await pool.query('Select * from loan_request_details where user_id=$1 ',[userId]);
+    const userLoan = loanDetail.rows;
+    const repayPaidDetail = await pool.query('Select * from loan_repayment where repayment_user_id=$1 AND payment_status=$2',[userId,'Paid']);
+    const userPaid = repayPaidDetail.rows;
+    const repayNotPaidDetail = await pool.query('Select * from loan_repayment where repayment_user_id=$1 AND payment_status=$2',[userId,'Not-paid']);
+    const userNotPaid = repayNotPaidDetail.rows;
+    const investorDetail = await pool.query('Select * from investor_details where user_id=$1 ',[userId]);
+    const userInvestment = await investorDetail.rows;
+    //console.log(userAvatar,userEmail,userName,verified , userLoan , userPaid,userNotPaid,userInvestment);
+    return res.status(200).json({
+      message:'User Detail fetched successfully',userAvatar,userEmail,userName,verified,totalMonths,userLoan,userPaid,userNotPaid,userInvestment
+    })
+  } catch (error) {
+    console.log(error);
+  }
 })
 /* router.get("/me", (req, res) => {
   const token = req.headers.authorization.split(" ")[1];
