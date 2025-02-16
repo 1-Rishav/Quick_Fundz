@@ -598,7 +598,6 @@ return async()=>{
 try {
       const response = await axios.get('loanRequest/repayStatus',{withCredentials:true});
       toast.success(response.data.message)
-
       return response.data;
 } catch (error) {
   toast.error(error.message) 
@@ -759,6 +758,18 @@ console.log(error);      }
       return response.data;
       } catch (error) {
         toast.error(error.message)
+      }
+    }
+  }
+
+  export function userDetail(formValues){
+    
+    return async()=>{
+      try {
+        const response = await axios.post('auth/detail',formValues,{withCredentials:true});
+        return response.data
+      } catch (error) {
+        console.log(error.message)
       }
     }
   }
