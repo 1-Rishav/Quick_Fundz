@@ -68,7 +68,7 @@ exports.registerUser = asyncHandler(async(req, res, next)=>{
   //   }
   //     res.cookie("token",token,options).status(201).json({ message: "User registered successfully" ,role,user_id,verificationStatus});
   req.userId = user_id;
-     next();
+     return next();
     }
   } catch (err) {
     console.error(err);
