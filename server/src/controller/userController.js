@@ -52,6 +52,7 @@ exports.registerUser = asyncHandler(async(req, res, next)=>{
       ]);
       
       const user_id=user.rows[0].id;
+      console.log(user_id);
   //      const role = user.rows[0].role     
   //     const verificationStatus=user.rows[0].is_verified;
   //     const token = jwt.sign(
@@ -67,7 +68,7 @@ exports.registerUser = asyncHandler(async(req, res, next)=>{
   //   }
   //     res.cookie("token",token,options).status(201).json({ message: "User registered successfully" ,role,user_id,verificationStatus});
   req.userId = user_id;
-    return next();
+     next();
     }
   } catch (err) {
     console.error(err);
