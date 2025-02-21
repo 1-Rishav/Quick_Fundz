@@ -254,8 +254,9 @@ exports.loginUser = asyncHandler(async (req, res) => {
 
 exports.incomeDocuments = asyncHandler(async (req, res) => {
   const { userId } = req
-  const fileOriginal = req.file.originalname;
 
+  const fileOriginal = req.file.originalname;
+console.log(fileOriginal)
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'File is required' });
