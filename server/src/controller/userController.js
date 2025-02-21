@@ -68,7 +68,7 @@ exports.registerUser = asyncHandler(async(req, res, next)=>{
   //   }
   //     res.cookie("token",token,options).status(201).json({ message: "User registered successfully" ,role,user_id,verificationStatus});
   req.userId = user_id;
-     return next();
+      next();
     }
   } catch (err) {
     console.error(err);
@@ -77,7 +77,7 @@ exports.registerUser = asyncHandler(async(req, res, next)=>{
 })
 
 exports.sendOTP = asyncHandler(async (req, res, next) => {
-  const { userId } = req.body;
+  const { userId } = req;
   
   if (!userId) {
     return res.status(400).json({ message: "User ID is required to send OTP" });
