@@ -11,7 +11,7 @@ const initialState = {
   token: null,
   user_id: null,
   docs_status:false,
-  verificationStatus:'pending',
+  verificationStatus:null,
   kycMessage: null,
   loan_status:'processing',
   verified:false,
