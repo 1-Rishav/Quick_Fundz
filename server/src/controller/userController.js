@@ -193,7 +193,7 @@ exports.verifyOTP = asyncHandler(async (req, res, next) => {
   const options = {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: "strict",
+    sameSite: "None",
     maxAge: 360000 * 24 * 60 * 60 * 1000,
   }
 
@@ -234,7 +234,7 @@ exports.loginUser = asyncHandler(async (req, res) => {
     const options = {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: "strict",
+      sameSite: "None",
       maxAge: 360000 * 24 * 60 * 60 * 1000,
     }
     const kycMessage = kycUser.rows[0]?.message;
