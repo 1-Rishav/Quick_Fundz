@@ -44,7 +44,8 @@ const KYCRequest = () => {
     setAllRequest(updatedRequestList);
   };
 
-  const handleConfirm = async(userId, usersId, status) => {
+  const handleConfirm = async(userId, usersId, status,e) => {
+    e.preventDefault();
     const data = { userId, usersId, status };
     dispatch(confirmOrRejectRequest(data));
     handleUserRemoval(userId);
@@ -108,7 +109,7 @@ const KYCRequest = () => {
                 
             </div>
             <div className="flex flex-col flex-wrap sm:flex-row gap-2 mt-4">
-                <button className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition" onClick={() => handleConfirm(user.id, user.user_id, 'confirm')}>Confirm</button>
+                <button className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition" onClick={(e) => handleConfirm(user.id, user.user_id, 'confirm',e)}>Confirm</button>
                 <button className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 transition" onClick={() => handleReject(user.id, user.user_id)}>Reject</button>
               </div>
             </div>
