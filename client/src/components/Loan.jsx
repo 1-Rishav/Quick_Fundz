@@ -253,10 +253,10 @@ const Loan = () => {
       <div className="z-index-50 max-sm:absolute">
         <Sidebar />
       </div>
-      <div className="flex max-sm:ml-8 flex-col flex-1 max-w-8xl mx-auto p-4 overflow-y-auto relative gradient-bg-transactions text-neutral-50">
+      <div className="flex max-sm:ml-8 flex-col flex-1 max-w-8xl mx-auto p-4 overflow-y-auto relative gradient-bg-transactions ">
          <h1 className="text-2xl font-bold mb-6 text-center">Live Loans</h1>   
           {countLoan>4 &&  <button
-          className="p-3 border border-black text-black rounded-full shadow-md hover:bg-gray-100 flex items-center space-x-2 w-44 absolute top-4 right-4"
+          className="p-3 border border-black text-gray-200 rounded-full shadow-md hover:bg-gray-100 flex items-center space-x-2 w-44 absolute top-4 right-4"
           onClick={() => setShowFilter(!showFilter)}
         >
           <FaSearch size={16} />
@@ -272,7 +272,7 @@ const Loan = () => {
                 onChange={handleChangeAmount}
                 onBlur={handleBlurAmount}
                 onFocus={handleFocusAmount}
-                className="border p-2 rounded-lg"
+                className="border p-2 rounded-lg text-black"
               />
               <input
                 type="text"
@@ -281,7 +281,7 @@ const Loan = () => {
                 onChange={handleChangeDuration}
                 onBlur={handleBlurDuration}
                 onFocus={handleFocusDuration}
-                className="border p-2 rounded-lg"
+                className="border p-2 rounded-lg text-black"
               />
               <input
                 type="text"
@@ -290,7 +290,7 @@ const Loan = () => {
                 onChange={handleChangeInterest}
                 onBlur={handleBlur}
                 onFocus={handleFocus}
-                className="border p-2 rounded-lg"
+                className="border p-2 rounded-lg text-black"
               />
             </div>
             <div className="flex gap-2 justify-end">
@@ -332,7 +332,7 @@ const Loan = () => {
             onClick={onOpen}
             onClickCapture={()=>handleModal(loan.user_id)}
             >
-              <div className="relative w-fit h-fit flex flex-wrap flex-col">
+              <div className="relative w-fit h-fit flex flex-wrap flex-col text-neutral-50">
                 <p>
                   <strong>Name:</strong> {loan.name}
                 </p>
@@ -343,7 +343,7 @@ const Loan = () => {
                   <strong>Amount:</strong> {loan.amount}
                 </p>
               </div>
-              <div className="relative w-fit h-fit flex flex-wrap flex-col gap-4">
+              <div className="relative w-fit h-fit flex flex-wrap flex-col gap-4 text-neutral-50">
                 <p>
                   <strong>Duration:</strong> {loan.duration}
                 </p>
