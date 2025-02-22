@@ -112,7 +112,7 @@ exports.userKyc = asyncHandler(async (req, res,next) => {
 
 exports.verifiedUser=asyncHandler(async(req,res)=>{
     const {status,user_id} = req.body;
-
+    
     try {
         const updateKyc_Is_verified=await pool.query("UPDATE user_kyc_details SET is_verified = $1 WHERE user_id = $2",[status,user_id])
         const updateUsers_Is_verified=await pool.query("UPDATE users SET is_verified = $1 WHERE id = $2",[status,user_id])
