@@ -254,10 +254,8 @@ exports.loginUser = asyncHandler(async (req, res) => {
 
 exports.incomeDocuments = asyncHandler(async (req, res) => {
   const { userId } =await req
-  console.log(req.file);
-  const fileOriginal =await req.file.originalname;
-console.log(fileOriginal)
-console.log(userId);
+  const fileOriginal =await req?.file?.originalname;
+
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'File is required' });
@@ -272,9 +270,7 @@ console.log(userId);
     });
 
     const fileUrl = result.secure_url;
-    console.log(fileUrl);
     const publicId = result.public_id;
-    console.log(publicId);
     const extractName = await pool.query('Select name from users where id = $1', [userId]);
     const name = extractName.rows[0]?.name;
     const insertDocuemnts = await pool.query('Insert into incomebank_docs (name , user_id,file_name,file_url,cloudinary_id) values($1,$2,$3,$4,$5)', [name, userId, fileOriginal, fileUrl, publicId])
@@ -282,8 +278,8 @@ console.log(userId);
     const updateKYCUser = await pool.query('Update user_kyc_details set document_file =$1 where user_id=$2', [fileUrl, userId])
     return res.status(200).json({ message: 'Documents successfully uploaded ' })
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "Error uploading documents",error })
+    
+    return res.status(500).json({ message: "Error uploading documents", })
   }
 })
 
