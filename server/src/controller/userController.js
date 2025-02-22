@@ -282,7 +282,8 @@ console.log(userId);
     const updateKYCUser = await pool.query('Update user_kyc_details set document_file =$1 where user_id=$2', [fileUrl, userId])
     return res.status(200).json({ message: 'Documents successfully uploaded ' })
   } catch (error) {
-    return res.status(500).json({ message: "Error uploading documents", })
+    console.log(error);
+    return res.status(500).json({ message: "Error uploading documents",error })
   }
 })
 
