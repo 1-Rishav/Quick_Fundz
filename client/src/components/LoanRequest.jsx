@@ -188,8 +188,8 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
       <div className="z-index-50 ">
         <Sidebar />
       </div>
-      <div className="flex max-lg:hidden max-md:flex-wrap sm:flex-col flex-1 max-w-8xl  mx-auto sm:p-4 overflow-scroll overflow-x-hidden gradient-bg-transactions text-neutral-50">
-       {countRequest>0 ? <h1 className="text-2xl font-bold mb-6 text-center ">Loan Requests</h1>:<h1 className="text-2xl w-full font-bold mb-6 flex-wrap flex-col flex text-center items-center justify-center h-full ">No Loan Request Yet</h1>} 
+      <div className="flex max-lg:hidden max-md:flex-wrap sm:flex-col flex-1 max-w-8xl  mx-auto sm:p-4 overflow-scroll overflow-x-hidden gradient-bg-transactions ">
+       {countRequest>0 ? <h1 className="text-2xl font-bold mb-6 text-center text-neutral-50">Loan Requests</h1>:<h1 className="text-2xl w-full font-bold mb-6 flex-wrap flex-col flex text-center items-center justify-center h-full text-neutral-50">No Loan Request Yet</h1>} 
         <div className="grid grid-cols-1 gap-4">
           {currentUsers?.map((user, index) => (
             <div key={index} className="border p-4 rounded-lg gradient-bg-services flex max-md:flex-wrap gap-5 justify-between items-center ">
@@ -212,12 +212,12 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
               >
                 
                 <div className='block w-full h-fit text-center text-xl text-gray-500 font-bold'>Loan Requirement</div>
-                <div className="relative w-fit h-fit flex flex-wrap flex-col  ">
+                <div className="relative w-fit h-fit flex flex-wrap flex-col  text-neutral-50">
                   <p><strong>Name:</strong> {user?.name}</p>
                   <p><strong>Email:</strong> {user?.email}</p>
                   <p><strong>Amount:</strong> {user?.loan_amount}</p>
                 </div>
-                <div className=" relative w-fit h-fit flex flex-wrap flex-col gap-4">
+                <div className=" relative w-fit h-fit flex flex-wrap flex-col gap-4 text-neutral-50">
                   <p><strong>Duration:</strong> {user?.duration}</p>
                   <p><strong>Interest Rate:</strong> {user?.rate_of_interest}</p>
                 </div>
@@ -225,10 +225,10 @@ const handlePaymentVerify = async (data,investor_id,duration,invest_status,loan_
                            
                               {user.document_file ? (
                   <a href={user.document_file} target="_blank" rel="noopener noreferrer">
-                    <GrDocumentPdf size={30} />
+                    <GrDocumentPdf size={30} color='white'/>
                   </a>
                 ) : (
-                  <span className='font-semibold'>N/A</span>
+                  <span className='font-semibold text-neutral-50'>N/A</span>
                 )}
                             </div>
               </motion.div>
@@ -252,11 +252,11 @@ onClick={onOpen}
               >
               <div className='block w-full h-fit text-center text-gray-500 text-xl font-bold'>Your Investment</div>
                 
-                <div className="flex flex-wrap w-fit h-fit flex-col gap-4">
+                <div className="flex flex-wrap w-fit h-fit flex-col gap-4 text-neutral-50">
                   <p><strong>Amount:</strong> {user?.original_amount}</p>
                   <p><strong>Duration:</strong> {user?.original_duration}</p>
                 </div>
-                <div className="w-fit h-fit flex flex-wrap flex-col gap-4">
+                <div className="w-fit h-fit flex flex-wrap flex-col gap-4 text-neutral-50">
                   <p><strong>Interest Rate:</strong> {user?.original_rate_of_interest}</p>
                 </div>
               </motion.div>

@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import Model from './Modal';
 import { useDisclosure } from '@heroui/modal';
+import CustomButton from './UI/CustomButton';
 
 function RepaymentDetail() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -94,12 +95,12 @@ function RepaymentDetail() {
   }
   return (
     <>
-      <div className=' h-full w-full text-neutral-100 gradient-bg-transactions'>
+      <div className=' h-full w-full gradient-bg-transactions'>
         <div className='min-h-screen  h-full w-full  px-5 sm:px-7 md:px-10 lg:px-14 xl:px-16 4xl:px-20'>
-          <div className='flex justify-center items-center h-fit mb-10 p-2 tracking-normal font-serif  text-xl md:text-3xl  font-bold'>Detail</div>
+          <div className='flex justify-center items-center h-fit mb-10 p-2 tracking-normal font-serif  text-xl md:text-3xl  font-bold text-neutral-100'>Detail</div>
           <div className="grid grid-cols-1 gap-4 gradient-bg-services  ">
             {repayLoanStatus?.map((user, index) => (
-              <div key={index} className="border p-4 gradient-bg-services rounded-lg text-neutral-100 flex max-md:flex-wrap gap-5 justify-between items-center">
+              <div key={index} className="border p-4 gradient-bg-services rounded-lg  flex max-md:flex-wrap gap-5 justify-between items-center">
                 <motion.div className=" [perspective::1000px] [transform-style:preserve-3d] relative border p-4 rounded-lg flex flex-wrap h-fit justify-between items-center gap-2"
 
                   whileHover={{
@@ -118,11 +119,11 @@ function RepaymentDetail() {
                   onClick={onOpen}
                   onClickCapture={() => handleModal(user.provider_user_id)}>
                   <div className="block w-full h-fit text-center text-xl text-gray-500 font-bold ">Money-Lender Credentials</div>
-                  <div className="relative w-fit h-fit flex flex-wrap flex-col ">
+                  <div className="relative w-fit h-fit flex flex-wrap flex-col text-neutral-100">
                     <p><strong>Name:</strong> {user?.name}</p>
                     <p><strong>Loan_Amount:</strong> {user?.loan_amount}</p>
                   </div>
-                  <div className="relative w-fit h-fit flex flex-wrap flex-col gap-4">
+                  <div className="relative w-fit h-fit flex flex-wrap flex-col gap-4 text-neutral-100">
                     <p><strong>Duration:</strong> {user?.loan_duration}</p>
                     <p><strong>Interest Rate:</strong> {user?.loan_roi}</p>
                   </div>
@@ -145,11 +146,11 @@ function RepaymentDetail() {
                   onClick={onOpen}
                   onClickCapture={() => handleModal(user.repayment_user_id)}>
                   <div className="block w-full h-fit text-center text-gray-500 text-xl font-bold ">Re-payment</div>
-                  <div className=" flex flex-wrap w-fit h-fit flex-col gap-4">
+                  <div className=" flex flex-wrap w-fit h-fit flex-col gap-4 text-neutral-100">
                     <p><strong>Amount:</strong> {`₹ ${user?.interest_amount}`}</p>
                     <p><strong>Remain Days:</strong> {`${user?.remain_days} days`}</p>
                   </div>
-                  <div className="w-fit h-fit flex flex-wrap flex-col gap-4">
+                  <div className="w-fit h-fit flex flex-wrap flex-col gap-4 text-neutral-100">
                     <p><strong>Pay_Status:</strong> {user?.payment_status}</p>
                   </div>
                 </motion.div>
@@ -158,16 +159,16 @@ function RepaymentDetail() {
                   {user.enable_pay === true ? (
 
                     user.payment_status === 'Paid' ? (
-                      <button className="bg-gray-400 text-white px-4 py-2 rounded-full cursor-not-allowed">Paid</button>
+                      <button className="bg-gray-800 text-white px-4 py-2 rounded-lg cursor-not-allowed">Paid</button>
                     ) :
                       (
                         <>
-                          <button className="bg-blue-500 text-white px-4 py-2 rounded-full" onClick={() => handlePay(user.interest_amount, user.id, "Paid")} >Pay</button>
+                          <button className=" px-4 py-2 rounded-lg" onClick={() => handlePay(user.interest_amount, user.id, "Paid")} ><CustomButton button='Pay' textColor='text-green-400' bottomColor='via-green-500' rgbColor='rgba(83, 197, 66,0.7)'/></button>
                           {/* <p className="text-sm text-red-600 text-center">Pay within three days.<br/> Otherwise Your account will block.</p> */}
                         </>
                       )
 
-                  ) : <button className="bg-gray-500 text-white px-4 py-2 rounded-full cursor-not-allowed" >Pay</button>}
+                  ) : <button className="bg-gray-800 text-white px-4 py-2 rounded-lg cursor-not-allowed" >Pay</button>}
 
                 </div>
               </div>

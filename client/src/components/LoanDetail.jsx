@@ -161,9 +161,9 @@ function LoanDetail() {
    }
   return (
     <>
-    <div className=' h-full w-full text-neutral-100 gradient-bg-transactions'>
+    <div className=' h-full w-full  gradient-bg-transactions'>
     <div className='min-h-screen  h-full w-full  px-5 sm:px-7 md:px-10 lg:px-14 xl:px-16 4xl:px-20'>
-      <div className='flex justify-center items-center h-fit mb-10 p-2 tracking-normal font-serif  text-xl md:text-3xl  font-bold'>Detail</div>
+      <div className='flex justify-center items-center h-fit mb-10 p-2 tracking-normal font-serif  text-xl md:text-3xl text-neutral-100 font-bold'>Detail</div>
       <div className="grid grid-cols-1 gap-4 gradient-bg-services  ">
                  {showLoanRequest?.map((user, index) => ( 
                   <div key={'index'} className="border  p-4 rounded-lg flex max-md:flex-wrap gap-5 justify-between items-center">
@@ -185,12 +185,12 @@ function LoanDetail() {
                   onClickCapture={()=>handleModal(user.user_id)}
                     >
                       <div className='block w-full h-fit text-center text-xl text-gray-500 font-bold'>Loan Requirement</div>
-                      <div className="relative w-fit h-fit flex flex-wrap flex-col  ">
+                      <div className="relative w-fit h-fit flex flex-wrap flex-col  text-neutral-50">
                         <p><strong>Name:</strong> {user?.name}</p>
                         <p><strong>Email:</strong> {user?.email}</p>
                         <p><strong>Amount:</strong> {user?.loan_amount}</p>
                       </div>
-                      <div className=" relative w-fit h-fit flex flex-wrap flex-col gap-4">
+                      <div className=" relative w-fit h-fit flex flex-wrap flex-col gap-4 text-neutral-50">
                         <p><strong>Duration:</strong> {user?.duration}</p>
                         <p><strong>Interest Rate:</strong> {user?.rate_of_interest}</p>
                       </div>
@@ -198,7 +198,7 @@ function LoanDetail() {
                                  
                                     {user.document_file ? (
                         <a href={'user.document_file'} target="_blank" rel="noopener noreferrer">
-                          <GrDocumentPdf size={30} className='mt-2'/>
+                          <GrDocumentPdf size={30} className='mt-2 text-white'/>
                         </a>
                       ) : (
                         <span className='font-semibold'>N/A</span>
@@ -225,11 +225,11 @@ function LoanDetail() {
                     >
                     <div className='block w-full h-fit text-center text-gray-500 text-xl font-bold'>Your Investment</div>
                       
-                      <div className="flex flex-wrap w-fit h-fit flex-col gap-4">
+                      <div className="flex flex-wrap w-fit h-fit flex-col gap-4 text-neutral-100">
                         <p><strong>Amount:</strong> {user?.original_amount}</p>
                         <p><strong>Duration:</strong> {user?.original_duration}</p>
                       </div>
-                      <div className="w-fit h-fit flex flex-wrap flex-col gap-4">
+                      <div className="w-fit h-fit flex flex-wrap flex-col gap-4 text-neutral-50">
                         <p><strong>Interest Rate:</strong> {user?.original_rate_of_interest}</p>
                       </div>
                     </motion.div>

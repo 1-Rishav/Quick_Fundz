@@ -80,8 +80,8 @@ const NegotiateLoan = () => {
       <div className="z-index-50 ">
         <Sidebar />
       </div>
-      <div className="flex max-lg:hidden flex-col flex-1 max-md:flex-wrap  max-w-8xl mx-auto p-4 overflow-scroll overflow-x-hidden gradient-bg-transactions text-neutral-50">
-        {countNegotiation>0 ? <h1 className="text-2xl font-bold mb-6 text-center">Loan Negotiation</h1>:<h1 className="text-2xl font-bold mb-6 flex items-center justify-center h-full">No Negotiation Request Yet</h1>}
+      <div className="flex max-lg:hidden flex-col flex-1 max-md:flex-wrap  max-w-8xl mx-auto p-4 overflow-scroll overflow-x-hidden gradient-bg-transactions ">
+        {countNegotiation>0 ? <h1 className="text-2xl font-bold mb-6 text-center text-neutral-50">Loan Negotiation</h1>:<h1 className="text-2xl font-bold mb-6 flex items-center justify-center h-full text-neutral-50">No Negotiation Request Yet</h1>}
         <div className="grid grid-cols-1 gap-4">
           {currentUsers?.map((user, index) => (
             <div key={index} className="border p-4 gradient-bg-services rounded-lg flex max-md:flex-wrap gap-4 justify-between items-center">
@@ -104,12 +104,12 @@ const NegotiateLoan = () => {
             onClickCapture={()=>handleModal(user.user_id)}
               >
                 <span className="block w-full h-fit text-center text-xl text-gray-500 font-bold">Negotiation-Requirements</span>
-                <div className="relative w-fit h-fit flex flex-wrap flex-col ">
+                <div className="relative w-fit h-fit flex flex-wrap flex-col text-neutral-50">
                   <p><strong>Name:</strong> {user?.name}</p>
                   <p><strong>Email:</strong> {user?.email}</p>
                   <p><strong>Amount:</strong> {user?.negotiate_amount}</p>
                 </div>
-                <div className="relative w-fit h-fit flex flex-wrap flex-col gap-4">
+                <div className="relative w-fit h-fit flex flex-wrap flex-col gap-4 text-neutral-50">
                   <p><strong>Duration:</strong> {user?.negotiate_duration}</p>
                   <p><strong>Interest Rate:</strong> {user?.negotiate_rate_of_interest}</p>
                 </div>
@@ -131,12 +131,12 @@ const NegotiateLoan = () => {
             onClick={onOpen}
             onClickCapture={()=>handleModal(user.loan_user_id)}
               >
-                <span className="block w-full h-fit text-center text-gray-500 text-xl font-bold">Your Requirements</span>
-                <div className="flex flex-wrap w-fit h-fit flex-col gap-4">
+                <span className="block w-full h-fit text-center text-gray-500 text-xl font-bold ">Your Requirements</span>
+                <div className="flex flex-wrap w-fit h-fit flex-col gap-4 text-neutral-50">
                   <p><strong>Amount:</strong> {user?.loan_amount}</p>
                   <p><strong>Duration:</strong> {user?.loan_duration}</p>
                 </div>
-                <div className="w-fit h-fit flex flex-wrap flex-col gap-4">
+                <div className="w-fit h-fit flex flex-wrap flex-col gap-4 text-neutral-50">
                   <p><strong>Interest Rate:</strong> {user?.loan_rate_of_interest}</p>
                 </div>
               </motion.div>

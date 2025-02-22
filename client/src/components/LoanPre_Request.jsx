@@ -109,7 +109,7 @@ function LoanPre_Request() {
           type="submit"
           className="px-6 py-3 rounded-lg shadow-md w-full mb-4"
         >
-          <CustomButton button='Submit' textColor='text-green-400' bottomColor='via-green-500' rgbColor='rgba(83, 197, 66,0.7)' className='w-full rounded-lg p-3 bg-black text-neutral-100'/>
+          <CustomButton button='Submit' textColor='text-green-400' bottomColor='via-green-500' rgbColor='rgba(83, 197, 66,0.7)' className='w-full rounded-lg p-3 bg-black '/>
         </div>
         
       </form>

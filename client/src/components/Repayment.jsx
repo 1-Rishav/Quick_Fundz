@@ -110,8 +110,8 @@ const LoanRepayment = () => {
       <div className="z-index-50 ">
         <Sidebar />
       </div>
-      <div className="flex max-lg:hidden sm:flex-col max-md:flex-wrap h-full min-h-screen  flex-1 max-w-8xl mx-auto sm:p-4 overflow-scroll overflow-x-hidden gradient-bg-transactions text-neutral-50">
-       {countRepayLoan>0 ? <h1 className="text-2xl h-fit w-full font-bold mb-6 text-center">Re-Payment</h1>:<h1 className=" text-2xl font-bold mb-6 flex justify-center items-center text-center w-full h-[90vh]">No Re-Payment Data</h1>}
+      <div className="flex max-lg:hidden sm:flex-col max-md:flex-wrap h-full min-h-screen  flex-1 max-w-8xl mx-auto sm:p-4 overflow-scroll overflow-x-hidden gradient-bg-transactions ">
+       {countRepayLoan>0 ? <h1 className="text-2xl h-fit w-full font-bold mb-6 text-center text-neutral-50">Re-Payment</h1>:<h1 className=" text-2xl font-bold mb-6 flex justify-center items-center text-center w-full h-[90vh] text-neutral-50">No Re-Payment Data</h1>}
         <div className="grid grid-cols-1 gap-4">
           {currentUsers?.map((user, index) => (
             <div key={index} className="border p-4 gradient-bg-services rounded-lg flex max-md:flex-wrap gap-5 justify-between items-center">
@@ -133,11 +133,11 @@ const LoanRepayment = () => {
             onClickCapture={()=>handleModal(user.provider_user_id)}
               >
                 <div className="block w-full h-fit text-center text-xl text-gray-500 font-bold ">Money-Lender Credentials</div>
-                <div className="relative w-fit h-fit flex flex-wrap flex-col ">
+                <div className="relative w-fit h-fit flex flex-wrap flex-col text-neutral-50">
                   <p><strong>Name:</strong> {user?.name}</p>
                   <p><strong>Loan_Amount:</strong> {user?.loan_amount}</p>
                 </div>
-                <div className="relative w-fit h-fit flex flex-wrap flex-col gap-4">
+                <div className="relative w-fit h-fit flex flex-wrap flex-col gap-4 text-neutral-50">
                   <p><strong>Duration:</strong> {user?.loan_duration}</p>
                   <p><strong>Interest Rate:</strong> {user?.loan_roi}</p>
                 </div>
@@ -160,11 +160,11 @@ const LoanRepayment = () => {
             onClickCapture={()=>handleModal(user.repayment_user_id)}
               >
                 <div className="block w-full h-fit text-center text-gray-500 text-xl font-bold ">Re-payment</div>
-                <div className=" flex flex-wrap w-fit h-fit flex-col gap-4">
+                <div className=" flex flex-wrap w-fit h-fit flex-col gap-4 text-neutral-50">
                   <p><strong>Amount:</strong> {`₹ ${user?.interest_amount}`}</p>
                   <p><strong>Remain Days:</strong> {`${user?.remain_days} days`}</p>
                 </div>
-                <div className="w-fit h-fit flex flex-wrap flex-col gap-4">
+                <div className="w-fit h-fit flex flex-wrap flex-col gap-4 text-neutral-50">
                   <p><strong>Pay_Status:</strong> {user?.payment_status}</p>
                 </div>
               </motion.div>

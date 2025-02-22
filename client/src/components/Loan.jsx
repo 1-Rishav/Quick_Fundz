@@ -329,10 +329,10 @@ const Loan = () => {
                 translateZ:100,
             }}
 
-            onClick={onOpen}
-            onClickCapture={()=>handleModal(loan.user_id)}
+            
             >
-              <div className="relative w-fit h-fit flex flex-wrap flex-col text-neutral-50">
+              <div className="relative w-fit h-fit flex flex-wrap flex-col text-neutral-50" onClick={onOpen}
+            onClickCapture={()=>handleModal(loan.user_id)}>
                 <p>
                   <strong>Name:</strong> {loan.name}
                 </p>
@@ -343,7 +343,8 @@ const Loan = () => {
                   <strong>Amount:</strong> {loan.amount}
                 </p>
               </div>
-              <div className="relative w-fit h-fit flex flex-wrap flex-col gap-4 text-neutral-50">
+              <div className="relative w-fit h-fit flex flex-wrap flex-col gap-4 text-neutral-50" onClick={onOpen}
+            onClickCapture={()=>handleModal(loan.user_id)}>
                 <p>
                   <strong>Duration:</strong> {loan.duration}
                 </p>
