@@ -73,7 +73,7 @@ const KYCRequest = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen ">
       <Sidebar />
 
       <div className="flex-1 flex flex-col max-w-8xl mx-auto p-4 overflow-hidden gradient-bg-transactions">
@@ -83,24 +83,24 @@ const KYCRequest = () => {
 
           
           {currentUsers.map((user, index) => (
-            <div key={index} className='flex pb-2 flex-wrap flex-col items-center justify-end w-full h-full  rounded-2xl bg-white'> 
-            <div  className="bg-white p-6 rounded-lg  flex flex-wrap flex-row gap-2 justify-between">
+            <div key={index} className='flex pb-2 flex-wrap flex-col items-center justify-end w-full h-full  rounded-2xl gradient-bg-services'> 
+            <div  className=" p-6 rounded-lg  flex flex-wrap flex-row gap-2 justify-between">
               <div >
                 {/* <p className="text-lg font-semibold"><strong>Name:</strong> {user.name}</p> */}
-                <p className="text-sm text-gray-600"><strong>Email:</strong> {user.email}</p>
-                <p className="text-sm text-gray-600"><strong>Phone:</strong> {user.phone_number}</p>
-                <p className="text-sm text-gray-600"><strong>Aadhar Number:</strong> {user.aadhar_number}</p>
+                <p className="text-sm text-gray-100"><strong>Email:</strong> {user.email}</p>
+                <p className="text-sm text-gray-100"><strong>Phone:</strong> {user.phone_number}</p>
+                <p className="text-sm text-gray-100"><strong>Aadhar Number:</strong> {user.aadhar_number}</p>
                 
               </div>
               <div>
-              <p className="text-sm text-gray-600"><strong>Account Number:</strong> {user.bank_account_number}</p>
-              <p className="text-sm text-gray-600"><strong>Ifsc Code:</strong> {user.ifsc_code}</p>
+              <p className="text-sm text-gray-100"><strong>Account Number:</strong> {user.bank_account_number}</p>
+              <p className="text-sm text-gray-100"><strong>Ifsc Code:</strong> {user.ifsc_code}</p>
               </div>
               <div className='flex flex-col w-full h-full justify-start items-center'>
               <h1 className='text-lg font-bold'>Income Statement</h1>
               {user.document_file ? (
   <a href={user.document_file} target="_blank" rel="noopener noreferrer">
-    <GrDocumentPdf size={35} />
+    <GrDocumentPdf size={35} color='white'/>
   </a>
 ) : (
   <span className='font-semibold'>N/A</span>
