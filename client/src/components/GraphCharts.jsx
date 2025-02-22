@@ -86,7 +86,7 @@ const dispatch = useDispatch();
         width: 380,
         type: 'pie',
       },
-      labels: ['Registered User', 'Investors', 'Borrowers', 'Total Investment'],
+      labels: ['Registered User', 'Investors', 'Borrowers' ],
       responsive: [{
         breakpoint: 480,
         options: {
@@ -101,13 +101,13 @@ const dispatch = useDispatch();
       }],
     legend: {
                 labels: {
-                    colors: ['#FF5733', '#33FF57', '#3357FF', '#F333FF'], // Custom label colors
+                    colors: ['#FF5733', '#33FF57', '#3357FF'], // Custom label colors
                     useSeriesColors: false, // Set this to false to use specific colors
                 }
             },
             dataLabels: {
                 style: {
-                    colors: ['#FF5733', '#33FF57', '#3357FF', '#F333FF'], // Custom label colors
+                    colors: ['#FF5733', '#33FF57', '#3357FF'], // Custom label colors
                 }
             }
         },
