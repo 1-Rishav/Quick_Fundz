@@ -266,7 +266,6 @@ toast.error(error.message)    }
 
 export function confirmOrRejectRequest(formValues){
   return async()=>{
-    console.log(formValues)
     try {
       const response = await axios.post('admin/confirmOrRejectUser',formValues);
       toast.success(response.data.message)

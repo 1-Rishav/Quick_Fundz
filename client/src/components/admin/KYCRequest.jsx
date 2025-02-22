@@ -14,6 +14,8 @@ const KYCRequest = () => {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const [currentRejectUserId, setCurrentRejectUserId] = useState(null);
   const [currentRejectUsersId, setCurrentRejectUsersId] = useState(null);
+  const [refresh, setRefresh] = useState(false);
+
   const usersPerPage = 8;
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -30,7 +32,7 @@ const KYCRequest = () => {
 
   useEffect(() => {
     fetchKycRequests();
-  }, [dispatch]);
+  }, [dispatch,refresh]);
 
   const lastIndex = currentPage * usersPerPage;
   const firstIndex = lastIndex - usersPerPage;
@@ -44,13 +46,11 @@ const KYCRequest = () => {
     setAllRequest(updatedRequestList);
   };
 
-  const handleConfirm = async(userId, usersId, status,e) => {
-    e.preventDefault();
+  const handleConfirm = async(userId, usersId, status) => {
     const data = { userId, usersId, status };
-    dispatch(confirmOrRejectRequest(data));
+    await dispatch(confirmOrRejectRequest(data));
     handleUserRemoval(userId);
-    window.location.reload();
-   await fetchKycRequests();
+    setRefresh(prev=>!prev)
   };
 
   const handleReject = (userId, usersId) => {
@@ -66,10 +66,9 @@ const KYCRequest = () => {
       status: 'Not verified',
       message
     };
-    dispatch(confirmOrRejectRequest(data));
+    await dispatch(confirmOrRejectRequest(data));
     handleUserRemoval(currentRejectUserId);
-    window.location.reload();
-    await fetchKycRequests();
+    setRefresh(prev=>!prev)
   };
 
   return (
@@ -109,7 +108,7 @@ const KYCRequest = () => {
                 
             </div>
             <div className="flex flex-col flex-wrap sm:flex-row gap-2 mt-4">
-                <button className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition" onClick={(e) => handleConfirm(user.id, user.user_id, 'confirm',e)}>Confirm</button>
+                <button className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition" onClick={() => handleConfirm(user.id, user.user_id, 'confirm')}>Confirm</button>
                 <button className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 transition" onClick={() => handleReject(user.id, user.user_id)}>Reject</button>
               </div>
             </div>

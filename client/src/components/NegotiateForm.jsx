@@ -125,7 +125,7 @@ const LoanAcceptForm = ({ isOpen, onClose, onSubmit}) => {
                 onChange={handleChangeDuration}
                 onBlur={handleBlurDuration}
         onFocus={handleFocusDuration}
-                className="p-3 border border-gray-300 rounded-lg w-full"
+                className="p-3 border border-gray-300 text-black rounded-lg w-full"
                 required
               />
             </div>
@@ -140,7 +140,7 @@ const LoanAcceptForm = ({ isOpen, onClose, onSubmit}) => {
         onChange={handleChangeInterest}
         onBlur={handleBlur}
         onFocus={handleFocus}
-        className="p-3 border border-gray-300 rounded-lg w-full"
+        className="p-3 border border-gray-300 text-black rounded-lg w-full"
         required
       />
             </div>
