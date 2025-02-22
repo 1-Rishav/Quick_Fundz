@@ -24,10 +24,9 @@ const RejectionOverlay = ({ isOpen, onClose, onSubmit}) => {
         <div className="mt-4 flex justify-center">
           <button
             onClick={handleSubmit}
-            className={`px-6 py-2 rounded-full text-white focus:outline-none ${
+            className={`px-6 py-2 rounded-lg text-white focus:outline-none ${
                 message.trim() !== ""
-                  ? "bg-blue-500 hover:bg-blue-600 cursor-pointer"
-                  : "bg-gray-300 cursor-not-allowed"
+                  ? 'bg-gray-700 cursor-not-allowed' : 'bg-black text-white hover:text-green-500 cursor-pointer'
               }`}
               disabled={message.trim() === ""}
           >

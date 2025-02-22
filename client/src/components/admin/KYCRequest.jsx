@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import Sidebar from '../Sidebar';
 import RejectionOverlay from './RejectionOverlay';
 import { GrDocumentPdf } from "react-icons/gr";
+import CustomButton from '../UI/CustomButton';
 
 
 const KYCRequest = () => {
@@ -108,8 +109,8 @@ const KYCRequest = () => {
                 
             </div>
             <div className="flex flex-col flex-wrap sm:flex-row gap-2 mt-4">
-                <button className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition" onClick={() => handleConfirm(user.id, user.user_id, 'confirm')}>Confirm</button>
-                <button className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 transition" onClick={() => handleReject(user.id, user.user_id)}>Reject</button>
+                <div className=" px-4 py-2 transition" onClick={() => handleConfirm(user.id, user.user_id, 'confirm')}><CustomButton button='Confirm' textColor='text-green-400' bottomColor='via-green-500' rgbColor='rgba(83, 197, 66,0.7)' /></div>
+                <div className="px-4 py-2 transition" onClick={() => handleReject(user.id, user.user_id)}><CustomButton button='Reject' textColor='text-red-400' bottomColor='via-red-500' rgbColor='rgba(235, 48, 20,0.7)'/></div>
               </div>
             </div>
           ))}
@@ -121,7 +122,7 @@ const KYCRequest = () => {
         {/* Pagination */}
        {countRequest>7 &&  <div className="flex justify-center mt-8 space-x-2">
           <button
-            className={`px-4 py-2 rounded-full ${currentPage === 1 ? 'bg-gray-300' : 'bg-slate-800 text-white hover:bg-slate-900'}`}
+            className={`px-4 py-2 rounded-lg ${currentPage === 1 ? 'bg-gray-700 cursor-not-allowed' : 'bg-black text-white hover:text-green-500 cursor-pointer'}`}
             disabled={currentPage === 1}
             onClick={() => handlePageChange(currentPage - 1)}
           >
@@ -139,7 +140,7 @@ const KYCRequest = () => {
           ))}
 
           <button
-            className={`px-4 py-2 rounded-full ${currentPage === totalPages ? 'bg-gray-300' : 'bg-green-600 text-white hover:bg-green-700'}`}
+            className={`px-4 py-2 rounded-lg ${currentPage === totalPages ? 'bg-gray-700 cursor-not-allowed' : 'bg-black text-white hover:text-green-500 cursor-pointer'}`}
             disabled={currentPage === totalPages}
             onClick={() => handlePageChange(currentPage + 1)}
           >

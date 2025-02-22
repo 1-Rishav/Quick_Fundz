@@ -197,7 +197,7 @@ const RepaymentDetails = () => {
         {/* Pagination */}
        {countRepay>7 &&  <div className="flex justify-end mt-6 space-x-2">
           <button
-            className={`px-4 py-2 rounded-full ${currentPage === 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-slate-800 text-white'}`}
+            className={`px-4 py-2 rounded-full ${currentPage === 1 ? 'bg-gray-700 cursor-not-allowed' : 'bg-black text-white hover:text-green-500 cursor-pointer'}`}
             disabled={currentPage === 1}
             onClick={() => handlePageChange(currentPage - 1)}
           >
@@ -215,7 +215,7 @@ const RepaymentDetails = () => {
           ))}
 
           <button
-            className={`px-4 py-2 rounded-full ${currentPage === totalPages ? 'bg-gray-300 cursor-not-allowed' : 'bg-green-600 text-white'}`}
+            className={`px-4 py-2 rounded-full ${currentPage === totalPages ? 'bg-gray-700 cursor-not-allowed' : 'bg-black text-white hover:text-green-500 cursor-pointer'}`}
             disabled={currentPage === totalPages}
             onClick={() => handlePageChange(currentPage + 1)}
           >
