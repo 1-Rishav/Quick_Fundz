@@ -253,10 +253,11 @@ exports.loginUser = asyncHandler(async (req, res) => {
 })
 
 exports.incomeDocuments = asyncHandler(async (req, res) => {
-  const { userId } = req
-
-  const fileOriginal = req.file.originalname;
+  const { userId } =await req
+  console.log(req.file);
+  const fileOriginal =await req.file.originalname;
 console.log(fileOriginal)
+console.log(userId);
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'File is required' });
@@ -271,7 +272,9 @@ console.log(fileOriginal)
     });
 
     const fileUrl = result.secure_url;
+    console.log(fileUrl);
     const publicId = result.public_id;
+    console.log(publicId);
     const extractName = await pool.query('Select name from users where id = $1', [userId]);
     const name = extractName.rows[0]?.name;
     const insertDocuemnts = await pool.query('Insert into incomebank_docs (name , user_id,file_name,file_url,cloudinary_id) values($1,$2,$3,$4,$5)', [name, userId, fileOriginal, fileUrl, publicId])
@@ -284,8 +287,7 @@ console.log(fileOriginal)
 })
 
 exports.changeProfile = asyncHandler(async (req, res) => {
-  const imgOriginal = req.file.originalname;
-  const { userId } = req;
+  const { userId } =await req;
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'File is required' });
