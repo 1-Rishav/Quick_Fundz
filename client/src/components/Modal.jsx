@@ -31,11 +31,11 @@ useEffect(()=>{
       }
       const detail = await dispatch(userDetail(data));
       setUserDetails(detail)
-      setUserEmail(detail.userEmail);
-      setUserInvest(detail.userInvestment.length);
-      setUserLoan(detail.userLoan.length);
-      setUserPaid(detail.userPaid.length);
-      setUserNotPaid(detail.userNotPaid.length);
+      setUserEmail(detail?.userEmail);
+      setUserInvest(detail?.userInvestment?.length);
+      setUserLoan(detail?.userLoan?.length);
+      setUserPaid(detail?.userPaid?.length);
+      setUserNotPaid(detail?.userNotPaid?.length);
       
     } catch (error) {
       console.log(error);
@@ -62,21 +62,21 @@ fetchUserDetails()
                     <ModalBody className='gradient-bg-transactions rounded-b-xl text-white'>
                       <div className=' w-full h-48 flex items-center justify-center'>
                         <div className='w-44 h-44  rounded-lg '>
-                        <img src={userDetails.userAvatar} alt={userDetails.userAvatar==null?'No Image Available':''} className='w-full h-44 text-center' />
+                        <img src={userDetails?.userAvatar} alt={userDetails?.userAvatar==null?'No Image Available':''} className='w-full h-44 text-center' />
                       </div>
                       </div>
                       <h1 className='w-full h-full text-white text-center text-xl'><Chip color='warning' variant='shadow' >User Detail</Chip></h1>
                   <div className=' w-full h-full '>
                     <div className='p-2 w-full h-full flex max-sm:flex-wrap items-start justify-between'>
                     <div className='p-2 w-fit h-full flex flex-col max-sm:flex-wrap items-start justify-between'>
-                      <div>Name:- {userDetails.userName}</div>
-                       {userEmail?.length>14 ? <div>Email:- {userEmail.substring(0 , 12)}... {copied ? <LuCopyCheck className='inline-flex'size={20}/>:<IoCopyOutline size={20} className='inline-flex hover:bg-neutral-100 hover:text-black rounded-full ' onClick={copyToClipboard}/>}</div> : <div>Email:- {userEmail}</div>
+                      <div>Name:- {userDetails?.userName}</div>
+                       {userEmail?.length>14 ? <div>Email:- {userEmail?.substring(0 , 12)}... {copied ? <LuCopyCheck className='inline-flex'size={20}/>:<IoCopyOutline size={20} className='inline-flex hover:bg-neutral-100 hover:text-black rounded-full ' onClick={copyToClipboard}/>}</div> : <div>Email:- {userEmail}</div>
                       } 
                       
                     </div>
                     <div className='p-2 w-fit h-full flex flex-col max-sm:flex-wrap items-start justify-between'>
                       {userDetails?.verified==='verified'?<div>Verified:- <Chip color='success' variant='shadow'>Yes</Chip> </div>:<div>Verified:- <Chip color='danger' variant='shadow'>No</Chip> </div>}
-                      <div>ACC. Age:- {userDetails.totalMonths} month </div>
+                      <div>ACC. Age:- {userDetails?.totalMonths} month </div>
                     </div>
                   </div>
                   </div>

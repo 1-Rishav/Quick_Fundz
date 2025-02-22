@@ -16,6 +16,7 @@ const Sidebar = ({position}) => {
       { title: "Loan Request", svg: "https://img.icons8.com/?size=100&id=yAYeAE5xvjeu&format=png&color=FFFFFF", href: "loanRequest" },
       { title: "Negotiate", svg: "https://img.icons8.com/?size=100&id=irl0UrqGW2li&format=png&color=FFFFFF", href: "negotiate" },
       { title: "Re-Payment", svg: "https://img.icons8.com/?size=100&id=irl0UrqGW2li&format=png&color=FFFFFF", href: "repayment" },
+      { title: "Help-Desk", svg: "https://img.icons8.com/?size=100&id=irl0UrqGW2li&format=png&color=FFFFFF", href: "help" },
     ];
   } else {
     Menus = [

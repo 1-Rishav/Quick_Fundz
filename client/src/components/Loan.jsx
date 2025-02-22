@@ -254,7 +254,7 @@ const Loan = () => {
         <Sidebar />
       </div>
       <div className="flex max-sm:ml-8 flex-col flex-1 max-w-8xl mx-auto p-4 overflow-y-auto relative gradient-bg-transactions ">
-         <h1 className="text-2xl font-bold mb-6 text-center">Live Loans</h1>   
+         <h1 className="text-2xl font-bold mb-6 text-center text-neutral-50">Live Loans</h1>   
           {countLoan>4 &&  <button
           className="p-3 border border-black text-gray-200 rounded-full shadow-md hover:bg-gray-100 flex items-center space-x-2 w-44 absolute top-4 right-4"
           onClick={() => setShowFilter(!showFilter)}
@@ -352,7 +352,7 @@ const Loan = () => {
                   <strong>Interest Rate:</strong> {loan.rate_of_interest}
                 </p>
               </div>
-              <div className="space-2 gap-2 flex justify-center sm:flex-col">
+              <div className="space-2 gap-2 flex flex-wrap justify-center sm:flex-col">
                 <div className=" px-4 py-2 rounded-full" onClick={() => {handleAcceptClick(loan.id, loan.user_id, loan.amount, loan.duration, loan.rate_of_interest, loan.email, 'processing') }}>
                   <CustomButton button='Accept' textColor='text-green-400' bottomColor='via-green-500' rgbColor='rgba(83, 197, 66,0.7)'/>
                 </div>
